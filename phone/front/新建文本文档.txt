@@ -1,0 +1,26 @@
+css 公共合并
+路由
+提示框（组件or自己写）
+dll
+postcss
+
+优化：
+滚动条样式
+react 热加载
+
+已解决：
+读卡器和高拍仪 引入不同js
+
+
+let buttons = types.map((value, index) => {
+            let style = {
+                animationDelay       : index * 100 + 'ms',
+                WebkitAnimationDelay : index * 100 + 'ms'
+            };
+            return (
+                <button key={index} className="btn scale" onClick={this.show.bind(this, value)} style={style}>
+                    {value}
+                </button>
+            )
+        });
+

@@ -1,0 +1,7 @@
+{
+  "name": "dll",
+  "content": {
+    "./front/node_modules/jquery/dist/jquery.js": 3,
+    "./front/node_modules/expose-loader/index.js?jQuery!./front/node_modules/jquery/dist/jquery.js": 2
+  }
+}
