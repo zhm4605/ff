@@ -7,7 +7,7 @@ export default class SearchSort extends React.Component{
     super(props);
     this.state = {
       data: [],
-      value: '',
+      value: props.value,
       focus: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,6 +17,17 @@ export default class SearchSort extends React.Component{
   }
   handleChange(value) {
     this.setState({ value });
+    const data = [
+      {
+        value:1,
+        text:"红色"
+      },
+      {
+        value:2,
+        text:"白色"
+      }
+    ];
+    this.setState({data});
     //fetch(value, data => this.setState({ data }));
   }
   handleSubmit() {

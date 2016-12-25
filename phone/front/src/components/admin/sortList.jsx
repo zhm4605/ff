@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Tree, Input } from 'antd';
+import { Tree, Input, Button, Modal } from 'antd';
+import AddSort from './addSort.jsx';
 
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -56,8 +57,6 @@ generateList(gData);
 
 console.log(dataList);
 
-
-
 const getParentKey = (key, tree) => {
   let parentKey;
   for (let i = 0; i < tree.length; i++) {
@@ -82,11 +81,13 @@ export default class SortList extends React.Component {
       expandedKeys: ['aa','bb'],
       searchValue: '',
       autoExpandParent: true,
+      visible: false
     }
     this.onExpand = this.onExpand.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this.openModal = this.openModal.bind(this);
   }
   onExpand(expandedKeys){
     this.setState({
@@ -161,6 +162,9 @@ export default class SortList extends React.Component {
       gData: data,
     });
   }
+  openModal(){
+    this.setState({visible:true});
+  }
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
     const loop = data => data.map((item) => {
@@ -186,10 +190,11 @@ export default class SortList extends React.Component {
     return (
       <div>
         <Search
-          style={{ width: 200 }}
+          style={{ width: 200,display:'inline-block' }}
           placeholder="Search"
           onChange={this.onChange}
         />
+        <AddSort />
         <Tree
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
@@ -200,6 +205,7 @@ export default class SortList extends React.Component {
         >
           {loop(this.state.gData)}
         </Tree>
+
       </div>
     );
   }

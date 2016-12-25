@@ -78,6 +78,7 @@ export default class GoodList extends React.Component{
           <a href="#" onClick={this.setAgeSort}>Age descending order</a>
           <a href="#" onClick={this.clearFilters}>清除筛选</a>
           <a href="#" onClick={this.clearAll}>清除筛选和排序</a>
+          <Button type="primary">添加商品</Button>
         </div>
         <Table dataSource={data} onChange={this.handleChange}>
           <Column title="名称" dataIndex="name" key="name" />

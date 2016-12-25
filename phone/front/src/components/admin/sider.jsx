@@ -40,19 +40,16 @@ export default class Sider extends React.Component{
             <Menu.Item key="goodList">商品列表</Menu.Item>
             <Menu.Item key="addGood">添加商品</Menu.Item>
           </SubMenu>
-          <SubMenu key="sort" title={<span><Icon type="appstore" /><span>分类管理</span></span>}>
-            <Menu.Item key="sortList">分类列表</Menu.Item>
-            <Menu.Item key="addSort">添加分类</Menu.Item>
-          </SubMenu>
+          <Menu.Item key="sortList"><span><Icon type="appstore" /><span>分类管理</span></span></Menu.Item>
           <SubMenu key="home" title={<span><Icon type="home" /><span>首页设置</span></span>}>
             <Menu.Item key="slide">轮播图</Menu.Item>
-            <Menu.Item key="hot_good">热门商品</Menu.Item>
+            <Menu.Item key="hotGood">热门商品</Menu.Item>
           </SubMenu>
           <SubMenu key="chart" title={<span><Icon type="line-chart" /><span>统计报表</span></span>}>
+            <Menu.Item key="">浏览量</Menu.Item>
           </SubMenu>
         </Menu>
     );
   }
 };
 
-//ReactDOM.render(<Sider />, document.getElementById('container'));
