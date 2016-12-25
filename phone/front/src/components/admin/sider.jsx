@@ -9,18 +9,24 @@ const MenuItemGroup = Menu.ItemGroup;
 export default class Sider extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {
-      defaultOpenKeys: 'good',
-      current: 'good_list',
-    };
+    this.state = props;
 
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick(e) {
-    //console.log('click ', e);
     this.setState({
       current: e.key,
     });
+    this.renderMain(e.key);
+  }
+  renderMain(key)
+  {
+    let Page = require("./"+key+".jsx");
+    ReactDOM.render(<Page />, document.getElementById('main'));
+  }
+  componentDidMount()
+  {
+    this.renderMain(this.state.current);
   }
   render() {
     return (
@@ -31,11 +37,12 @@ export default class Sider extends React.Component{
           mode="inline"
          id='sider' >
           <SubMenu key="good" title={<span><Icon type="mobile" /><span>商品管理</span></span>}>
-            <Menu.Item key="good_list">商品列表</Menu.Item>
-            <Menu.Item key="add_good">添加商品</Menu.Item>
+            <Menu.Item key="goodList">商品列表</Menu.Item>
+            <Menu.Item key="addGood">添加商品</Menu.Item>
           </SubMenu>
           <SubMenu key="sort" title={<span><Icon type="appstore" /><span>分类管理</span></span>}>
-            <Menu.Item key="add_aort">添加分类</Menu.Item>
+            <Menu.Item key="sortList">分类列表</Menu.Item>
+            <Menu.Item key="addSort">添加分类</Menu.Item>
           </SubMenu>
           <SubMenu key="home" title={<span><Icon type="home" /><span>首页设置</span></span>}>
             <Menu.Item key="slide">轮播图</Menu.Item>

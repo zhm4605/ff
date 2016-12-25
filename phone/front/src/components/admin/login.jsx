@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './style.less';
 import { Card, Form, Icon, Input, Button, Checkbox } from 'antd';
 
 const FormItem = Form.Item;

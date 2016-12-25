@@ -7,8 +7,6 @@ import './style.less';
 
 import Sider from 'componentsDir/admin/sider.jsx';
 import MyCenter from 'componentsDir/admin/myCenter.jsx';
-import GoodList from 'componentsDir/admin/goodList.jsx';
-import AddGood from 'componentsDir/admin/addGood.jsx';
 
 
 class Page extends React.Component{
@@ -35,9 +33,8 @@ class Page extends React.Component{
           <h1>管理系统 </h1>
           <MyCenter />
         </header>
-        <Sider />
+        <Sider defaultOpenKeys='sort' current='sortList'/>
         <div id='main'>
-          <AddGood />
         </div>
       </div>
     );

@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Card, Form, Icon, Input,InputNumber,Button, Checkbox,DatePicker,Col,Row,Tabs } from 'antd';
+import { Card, Form, Icon, Input,InputNumber,Button, Checkbox,DatePicker,Col,Row,Tabs,Radio  } from 'antd';
 
 import UploadPic from './uploadPic.jsx';
 import Ueditor from './ueditor.jsx';
+import SearchSort from './searchSort.jsx';
 
 const FormItem = Form.Item;
 
 const TabPane = Tabs.TabPane;
+
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 export default class AddGood extends React.Component{
   constructor(props) {
@@ -33,7 +37,7 @@ export default class AddGood extends React.Component{
 
     return (
       <Card title="添加商品">
-        <Tabs defaultActiveKey="description">
+        <Tabs defaultActiveKey="sorts">
           <TabPane tab="基本信息" key="basic">
             <Form horizontal onSubmit={this.handleSubmit}>
               <FormItem
@@ -114,10 +118,63 @@ export default class AddGood extends React.Component{
               </FormItem>
             </Form> 
           </TabPane>
-          <TabPane tab="商品描述" key="description">aa
+          <TabPane tab="商品描述" key="description">
             <Ueditor value={formData.content} id="content" height="800" /> 
+            <div><Button type="primary" htmlType="submit" size="large">提交</Button></div>
           </TabPane>
           <TabPane tab="设置分类" key="sorts">
+            <div style={{textAlign:'center',marginBottom:10}}>
+              <SearchSort placeholder="搜索要添加的分类" style={{ width: 250,marginBottom:10,textAlign:'left' }} />
+            </div>
+            <Form horizontal onSubmit={this.handleSubmit}>
+              <FormItem
+                {...formItemLayout}
+                wrapperCol={{ span: 14 }}
+                label="颜色"
+              >
+                {getFieldDecorator('name', {
+                  initialValue:"a",
+                  rules: [{ required: true, message: '请选择颜色' }],
+                })(
+                  <RadioGroup>
+                    <RadioButton value="a">Hangzhou</RadioButton>
+                    <RadioButton value="b">Shanghai</RadioButton>
+                    <RadioButton value="c">Beijing</RadioButton>
+                    <RadioButton value="d">Chengdu</RadioButton>
+                  </RadioGroup>
+                )}
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                wrapperCol={{ span: 4 }}
+                label="价格"
+              >
+                  {getFieldDecorator('priceO', {
+                    rules: [{ required: true, message: '请输入价格' }],
+                  })(
+                    <Input type='number' placeholder='' addonAfter='元'/>
+                  )}
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                wrapperCol={{ span: 4 }}
+                label="库存"
+              >
+                {getFieldDecorator('name', {
+                  rules: [{required: true, message: '请输入库存'}],
+                })(
+                  <Input type='number' placeholder='' addonAfter='件'/>
+                )}
+              </FormItem>
+              <FormItem 
+                 wrapperCol={{
+                  span: 10,
+                  offset: 2,
+                }}
+              >
+                <Button type="primary" htmlType="submit" size="large">提交</Button>
+              </FormItem>
+            </Form>
           </TabPane>
         </Tabs>
       </Card>
