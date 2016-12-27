@@ -77,8 +77,8 @@ $active_record = TRUE;
 $db['phone'] = array(
 	'dsn'	=> 'mysql:host=127.0.0.1;dbname=phone;charset=UTF8',
 	'hostname' => '127.0.0.1',
-	'username' => 'root',
-	'password' => '',
+	'username' => 'lsmz',
+	'password' => '123456',
 	'database' => 'phone',
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
