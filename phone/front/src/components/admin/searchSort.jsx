@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Input, Select, Button, Icon } from 'antd';
 
+const Option = Select.Option;
+
 export default class SearchSort extends React.Component{
   constructor(props) {
     super(props);

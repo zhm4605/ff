@@ -11,7 +11,7 @@ export default class AddSort extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: true
     }
     this.showModal = this.showModal.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -20,17 +20,28 @@ export default class AddSort extends React.Component{
   showModal() {
     this.setState({visible:true});
   }
-  handleOk() {
+  handleOk(e) {
+    console.log(e);
     this.setState({
       ModalText: 'The modal dialog will be closed after two seconds',
       confirmLoading: true,
     });
+
+    //e.preventDefault();
+    console.log(this.props.form);
+    this.props.form.validateFields((err, values) => {
+      console.log(values);
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+    /*
     setTimeout(() => {
       this.setState({
         visible: false,
         confirmLoading: false,
       });
-    }, 2000);
+    }, 2000);*/
   }
   handleCancel() {
     console.log('Clicked cancel button');
@@ -38,6 +49,7 @@ export default class AddSort extends React.Component{
       visible: false,
     });
   }
+
   render() {
     const { getFieldProps, getFieldError,getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -53,7 +65,7 @@ export default class AddSort extends React.Component{
           onCancel={this.handleCancel}
           visible={this.state.visible}
         >
-          <Form horizontal>
+          <Form horizontal onSubmit={this.handleSubmit}>
             <FormItem
               {...formItemLayout}
               wrapperCol={{ span: 16 }}

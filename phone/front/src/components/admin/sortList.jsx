@@ -195,7 +195,7 @@ export default class SortList extends React.Component {
           placeholder="Search"
           onChange={this.onChange}
         />
-        {/*<AddSort />*/}
+       <AddSort />
         <Tree
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
