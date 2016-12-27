@@ -33,4 +33,5 @@ class Admin_mod extends MY_Model {
 		$sql = "DELETE FROM {$table} where id IN ($id)";
 		return $retDb->query($sql);
 	}
+	
 }

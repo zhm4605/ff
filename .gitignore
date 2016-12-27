@@ -1,3 +1,5 @@
-/phone/front/node_modules
-/phone/build
-/phone/application/data/session
+phone/front/node_modules
+phone/build
+phone/application/data/session
+phone/upload
+phone/ueditor/php/upload

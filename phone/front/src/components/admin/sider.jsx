@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 import { Menu, Icon } from 'antd';
 
 
@@ -17,16 +17,7 @@ export default class Sider extends React.Component{
     this.setState({
       current: e.key,
     });
-    this.renderMain(e.key);
-  }
-  renderMain(key)
-  {
-    let Page = require("./"+key+".jsx");
-    ReactDOM.render(<Page />, document.getElementById('main'));
-  }
-  componentDidMount()
-  {
-    this.renderMain(this.state.current);
+    window.location.hash = '#/'+e.key;
   }
   render() {
     return (

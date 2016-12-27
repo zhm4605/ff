@@ -178,6 +178,7 @@ export default class SortList extends React.Component {
           {afterStr}
         </span>
       ) : <span>{item.key}</span>;
+
       if (item.children) {
         return (
           <TreeNode key={item.key} title={title}>
@@ -194,7 +195,7 @@ export default class SortList extends React.Component {
           placeholder="Search"
           onChange={this.onChange}
         />
-        <AddSort />
+        {/*<AddSort />*/}
         <Tree
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
