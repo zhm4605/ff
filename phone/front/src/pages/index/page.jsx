@@ -1,13 +1,12 @@
-import React from 'react';
-import {render} from 'react-dom';
 
-import { Button, Menu, Dropdown, Icon } from 'antd';
+import {render} from 'react-dom';
 
 import './style.less';
 
 import Sider from 'componentsDir/admin/sider.jsx';
 import MyCenter from 'componentsDir/admin/myCenter.jsx';
 
+//React.Component
 class Page extends React.Component{
   constructor(props) {
     super(props);

@@ -12,12 +12,15 @@ var configPlugins = [
     jQuery: 'jquery',
     'window.jQuery': 'jquery',
     'window.$': 'jquery',
+    Promise: 'promise-polyfill',
+    React: 'react',
+    'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch',
   }),
   /* 抽取出所有通用的部分 */
   new webpack.optimize.CommonsChunkPlugin({
     name: 'commons/commons',      // 需要注意的是，chunk的name不能相同！！！
     filename: 'build/[name]/bundle.js',
-    minChunks: 4,
+    minChunks: 2,
   }),
   //抽取出chunk的css
   new ExtractTextPlugin('build/[name]/styles.css'),

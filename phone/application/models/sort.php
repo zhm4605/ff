@@ -10,19 +10,21 @@ class Sort extends MY_Model {
 	{
 		if($parentId==0)
 		{
-			$sql = "select * from sorts where level=0";
+			$where = "level=0";
 		}
 		else
 		{
-			$sql = "select * from sorts where parentId='".$parentId."'";
+			$where = "parentId='".$parentId."'";
 		}
+		//id as key,name as title,description,parentId,level,order
+		$sql = "select id as 'key',name as title,description,parentId,level,orderId from sorts where ".$where;
 
 		$query = $this->db->query($sql);
 		$list = $query->result_array();
 
 		foreach ($list as $key=>$item)
 		{
-		   $list[$key]["children"] = $this->get_sort_list($item['id']);
+		   $list[$key]["children"] = $this->get_sort_list($item['key']);
 		}
 
 		return $list;

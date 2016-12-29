@@ -15,7 +15,14 @@ module.exports = {
       test: require.resolve('jquery'),
       loader: 'expose?$!expose?jQuery',
     },
-    
+    {
+      test: require.resolve('promise-polyfill'),
+      loader: 'expose?Promise',
+    },
+    {
+      test: require.resolve("react"), 
+      loader: "expose?React"
+    },
     {
       test: /\.jsx?$/,
       loader: 'babel',
@@ -23,7 +30,8 @@ module.exports = {
       query: {
         presets: ['es2015','react'],
         //plugins: [["import", { libraryName: "antd", style: "true" }]]
-        plugins: [["import", { libraryName: "antd", style: true }],'babel-plugin-add-module-exports','babel-plugin-transform-decorators-legacy']
+        //plugins: [["import", { libraryName: "antd", style: true }],'babel-plugin-add-module-exports','babel-plugin-transform-decorators-legacy']
+        plugins: ['babel-plugin-add-module-exports','babel-plugin-transform-decorators-legacy']
       }
     },
     {

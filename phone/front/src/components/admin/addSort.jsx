@@ -11,7 +11,7 @@ export default class AddSort extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      visible: true
+      visible: false
     }
     this.showModal = this.showModal.bind(this);
     this.handleOk = this.handleOk.bind(this);

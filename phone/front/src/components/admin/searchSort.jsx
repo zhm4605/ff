@@ -9,72 +9,40 @@ export default class SearchSort extends React.Component{
     super(props);
     this.state = {
       data: [],
-      value: props.value,
-      focus: false,
+      focus: false
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
   handleChange(value) {
     this.setState({ value });
+  }
+  handleSearch(name) {
     const data = [
       {
-        value:1,
-        text:"红色"
+        id:1,
+        name:"红色"
       },
       {
-        value:2,
-        text:"白色"
+        id:2,
+        name:"白色"
       }
     ];
     this.setState({data});
-    //fetch(value, data => this.setState({ data }));
-  }
-  handleSubmit() {
-    console.log('输入框内容是: ', this.state.value);
-  }
-  handleFocus() {
-    this.setState({ focus: true });
-  }
-  handleBlur() {
-    this.setState({ focus: false });
   }
   render() {
-    /*
-    const btnCls = classNames({
-      'ant-search-btn': true,
-      'ant-search-btn-noempty': !!this.state.value.trim(),
-    });
-    const searchCls = classNames({
-      'ant-search-input': true,
-      'ant-search-input-focus': this.state.focus,
-    });*/
-    const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>);
+    const options = this.state.data.map(d => <Option key={d.id}>{d.name}</Option>);
     return (
       <div className="ant-search-input-wrapper" style={this.props.style}>
-        <Input.Group className="ant-search-input ant-search-input-focus">
           <Select
-            combobox
-            value={this.state.value}
+            showSearch
             placeholder={this.props.placeholder}
-            notFoundContent=""
-            defaultActiveFirstOption={false}
-            showArrow={false}
-            filterOption={false}
+            optionFilterProp="children"
             onChange={this.handleChange}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
+            onSearch={this.handleSearch}
           >
             {options}
           </Select>
-          <div className="ant-input-group-wrap">
-            <Button className="ant-search-btn" onClick={this.handleSubmit}>
-              <Icon type="search" />
-            </Button>
-          </div>
-        </Input.Group>
       </div>
     );
   }

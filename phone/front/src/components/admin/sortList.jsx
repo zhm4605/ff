@@ -1,7 +1,8 @@
-import React from 'react';
+
 import ReactDOM from 'react-dom';
 
 import { Tree, Input, Button, Modal } from 'antd';
+
 import AddSort from './addSort.jsx';
 
 const TreeNode = Tree.TreeNode;
@@ -10,6 +11,8 @@ const Search = Input.Search;
 const x = 3;
 const y = 2;
 const z = 1;
+
+
 const gData = [
   {
     key:'aa',
@@ -40,6 +43,16 @@ const gData = [
     ]
   }
 ];
+
+
+
+fetch("?app=admin&act=sortList").then(function(response) {
+  return response.json();
+}).then(function(data) {
+  console.log(data);
+}).catch(function(e) {
+  console.log("Oops, error");
+});
 
 
 const dataList = [];

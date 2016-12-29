@@ -19,7 +19,7 @@ class Admin extends MY_Controller {
 
     public function sortList()
     {
-        print_r($this->sort->get_sort_list());
+        echo json_encode($this->sort->get_sort_list());
     }
     
 
