@@ -75,7 +75,7 @@ class Good_mod extends MY_Model {
 	}
 
 	
-
+	//商品列表（页码，排序方式）
 	public function get_good_list($page=1,$order='updateTime')
 	{
 		$this->db->order_by($order,'desc');
