@@ -12,7 +12,7 @@ const x = 3;
 const y = 2;
 const z = 1;
 
-
+/*
 const gData = [
   {
     key:'aa',
@@ -43,20 +43,12 @@ const gData = [
     ]
   }
 ];
-
-
-
-fetch("?app=admin&act=sortList").then(function(response) {
-  return response.json();
-}).then(function(data) {
-  console.log(data);
-}).catch(function(e) {
-  console.log("Oops, error");
-});
+*/
 
 
 const dataList = [];
 const generateList = (data) => {
+  
   for (let i = 0; i < data.length; i++) {
     const node = data[i];
     const key = node.key;
@@ -67,8 +59,6 @@ const generateList = (data) => {
   }
 };
 generateList(gData);
-
-console.log(dataList);
 
 const getParentKey = (key, tree) => {
   let parentKey;
@@ -89,13 +79,14 @@ const getParentKey = (key, tree) => {
 export default class SortList extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      gData,
-      expandedKeys: ['aa','bb'],
-      searchValue: '',
-      autoExpandParent: true,
-      visible: false
-    }
+        data,
+        expandedKeys: ['aa','bb'],
+        searchValue: '',
+        autoExpandParent: true,
+        visible: false
+      };
     this.onExpand = this.onExpand.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onDragEnter = this.onDragEnter.bind(this);
@@ -224,5 +215,17 @@ export default class SortList extends React.Component {
     );
   }
 }
+
+fetch("/admin_sort/sortList").then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      console.log(data);
+      
+      const gData = data;
+       extends;
+    }).catch(function(e) {
+      console.log("Oops, error");
+    });
+
 
 

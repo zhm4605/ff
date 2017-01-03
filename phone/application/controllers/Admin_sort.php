@@ -42,7 +42,7 @@ class Admin_sort extends MY_Controller {
     //分类列表
     public function sortList()
     {
-        print_r($this->sort_mod->get_sort_list());
+        echo json_encode($this->sort_mod->get_sort_list());
     }
 
     //搜索分类

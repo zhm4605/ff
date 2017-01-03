@@ -186,9 +186,9 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 |
 */
 $config['allow_get_array'] = TRUE;
-$config['enable_query_strings'] = TRUE;
-$config['controller_trigger'] = 'app';
-$config['function_trigger'] = 'act';
+//$config['enable_query_strings'] = TRUE;
+//$config['controller_trigger'] = 'app';
+//$config['function_trigger'] = 'act';
 $config['directory_trigger'] = 'd';
 
 /*
