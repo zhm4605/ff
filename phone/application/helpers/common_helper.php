@@ -138,6 +138,22 @@ function md532($str, $salt=''){
 	return md5(strrev(md5($salt.$str)).$salt);
 }
 
+function md5_password($str){
+	$salt = 'zhm';
+	return md5(strrev(md5($salt.$str)).$salt);
+}
+
+function get_user_identifier($name)
+{
+	$salt = "zhm";
+	return md5($salt.md5($name.$salt));
+}
+
+function get_user_token()
+{
+	return md5(uniqid(rand(), TRUE));
+}
+
 function salt($len = 8){
 	$str = 'qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM';
 	$length = strlen($str)-1;
@@ -544,5 +560,28 @@ function db_create_in($item_list, $field_name = '')
     }
 }
 
+
+function getIP()
+{
+    static $realip;
+    if (isset($_SERVER)){
+        if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])){
+            $realip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        } else if (isset($_SERVER["HTTP_CLIENT_IP"])) {
+            $realip = $_SERVER["HTTP_CLIENT_IP"];
+        } else {
+            $realip = $_SERVER["REMOTE_ADDR"];
+        }
+    } else {
+        if (getenv("HTTP_X_FORWARDED_FOR")){
+            $realip = getenv("HTTP_X_FORWARDED_FOR");
+        } else if (getenv("HTTP_CLIENT_IP")) {
+            $realip = getenv("HTTP_CLIENT_IP");
+        } else {
+            $realip = getenv("REMOTE_ADDR");
+        }
+    }
+    return $realip;
+}
 
 

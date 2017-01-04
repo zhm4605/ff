@@ -75,16 +75,13 @@ function _html_list($mod = 'scenic/index', $page, $newhtml){
 	}
 	return create_html($newhtml, $content);
 }
-
+//登录 
 function is_login(){
-	$CI = &get_instance();
-	if(!$CI->session->userdata('user_id')){
-		print_r($CI->session);
-		//$link[0]['link_url'] = '?app=welcome&act=login';
-		//$link[0]['link_name']= '用户登陆';
-		//showmsg('请先登录', $link, 2);
-	}
+	
+	
+
 }
+
 function sortarray($classification,$pid='0'){
 	$arr=array();
 	foreach($classification as $val){
@@ -137,3 +134,4 @@ function randColor(){
     }
     return implode('',$colors);
 }
+

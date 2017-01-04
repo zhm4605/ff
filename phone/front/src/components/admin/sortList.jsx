@@ -45,20 +45,20 @@ const gData = [
 ];
 */
 
-
-const dataList = [];
+let gData = [];
+let dataList = [];
 const generateList = (data) => {
-  
   for (let i = 0; i < data.length; i++) {
     const node = data[i];
     const key = node.key;
-    dataList.push({ key, title: key });
+    const title = node.title;
+    dataList.push({ key, title});
     if (node.children) {
       generateList(node.children, node.key);
     }
   }
 };
-generateList(gData);
+
 
 const getParentKey = (key, tree) => {
   let parentKey;
@@ -79,14 +79,33 @@ const getParentKey = (key, tree) => {
 export default class SortList extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-        data,
+    let that = this;
+    that.state = {
+        gData,
         expandedKeys: ['aa','bb'],
         searchValue: '',
         autoExpandParent: true,
         visible: false
       };
+
+    fetch("/admin_sort/sortList").then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      console.log(data);
+      
+      gData = data;
+      that.setState({
+        gData,
+        expandedKeys: ['aa','bb'],
+        searchValue: '白色',
+        autoExpandParent: true,
+        visible: false
+      });
+      generateList(gData);
+    }).catch(function(e) {
+      console.log(e);
+    });
+
     this.onExpand = this.onExpand.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onDragEnter = this.onDragEnter.bind(this);
@@ -100,10 +119,11 @@ export default class SortList extends React.Component {
     });
   }
   onChange(e){
+
     const value = e.target.value;
     const expandedKeys = [];
     dataList.forEach((item) => {
-      if (item.key.indexOf(value) > -1) {
+      if (item.title.indexOf(value) > -1) {
         expandedKeys.push(getParentKey(item.key, gData));
       }
     });
@@ -172,25 +192,28 @@ export default class SortList extends React.Component {
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
     const loop = data => data.map((item) => {
-      const index = item.key.search(searchValue);
-      const beforeStr = item.key.substr(0, index);
-      const afterStr = item.key.substr(index + searchValue.length);
+      const index = item.title.search(searchValue);
+      const beforeStr = item.title.substr(0, index);
+      const afterStr = item.title.substr(index + searchValue.length);
       const title = index > -1 ? (
         <span>
           {beforeStr}
           <span className="ant-tree-searchable-filter">{searchValue}</span>
           {afterStr}
         </span>
-      ) : <span>{item.key}</span>;
+      ) : <span>{item.title}</span>;
+
+      const line = <div>{title}<span>编辑</span></div>
 
       if (item.children) {
         return (
-          <TreeNode key={item.key} title={title}>
+          <TreeNode key={item.key} title={line}>
             {loop(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode key={item.key} title={title} />;
+
+      return <TreeNode key={item.key} title={line} />;
     });
     return (
       <div>
@@ -216,16 +239,7 @@ export default class SortList extends React.Component {
   }
 }
 
-fetch("/admin_sort/sortList").then(function(response) {
-      return response.json();
-    }).then(function(data) {
-      console.log(data);
-      
-      const gData = data;
-       extends;
-    }).catch(function(e) {
-      console.log("Oops, error");
-    });
+
 
 
 
