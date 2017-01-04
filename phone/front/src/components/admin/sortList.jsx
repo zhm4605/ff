@@ -1,9 +1,10 @@
 
 import ReactDOM from 'react-dom';
 
-import { Tree, Input, Button, Modal } from 'antd';
+import { Tree, Input, Button, Modal, Row, Col } from 'antd';
 
 import AddSort from './addSort.jsx';
+import SortModal from './sortModal.jsx';
 
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -82,35 +83,36 @@ export default class SortList extends React.Component {
     let that = this;
     that.state = {
         gData,
-        expandedKeys: ['aa','bb'],
+        expandedKeys: [],
         searchValue: '',
         autoExpandParent: true,
-        visible: false
+        visible: false,
+        parentId: 0,
+        editId: 0
       };
-
     fetch("/admin_sort/sortList").then(function(response) {
       return response.json();
     }).then(function(data) {
       console.log(data);
-      
       gData = data;
       that.setState({
         gData,
-        expandedKeys: ['aa','bb'],
-        searchValue: '白色',
-        autoExpandParent: true,
-        visible: false
       });
       generateList(gData);
     }).catch(function(e) {
       console.log(e);
     });
-
     this.onExpand = this.onExpand.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDrop = this.onDrop.bind(this);
-    this.openModal = this.openModal.bind(this);
+    this.onLoadData = this.onLoadData.bind(this);
+    this.editSort = this.editSort.bind(this);
+  }
+  onLoadData()
+  {
+    
+
   }
   onExpand(expandedKeys){
     this.setState({
@@ -119,7 +121,6 @@ export default class SortList extends React.Component {
     });
   }
   onChange(e){
-
     const value = e.target.value;
     const expandedKeys = [];
     dataList.forEach((item) => {
@@ -147,6 +148,7 @@ export default class SortList extends React.Component {
     // });
   }
   onDrop(info) {
+
     console.log(info);
     const dropKey = info.node.props.eventKey;
     const dragKey = info.dragNode.props.eventKey;
@@ -186,8 +188,15 @@ export default class SortList extends React.Component {
       gData: data,
     });
   }
-  openModal(){
-    this.setState({visible:true});
+  editSort()
+  {
+    //console.log(e);
+    //console.log(item);
+    //console.log(this);
+    this.setState({
+      gData: [],
+      visible:true,
+    });
   }
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
@@ -202,8 +211,18 @@ export default class SortList extends React.Component {
           {afterStr}
         </span>
       ) : <span>{item.title}</span>;
-
-      const line = <div>{title}<span>编辑</span></div>
+      //()=>{this.editSort(item)}
+      const line = <Row className="sort-item">
+                    <Col span={3} className='title'>{title}</Col>
+                    <Col span={5}>{item.description}</Col>
+                    <Col span={2}>{item.key}</Col>
+                    <Col span={2}>{item.orderId}</Col>
+                    <Col span={8}>
+                      <Button type="ghost" size="small">删除</Button>
+                      <Button type="ghost" size="small" onClick={this.editSort} data-key={item.key}>编辑</Button>
+                      <Button type="primary" size="small" >添加子分类</Button>
+                    </Col>
+                   </Row>
 
       if (item.children) {
         return (
@@ -223,6 +242,13 @@ export default class SortList extends React.Component {
           onChange={this.onChange}
         />
        <AddSort />
+       <Row className='sort-title'>
+        <Col span={3} style={{textAlign:'left'}}>分类名称</Col>
+        <Col span={5}>分类描述</Col>
+        <Col span={2}>分类id</Col>
+        <Col span={2}>排序</Col>
+        <Col span={8}>操作</Col>
+       </Row>
         <Tree
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
@@ -230,10 +256,12 @@ export default class SortList extends React.Component {
           draggable
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
+          loadData={this.onLoadData}
+          defaultExpandAll
         >
           {loop(this.state.gData)}
         </Tree>
-
+        <SortModal visible={this.state.visible} parentId={this.state.parentId} id={this.state.editId}/>
       </div>
     );
   }
