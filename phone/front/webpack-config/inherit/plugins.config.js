@@ -8,11 +8,10 @@ var pageArr = require('../base/page-entries.config.js');
 var configPlugins = [
   /* 全局shimming */
   new webpack.ProvidePlugin({
-    /*
     $: 'jquery',
     jQuery: 'jquery',
     'window.jQuery': 'jquery',
-    'window.$': 'jquery',*/
+    'window.$': 'jquery',
     Promise: 'promise-polyfill',
     React: 'react',
     'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch',

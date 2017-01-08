@@ -17,32 +17,41 @@ class Admin_sort extends MY_Controller {
          $this->load->view('index/index.html');
     }
 
+    //分类列表
+    public function sortList($simple=false)
+    {
+        if($simple)
+        {
+            $list = $this->sort_mod->get_simple_sort_list();
+        }
+        else
+        {
+             $list = $this->sort_mod->get_sort_list();
+        }
+       
+        echo json_encode($list);
+    }
     
     //添加分类
-    public function editSort()
+    public function editSort($id=0)
     {
     	$data = $_POST;
-    	//$data = array('name'=>'bb');
-    	if(isset($_GET['id']))
+    	if($id>0)
     	{
-    		$this->sort_mod->update_sort($data,$_GET['id']);
+    		$state = $this->sort_mod->update_sort($data,$id);
     	}
     	else
     	{
-    		$this->sort_mod->add_sort($data);
+    		$state = $this->sort_mod->add_sort($data);
     	}
+        $output = array("state"=>$state);
+        echo json_encode($output);
     }
     //删除分类
     public function removeSort()
     {
     	$id = $_GET['id'];
     	$this->sort_mod->remove_sort($id);
-    }
-
-    //分类列表
-    public function sortList()
-    {
-        echo json_encode($this->sort_mod->get_sort_list());
     }
 
     //搜索分类
@@ -53,12 +62,10 @@ class Admin_sort extends MY_Controller {
    	}
 
    	//单个分类详情
-   	public function sortInfo()
+   	public function sortInfo($id)
    	{
-   		$id = $_GET['id'];
-   		print_r($this->sort_mod->get_sort_by_id($id));
+   		echo json_encode($this->sort_mod->get_sort_by_id($id));
    	}
-
 
     //商品列表
     public function goodList()

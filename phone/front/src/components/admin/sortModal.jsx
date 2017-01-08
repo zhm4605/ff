@@ -18,28 +18,45 @@ export default class SortModal extends React.Component{
   showModal() {
     this.setState({visible:true});
   }
+  componentWillReceiveProps(nextProps) {
+    //console.log(nextProps);
+    this.setState(nextProps);
+  }
   handleOk(e) {
-    console.log(e);
+    const that = this;
     this.setState({
-      ModalText: 'The modal dialog will be closed after two seconds',
-      confirmLoading: true,
-    });
-
-    //e.preventDefault();
-    console.log(this.props.form);
+        confirmLoading: true,
+      });
     this.props.form.validateFields((err, values) => {
       console.log(values);
-      if (!err) {
+      if (!err) 
+      {
         console.log('Received values of form: ', values);
+        const id = this.state.item.id;
+        $.ajax({
+          url:"/admin_sort/editSort/"+id,
+          dataType:"json",
+          type:"post",
+          data:values,
+          success:function(msg)
+          {
+            console.log(msg);
+            if(msg.state)
+            {
+              that.setState({
+                confirmLoading: false,
+                visible:false
+            });
+            }
+            
+          },
+          error:function(msg){
+            document.body.innerHTML = msg.responseText;
+          }
+        })
+        
       }
-    });
-    /*
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-    }, 2000);*/
+    })
   }
   handleCancel() {
     console.log('Clicked cancel button');
@@ -68,7 +85,7 @@ export default class SortModal extends React.Component{
               label="父分类"
             >
               {getFieldDecorator('parentId', {
-                initialValue:this.state.parentId
+                initialValue:this.state.item.parentId
               })(
                 <SearchSort placeholder="选择父分类" style={{width:200}}/>
               )}
@@ -79,6 +96,7 @@ export default class SortModal extends React.Component{
               label="名称"
             >
               {getFieldDecorator('name', {
+                initialValue:this.state.item.name,
                 rules: [{required: true, message: '请输入名称'}],
               })(
                 <Input />
@@ -90,7 +108,7 @@ export default class SortModal extends React.Component{
               label="描述"
             >
               {getFieldDecorator('description', {
-                
+                initialValue:this.state.item.description
               })(
                 <Input type="textarea" rows={2} />
               )}
@@ -100,8 +118,8 @@ export default class SortModal extends React.Component{
               wrapperCol={{ span: 4 }}
               label="排序"
             >
-              {getFieldDecorator('order', {
-                initialValue:'999'
+              {getFieldDecorator('orderId', {
+                initialValue:this.state.item.orderId
               })(
                 <Input type='number'/>
               )}

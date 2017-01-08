@@ -25,13 +25,12 @@ module.exports = {
       context: dirVars.staticRootDir, // 指定一个路径作为上下文环境，需要与DllReferencePlugin的context参数保持一致，建议统一设置为项目根目录
     }),
     /* 跟业务代码一样，该兼容的还是得兼容 */
-    /*
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
       'window.$': 'jquery',
-    }),*/
+    }),
     new ExtractTextPlugin('[name].css'), // 打包css/less的时候会用到ExtractTextPlugin
   ],
   module: require('./webpack-config/module.config.js'), // 沿用业务代码的module配置

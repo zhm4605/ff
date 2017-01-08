@@ -30,6 +30,7 @@ class Page extends React.Component{
 import { Router, Route, hashHistory } from 'react-router';
 
 
+
 const routes = <Router history={hashHistory}>
                 <Route path="/" component={Page}>
                   <Route path="/addGood" component={require('componentsDir/admin/addGood.jsx')}/>
@@ -42,5 +43,6 @@ render(routes, document.getElementById('container'));
 
 
 window.location.hash = '#/sortList';
+
 //console.log(window.location)
 

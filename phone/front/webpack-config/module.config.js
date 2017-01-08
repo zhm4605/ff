@@ -11,11 +11,10 @@ theme = getThemeConfig();
 
 module.exports = {
   loaders: [
-    /*
     {
       test: require.resolve('jquery'),
       loader: 'expose?$!expose?jQuery',
-    },*/
+    },
     {
       test: require.resolve('promise-polyfill'),
       loader: 'expose?Promise',

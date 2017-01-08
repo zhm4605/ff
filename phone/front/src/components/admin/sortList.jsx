@@ -13,49 +13,16 @@ const x = 3;
 const y = 2;
 const z = 1;
 
-/*
-const gData = [
-  {
-    key:'aa',
-    title:'12',
-    children:[
-      {
-        key:'0-1',
-        title:'0-1',
-      },
-      {
-        key:'0-2',
-        title:'0-2',
-      }
-    ]
-  },
-  {
-    key:'bb',
-    title:'12',
-    children:[
-      {
-        key:'22',
-        title:'0-1',
-      },
-      {
-        key:'0-2',
-        title:'0-2',
-      }
-    ]
-  }
-];
-*/
-
 let gData = [];
 let dataList = [];
 const generateList = (data) => {
   for (let i = 0; i < data.length; i++) {
     const node = data[i];
-    const key = node.key;
-    const title = node.title;
-    dataList.push({ key, title});
+    const id = node.id;
+    const name = node.name;
+    dataList.push({ id,name});
     if (node.children) {
-      generateList(node.children, node.key);
+      generateList(node.children, id);
     }
   }
 };
@@ -66,8 +33,8 @@ const getParentKey = (key, tree) => {
   for (let i = 0; i < tree.length; i++) {
     const node = tree[i];
     if (node.children) {
-      if (node.children.some(item => item.key === key)) {
-        parentKey = node.key;
+      if (node.children.some(item => item.id === key)) {
+        parentKey = node.id;
       } else if (getParentKey(key, node.children)) {
         parentKey = getParentKey(key, node.children);
       }
@@ -81,38 +48,40 @@ export default class SortList extends React.Component {
   constructor(props) {
     super(props);
     let that = this;
-    that.state = {
-        gData,
-        expandedKeys: [],
-        searchValue: '',
-        autoExpandParent: true,
-        visible: false,
-        parentId: 0,
-        editId: 0
-      };
-    fetch("/admin_sort/sortList").then(function(response) {
-      return response.json();
-    }).then(function(data) {
-      console.log(data);
-      gData = data;
-      that.setState({
-        gData,
-      });
-      generateList(gData);
-    }).catch(function(e) {
-      console.log(e);
-    });
+    
+    $.ajax({
+        url:"/admin_sort/sortList",
+        dataType:"json",
+        async: false,
+        success:function(msg)
+        {
+          console.log(msg);
+          gData = msg;
+          generateList(gData);
+          that.state = {
+            gData,
+            dataList,
+            expandedKeys: [],
+            searchValue: '',
+            autoExpandParent: true,
+            visible: false,
+            item:{
+              id:0,
+              parentId:0
+            }
+          };
+        },
+        error:function(msg){
+          console.log(msg);
+          document.body.innerHTML = msg.responseText;
+        }
+      })
+
     this.onExpand = this.onExpand.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDrop = this.onDrop.bind(this);
-    this.onLoadData = this.onLoadData.bind(this);
     this.editSort = this.editSort.bind(this);
-  }
-  onLoadData()
-  {
-    
-
   }
   onExpand(expandedKeys){
     this.setState({
@@ -124,8 +93,8 @@ export default class SortList extends React.Component {
     const value = e.target.value;
     const expandedKeys = [];
     dataList.forEach((item) => {
-      if (item.title.indexOf(value) > -1) {
-        expandedKeys.push(getParentKey(item.key, gData));
+      if (item.name.indexOf(value) > -1) {
+        expandedKeys.push(getParentKey(item.id, gData));
       }
     });
     const uniqueExpandedKeys = [];
@@ -155,7 +124,7 @@ export default class SortList extends React.Component {
     // const dragNodesKeys = info.dragNodesKeys;
     const loop = (data, key, callback) => {
       data.forEach((item, index, arr) => {
-        if (item.key === key) {
+        if (item.id === key) {
           return callback(item, index, arr);
         }
         if (item.children) {
@@ -188,51 +157,51 @@ export default class SortList extends React.Component {
       gData: data,
     });
   }
-  editSort()
+  editSort(item)
   {
-    //console.log(e);
+    //console.log(item);
     //console.log(item);
     //console.log(this);
     this.setState({
-      gData: [],
       visible:true,
+      item:item
     });
   }
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
     const loop = data => data.map((item) => {
-      const index = item.title.search(searchValue);
-      const beforeStr = item.title.substr(0, index);
-      const afterStr = item.title.substr(index + searchValue.length);
+      const index = item.name.search(searchValue);
+      const beforeStr = item.name.substr(0, index);
+      const afterStr = item.name.substr(index + searchValue.length);
       const title = index > -1 ? (
         <span>
           {beforeStr}
           <span className="ant-tree-searchable-filter">{searchValue}</span>
           {afterStr}
         </span>
-      ) : <span>{item.title}</span>;
+      ) : <span>{item.name}</span>;
       //()=>{this.editSort(item)}
       const line = <Row className="sort-item">
                     <Col span={3} className='title'>{title}</Col>
                     <Col span={5}>{item.description}</Col>
-                    <Col span={2}>{item.key}</Col>
+                    <Col span={2}>{item.id}</Col>
                     <Col span={2}>{item.orderId}</Col>
                     <Col span={8}>
                       <Button type="ghost" size="small">删除</Button>
-                      <Button type="ghost" size="small" onClick={this.editSort} data-key={item.key}>编辑</Button>
-                      <Button type="primary" size="small" >添加子分类</Button>
+                      <Button type="ghost" size="small" onClick={()=>{this.editSort(item)}}>编辑</Button>
+                      <Button type="primary" size="small" onClick={()=>this.editSort({parentId:item.id,id:0})}>添加子分类</Button>
                     </Col>
                    </Row>
 
       if (item.children) {
         return (
-          <TreeNode key={item.key} title={line}>
+          <TreeNode key={item.id} title={line}>
             {loop(item.children)}
           </TreeNode>
         );
       }
 
-      return <TreeNode key={item.key} title={line} />;
+      return <TreeNode key={item.id} title={line} />;
     });
     return (
       <div>
@@ -256,12 +225,11 @@ export default class SortList extends React.Component {
           draggable
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
-          loadData={this.onLoadData}
           defaultExpandAll
         >
           {loop(this.state.gData)}
         </Tree>
-        <SortModal visible={this.state.visible} parentId={this.state.parentId} id={this.state.editId}/>
+        <SortModal visible={this.state.visible} item={this.state.item} list={this.state.dataList}/>
       </div>
     );
   }
