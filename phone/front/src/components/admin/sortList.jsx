@@ -159,13 +159,12 @@ export default class SortList extends React.Component {
   }
   editSort(item)
   {
-    //console.log(item);
-    //console.log(item);
-    //console.log(this);
+    //const editSort_modal = <SortModal visible=true item={item} />
+    //ReactDOM.render(<SortModal visible=true item={item} />,document.getElementById('container'));
     this.setState({
-      visible:true,
+      visible: true,
       item:item
-    });
+    })
   }
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
@@ -193,7 +192,7 @@ export default class SortList extends React.Component {
                     </Col>
                    </Row>
 
-      if (item.children) {
+      if (item.children.length>0) {
         return (
           <TreeNode key={item.id} title={line}>
             {loop(item.children)}
@@ -219,17 +218,14 @@ export default class SortList extends React.Component {
         <Col span={8}>操作</Col>
        </Row>
         <Tree
-          onExpand={this.onExpand}
-          expandedKeys={expandedKeys}
-          autoExpandParent={autoExpandParent}
+          defaultExpandedKeys={this.state.expandedKeys}
           draggable
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
-          defaultExpandAll
         >
           {loop(this.state.gData)}
         </Tree>
-        <SortModal visible={this.state.visible} item={this.state.item} list={this.state.dataList}/>
+        <SortModal visible={this.state.visible} item={this.state.item} />
       </div>
     );
   }
