@@ -111,10 +111,10 @@ export default class SortList extends React.Component {
   }
   onDragEnter(info) {
     //console.log(info);
-    // expandedKeys 需要受控时设置
-    // this.setState({
-    //   expandedKeys: info.expandedKeys,
-    // });
+    //expandedKeys 需要受控时设置
+    //this.setState({
+    //  expandedKeys: info.expandedKeys,
+    //});
   }
   onDrop(info) {
 
