@@ -39,7 +39,7 @@ export default class SearchSort extends React.Component{
     //this.setState({ value });
   }
   handleSearch(name) {
-
+    //this.setState({ value: '5'});
   }
   render() {
     const options = data.map(d => <Option key={d.id}>{d.name}</Option>);

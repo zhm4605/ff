@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 
 import { Card, Form, Icon, Input,InputNumber,Button, Checkbox,DatePicker,Col,Row,Tabs,Radio  } from 'antd';
 
-import UploadPic from './uploadPic.jsx';
-import Ueditor from './ueditor.jsx';
-import SearchSort from './searchSort.jsx';
+import UploadPic from './good/uploadPic.jsx';
+import Ueditor from './good/ueditor.jsx';
+
+import SearchSort from './sort/searchSort.jsx';
 
 const FormItem = Form.Item;
 

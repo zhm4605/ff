@@ -47,9 +47,9 @@ export default class SortModal extends React.Component{
               that.setState({
                 confirmLoading: false,
                 visible:false
-              });
-
+              },()=>{that.props.onOk(msg.list,that.state.visible)});
               //更新父组件
+              
             }
             
           },

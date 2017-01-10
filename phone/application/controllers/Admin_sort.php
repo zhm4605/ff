@@ -44,14 +44,21 @@ class Admin_sort extends MY_Controller {
     	{
     		$state = $this->sort_mod->add_sort($data);
     	}
-        $output = array("state"=>$state);
+        $output = array();
+        $output["state"] = $state;
+        $output["list"] = $this->sort_mod->get_sort_list();
         echo json_encode($output);
     }
     //删除分类
-    public function removeSort()
+    public function removeSort($id)
     {
-    	$id = $_GET['id'];
-    	$this->sort_mod->remove_sort($id);
+        $output = array("state"=>0);
+    	if($this->sort_mod->remove_sort($id))
+        {
+            $output["state"] = 1;
+        };
+        
+        echo json_encode($output);
     }
 
     //搜索分类

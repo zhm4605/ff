@@ -1,10 +1,10 @@
 
 import ReactDOM from 'react-dom';
 
-import { Tree, Input, Button, Modal, Row, Col } from 'antd';
+import { Tree, Input, Button, Modal, Row, Col, message } from 'antd';
 
-import AddSort from './addSort.jsx';
-import SortModal from './sortModal.jsx';
+import AddSort from './sort/addSort.jsx';
+import SortModal from './sort/sortModal.jsx';
 
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -81,7 +81,9 @@ export default class SortList extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDrop = this.onDrop.bind(this);
-    this.editSort = this.editSort.bind(this);
+    //this.editSort = this.editSort.bind(this);
+    this.updateList = this.updateList.bind(this);
+    this.removeItem = this.removeItem.bind(this);
   }
   onExpand(expandedKeys){
     this.setState({
@@ -157,14 +159,64 @@ export default class SortList extends React.Component {
       gData: data,
     });
   }
-  editSort(item)
-  {
+  editSort(item){
     //const editSort_modal = <SortModal visible=true item={item} />
     //ReactDOM.render(<SortModal visible=true item={item} />,document.getElementById('container'));
     this.setState({
       visible: true,
       item:item
     })
+  }
+  removeSort(item){
+    const that = this;
+    let text = "";
+    if(item.children.length>0)
+    {
+      text = "（含子分类）";
+    }
+
+    if(confirm("确认删除该分类?"+text))
+    {
+      $.ajax({
+        url:"/admin_sort/removeSort/"+item.id,
+        dataType:"json",
+        async: false,
+        success:function(msg)
+        {
+          if(msg.state)
+          {
+            message.success('删除成功');
+            that.removeItem(item);
+          }
+        },
+        error:function(msg){
+          console.log(msg);
+          document.body.innerHTML = msg.responseText;
+        }
+      })
+    }
+  }
+  removeItem(remove_item){
+    const data = [...this.state.gData];
+    console.log(data);
+
+    const loop = (data, id, callback) => {
+      data.forEach((item, index) => {
+        if(item.id==id)
+        {
+          data.splice(index,1);
+          return data;
+        }
+        else if(item.children.length>0)
+        {
+          loop(item.children,id);
+        }
+      })
+    }
+    
+  }
+  updateList(gData,visible) {
+    this.setState({gData,visible});
   }
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
@@ -186,7 +238,7 @@ export default class SortList extends React.Component {
                     <Col span={2}>{item.id}</Col>
                     <Col span={2}>{item.orderId}</Col>
                     <Col span={8}>
-                      <Button type="ghost" size="small">删除</Button>
+                      <Button type="ghost" size="small" onClick={()=>{this.removeSort(item)}}>删除</Button>
                       <Button type="ghost" size="small" onClick={()=>{this.editSort(item)}}>编辑</Button>
                       <Button type="primary" size="small" onClick={()=>this.editSort({parentId:item.id,id:0})}>添加子分类</Button>
                     </Col>
@@ -209,23 +261,24 @@ export default class SortList extends React.Component {
           placeholder="Search"
           onChange={this.onChange}
         />
-       <AddSort />
-       <Row className='sort-title'>
-        <Col span={3} style={{textAlign:'left'}}>分类名称</Col>
-        <Col span={5}>分类描述</Col>
-        <Col span={2}>分类id</Col>
-        <Col span={2}>排序</Col>
-        <Col span={8}>操作</Col>
-       </Row>
+        <Button style={{marginLeft:10}} type='primary' onClick={()=>this.editSort({parentId:'0',id:0})}>添加分类</Button>
+        <Row className='sort-title'>
+          <Col span={3} style={{textAlign:'left'}}>分类名称</Col>
+          <Col span={5}>分类描述</Col>
+          <Col span={2}>分类id</Col>
+          <Col span={2}>排序</Col>
+          <Col span={8}>操作</Col>
+        </Row>
         <Tree
           defaultExpandedKeys={this.state.expandedKeys}
           draggable
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
+          defaultExpandAll
         >
           {loop(this.state.gData)}
         </Tree>
-        <SortModal visible={this.state.visible} item={this.state.item} />
+        <SortModal visible={this.state.visible} item={this.state.item} onOk={this.updateList}/>
       </div>
     );
   }

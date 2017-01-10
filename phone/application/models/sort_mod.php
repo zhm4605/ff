@@ -52,7 +52,14 @@ class Sort_mod extends MY_Model {
 
 	public function remove_sort($id)
 	{
-		$this->db->where('id', $id)->delete($this->_table);
+		if($this->db->where('id', $id)->delete($this->_table)&&$this->db->where('parentId', $id)->delete($this->_table))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		};
 	}
 
 	//分类列表
