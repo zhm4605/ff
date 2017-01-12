@@ -42,7 +42,7 @@ const routes = <Router history={hashHistory}>
 render(routes, document.getElementById('container'));
 
 
-window.location.hash = '#/sortList';
+window.location.hash = '#/addGood';
 
 //console.log(window.location)
 
