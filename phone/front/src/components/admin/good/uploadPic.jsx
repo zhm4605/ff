@@ -2,6 +2,15 @@
 
 import { Upload, Icon, Modal, message } from 'antd';
 
+/*
+  [{
+        uid: -1,
+        name: 'xxx.png',
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      }]
+*/
+
 export default class UploadPic extends React.Component {
   constructor(props)
   {
@@ -9,12 +18,7 @@ export default class UploadPic extends React.Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: [{
-        uid: -1,
-        name: 'xxx.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      }],
+      fileList: props.fileList||[],
       text: ''
     };
 
@@ -22,6 +26,7 @@ export default class UploadPic extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
+    this.triggerChange = this.triggerChange.bind(this);
   }
 
   handleCancel() {
@@ -36,15 +41,15 @@ export default class UploadPic extends React.Component {
   }
 
   handleChange(info) {
-    this.setState({ fileList: info.fileList })
-
+    //this.setState({ fileList: info.fileList })
+    console.log(info);
     if(info.file.status=='done')
     {
       console.log(info);
-      this.setState({
-        text: '提示'+info.file.response,
-        previewVisible: true,
-      });
+      //const fileList = this.state.fileList.push
+      //this.setState({fileList},this.triggerChange());
+
+      document.body.innerHTML=info.file.response;
     }
     
   }
@@ -53,12 +58,20 @@ export default class UploadPic extends React.Component {
     console.log(file);
   }
 
+  triggerChange(){
+    // Should provide an event to pass value to Form.
+    const onChange = this.props.onChange;
+    if (onChange) {
+      onChange(this.state.fileList);
+    }
+  }
+
   render() {
     const { previewVisible, previewImage, fileList, text } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
+        <div className="ant-upload-text">上传图片</div>
       </div>
     );
     return (
@@ -66,7 +79,7 @@ export default class UploadPic extends React.Component {
         <Upload
           multiple
           accept="image/*"
-          action="/?app=home&act=upload"
+          action="/admin_good/uploadPic"
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}

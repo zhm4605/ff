@@ -44,7 +44,7 @@ class Good_mod extends MY_Model {
 	{
 		if($this->db->set($data)->insert($this->_table_pic))
 		{
-			retun true;
+			return true;
 		}
 	}
 
@@ -67,7 +67,7 @@ class Good_mod extends MY_Model {
 		{
 			$id = $value["id"];
 			$ids[] = $id;
-			unset[$value["id"]];
+			unset($value["id"]);
 			if($value["id"])
 			{
 				$this->db->set($value)->where('id',$id)->update($this->_table_sort);
