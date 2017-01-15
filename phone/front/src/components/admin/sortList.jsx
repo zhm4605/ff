@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import { Tree, Input, Button, Modal, Row, Col, message } from 'antd';
 
-import AddSort from './sort/addSort.jsx';
 import SortModal from './sort/sortModal.jsx';
 
 const TreeNode = Tree.TreeNode;

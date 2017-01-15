@@ -63,8 +63,13 @@ class Sort_mod extends MY_Model {
 	}
 
 	//分类列表
-	public function get_sort_list($parentId=0,$level=0)
+	public function get_sort_list($simple=false,$parentId=0,$level=0)
 	{
+		if($simple)
+		{
+			$this->db->select('id,name');
+		}
+
 		if($parentId>0)
 		{
 			$this->db->where('parentId',$parentId);
@@ -79,23 +84,27 @@ class Sort_mod extends MY_Model {
 
 		foreach ($list as $key=>$item)
 		{
-		   $list[$key]["children"] = $this->get_sort_list($item['id']);
+		   $list[$key]["children"] = $this->get_sort_list($simple,$item['id']);
 		}
 
 		return $list;
 	}
 	//搜索分类列表
+	/*
 	public function get_simple_sort_list()
 	{
 		$query = $this->db->select('id,name')->get($this->_table);
 		$list = $query->result_array();
 		return $list;
-	}
+	}*/
 
 	public function get_sort_by_id($id)
 	{
 		$query = $this->db->get_where($this->_table, array('id' => $id));
-		return $query->row_array();
+		$arr = $query->row_array();
+		//$arr["children"] = $this->get_sort_list(true,$id);
+		$arr["children"] = [];
+		return $arr;
 	}
 
 	public function get_sort_by_key($key)

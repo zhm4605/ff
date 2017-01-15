@@ -1,79 +1,67 @@
 
 
-import { Form, Icon, Input,InputNumber,Button,Checkbox,DatePicker,Col,Row,Tabs,Radio  } from 'antd';
+import { Form, Icon, Input,InputNumber,Button,Col,Row,Tabs,Tag  } from 'antd';
 
 import SearchSort from '../sort/searchSort.jsx';
+import EditSortChild from './editSortChild.jsx';
 
 const FormItem = Form.Item;
 
 export default class EditSort extends React.Component{
   constructor(props) {
     super(props);
+    const that = this;
+    $.ajax({
+      url:"/admin_good/default_sort/",
+      dataType:"json",
+      async: false,
+      success:function(msg)
+      {
+        console.log(msg);
+        that.state = {
+        	list:msg
+        };
+      },
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+
+    this.addSort = this.addSort.bind(this);
   }
 
   handleSubmit() {
 
   }
 
+  addSort()
+  {
+  	//this.refs.sort.value
+  }
+
+  updateRender(data)
+  {
+  	console.log(data)
+  }
+
   render() {
-    const { getFieldProps, getFieldError,getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: { span: 2 }
-    };
+    const {list} = this.state;
+    const sorts = list.map((d) => 
+	    		<Row key={d.id} style={{padding:'5px 0'}}>
+			      <Col span={4} style={{textAlign:'right',paddingRight:5}}>{d.name}：</Col>
+			      <Col span={20}>
+			      	<EditSortChild id={d.id} name={d.name} children={d.children} onChange={this.updateRender}/>
+			      </Col>
+			    </Row>
+				);
+    //
     return (
     	<div>
-	    	<div style={{textAlign:'center',marginBottom:10}}>
-	        <SearchSort placeholder="搜索要添加的分类" style={{ width: 250,marginBottom:10,textAlign:'left' }} />
+	    	<div style={{textAlign:'left',marginBottom:15}}>
+	    		<SearchSort placeholder="搜索要添加的分类" style={{width:200,textAlign:'left'}} ref='sort'/>
+	    		<Button type='primary' onClick={this.addSort} style={{marginLeft:5,verticalAlign:'middle'}}>添加</Button>
 	      </div>
-	    	<Form horizontal onSubmit={this.handleSubmit}>
-		      <FormItem
-		        {...formItemLayout}
-		        wrapperCol={{ span: 14 }}
-		        label="颜色"
-		      >
-		        {getFieldDecorator('name', {
-		          initialValue:"a",
-		          rules: [{ required: true, message: '请选择颜色' }],
-		        })(
-		          <RadioGroup>
-		            <RadioButton value="a">Hangzhou</RadioButton>
-		            <RadioButton value="b">Shanghai</RadioButton>
-		            <RadioButton value="c">Beijing</RadioButton>
-		            <RadioButton value="d">Chengdu</RadioButton>
-		          </RadioGroup>
-		        )}
-		      </FormItem>
-		      <FormItem
-		        {...formItemLayout}
-		        wrapperCol={{ span: 4 }}
-		        label="价格"
-		      >
-		          {getFieldDecorator('priceO', {
-		            rules: [{ required: true, message: '请输入价格' }],
-		          })(
-		            <Input type='number' placeholder='' addonAfter='元'/>
-		          )}
-		      </FormItem>
-		      <FormItem
-		        {...formItemLayout}
-		        wrapperCol={{ span: 4 }}
-		        label="库存"
-		      >
-		        {getFieldDecorator('name', {
-		          rules: [{required: true, message: '请输入库存'}],
-		        })(
-		          <Input type='number' placeholder='' addonAfter='件'/>
-		        )}
-		      </FormItem>
-		      <FormItem 
-		         wrapperCol={{
-		          span: 10,
-		          offset: 2,
-		        }}
-		      >
-		        <Button type="primary" htmlType="submit" size="large">提交</Button>
-		      </FormItem>
-		    </Form>
+	      {sorts}
 	    </div>
     )
   }

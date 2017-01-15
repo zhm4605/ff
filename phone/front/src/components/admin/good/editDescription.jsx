@@ -1,10 +1,14 @@
- 
-export default class Ueditor extends React.Component{ 
-    constructor(props) {
-      super(props);
-    }
-    componentDidMount(){
-        var editor = UE.getEditor(this.props.id, {
+
+
+import { Button } from 'antd';
+
+export default class AddGood extends React.Component{
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  componentDidMount(){
+        const editor = UE.getEditor("content", {
              //工具栏
                 toolbars: [[
                     'fullscreen', 'source', '|', 'undo', 'redo', '|',
@@ -37,21 +41,33 @@ export default class Ueditor extends React.Component{
                 ,'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36]
                 , enableAutoSave : false
                 , autoHeightEnabled : false
-                , initialFrameHeight: this.props.height
+                , initialFrameHeight: 600
                 , initialFrameWidth: '100%'
                 ,readonly:this.props.disabled
         });
+        //this.setState({editor});
+        this.editor  = editor;
         var me = this;
         editor.ready( function( ueditor ) {
             var value = me.props.value?me.props.value:'<p></p>';
             editor.setContent(value); 
         }); 
     }
-    render(){
-        return (
-             <script id={this.props.id} name="content" type="text/plain">
-                  
-             </script>
-        )
-    }
+  handleSubmit() {
+    console.log(this.editor.getContent());
+  }
+  render() {
+    const formData = {
+      content: 'aa'
+    };
+
+    return (
+      <div>
+        <script id="content" name="content" type="text/plain"></script>
+        <Button type="primary" htmlType="submit" size="large" style={{float:'right',marginTop:10}} onClick={this.handleSubmit}>提交</Button>
+      </div>
+     )
+  }
 }
+
+//AddGood = Form.create({})(AddGood);<EditSort />

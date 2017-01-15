@@ -1,25 +1,37 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Input, Select, Button, Icon } from 'antd';
+import { Input, Select, Button, Icon, Cascader } from 'antd';
 
 const Option = Select.Option;
 
 let data = []; 
- $.ajax({
-    url:"/admin_sort/sortList/true",
-    dataType:"json",
-    async: false,
-    success:function(msg)
+$.ajax({
+  url:"/admin_sort/sortList/true",
+  dataType:"json",
+  async: false,
+  success:function(msg)
+  {
+    console.log(msg);
+    data = msg;
+  },
+  error:function(msg){
+    //console.log(msg);
+    document.body.innerHTML = msg.responseText;
+  }
+})
+
+
+//数组中的 id->value name->label  const loop = data =>
+function changeKey(list)
+{ 
+  list.forEach(function(item, index, arr){
+    arr[index]["value"] = arr[index]["id"];
+    arr[index]["label"] = arr[index]["name"];
+    if(item.children&&item.children.length>0)
     {
-      console.log(msg);
-      data = msg;
-      data.unshift({id:"0",name:"无"});
-    },
-    error:function(msg){
-      //console.log(msg);
-      document.body.innerHTML = msg.responseText;
+      changeKey(item.children);
     }
   })
+  return list;
+}
 
 export default class SearchSort extends React.Component{
   constructor(props) {
@@ -35,26 +47,32 @@ export default class SearchSort extends React.Component{
   componentWillReceiveProps(nextProps) {
     this.setState({ defaultValue: nextProps.value});
   }
-  handleChange(value) {
-    //this.setState({ value });
+  handleChange(value,label) {
+    console.log(value);
+    console.log(label);
+
+    const onChoosed = this.props.onChoosed;
+    if(onChoosed)
+    {
+      onChoosed(value,label);
+    }
   }
   handleSearch(name) {
-    //this.setState({ value: '5'});
   }
   render() {
-    const options = data.map(d => <Option key={d.id}>{d.name}</Option>);
-
+    //const options = data.map(d => <Option key={d.id}>{d.name}</Option>);
+    const options = changeKey(this.props.list||data);
+    console.log(options);
+    //defaultValue={this.state.hasOwnProperty('defaultValue')?this.state.defaultValue:[]}
     return (
       <div className="ant-search-input-wrapper" style={this.props.style}>
-          <Select
-            showSearch
-            placeholder={this.props.placeholder}
-            onChange={this.handleChange}
-            onSearch={this.handleSearch}
-            defaultValue={this.state.hasOwnProperty('defaultValue')?this.state.defaultValue:'0'}
-          >
-            {options}
-          </Select>
+        <Cascader
+          options={options}
+          onChange={this.handleChange}
+          placeholder={this.props.placeholder}
+          showSearch
+          style={{width:'100%'}}
+        />
       </div>
     );
     

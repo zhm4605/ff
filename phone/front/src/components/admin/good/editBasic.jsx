@@ -16,10 +16,9 @@ export default class EditBasic extends React.Component{
       if (!err) 
       {
         console.log('Received values of form: ', values);
-        /*
-        const id = this.state.item.id;
+
         $.ajax({
-          url:"/admin_sort/editSort/"+id,
+          url:"/admin_good/editGood/"+this.props.goodId||'',
           dataType:"json",
           type:"post",
           data:values,
@@ -28,19 +27,14 @@ export default class EditBasic extends React.Component{
             console.log(msg);
             if(msg.state)
             {
-              that.setState({
-                confirmLoading: false,
-                visible:false
-              },()=>{that.props.onOk(msg.list,that.state.visible)});
-              //更新父组件
-              
+			  that.props.finish&&that.props.finish();
             }
             
           },
           error:function(msg){
             document.body.innerHTML = msg.responseText;
           }
-        })*/
+        })
       }
     })
   }
@@ -117,7 +111,7 @@ export default class EditBasic extends React.Component{
 	        {getFieldDecorator('pics', {
 	          valuePropName: 'fileList'
 	        })(
-	          <UploadPic />
+	          <UploadPic on/>
 	        )}
 	      </FormItem>
 	      <FormItem 

@@ -1,17 +1,6 @@
-
-
 import { Upload, Icon, Modal, message } from 'antd';
 
-/*
-  [{
-        uid: -1,
-        name: 'xxx.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      }]
-*/
-
-export default class UploadPic extends React.Component {
+export default class PicturesWall extends React.Component {
   constructor(props)
   {
     super(props);
@@ -22,78 +11,83 @@ export default class UploadPic extends React.Component {
       text: ''
     };
 
+    this.handleChange = this.handleChange.bind(this);
     this.handlePreview = this.handlePreview.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleRemove = this.handleRemove.bind(this);
+    //this.handleRemove = this.handleRemove.bind(this);
     this.triggerChange = this.triggerChange.bind(this);
   }
 
   handleCancel() {
     this.setState({ previewVisible: false })
   }
-
-  handlePreview(file) {
+  handlePreview(file){
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true,
     });
   }
 
-  handleChange(info) {
-    //this.setState({ fileList: info.fileList })
-    console.log(info);
-    if(info.file.status=='done')
-    {
-      console.log(info);
-      //const fileList = this.state.fileList.push
-      //this.setState({fileList},this.triggerChange());
+  handleChange(info){
+    let fileList = info.fileList;
 
-      document.body.innerHTML=info.file.response;
-    }
-    
-  }
 
-  handleRemove(file) {
-    console.log(file);
+    // 2. read from response and show file link
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.url;
+        file.thumbUrl = file.response.thumbUrl;
+      }
+      return file;
+    });
+
+    // 3. filter successfully uploaded files according to response from server
+    fileList = fileList.filter((file) => {
+      console.log(file.response);
+      if (file.response) {
+        return file.response.state == '1';
+      }
+      return true;
+    });
+
+    this.setState({ fileList },this.triggerChange);
   }
 
   triggerChange(){
     // Should provide an event to pass value to Form.
     const onChange = this.props.onChange;
+    const fileList = this.state.fileList;
     if (onChange) {
-      onChange(this.state.fileList);
+      onChange(fileList);
     }
   }
 
   render() {
-    const { previewVisible, previewImage, fileList, text } = this.state;
+    const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
-        <div className="ant-upload-text">上传图片</div>
+        <div className="ant-upload-text">Upload</div>
       </div>
     );
     return (
       <div className="clearfix">
         <Upload
-          multiple
-          accept="image/*"
+          accept="image/jpeg,image/png,image/jpg"
           action="/admin_good/uploadPic"
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
-          onRemove={this.handleRemove}
+          multiple
         >
           {fileList.length >= 3 ? null : uploadButton}
         </Upload>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
-          <div>{text}</div>
         </Modal>
       </div>
     );
   }
 }
-

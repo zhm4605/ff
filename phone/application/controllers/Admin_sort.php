@@ -18,20 +18,14 @@ class Admin_sort extends MY_Controller {
     }
 
     //分类列表
-    public function sortList($simple=false)
+    public function sortList($simple=false,$parentId=0)
     {
-        if($simple)
-        {
-            $list = $this->sort_mod->get_simple_sort_list();
-        }
-        else
-        {
-             $list = $this->sort_mod->get_sort_list();
-        }
+
+        $list = $this->sort_mod->get_sort_list($simple,$parentId);
        
         echo json_encode($list);
     }
-    
+
     //添加分类
     public function editSort($id=0)
     {

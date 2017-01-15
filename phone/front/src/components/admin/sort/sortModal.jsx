@@ -1,6 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-
 import { Card, Form, Icon, Input,Button,Modal } from 'antd';
 
 import SearchSort from './searchSort.jsx';

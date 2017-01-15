@@ -1,20 +1,12 @@
 
 
-import { Card, Form, Icon, Input,InputNumber,Button, Checkbox,DatePicker,Col,Row,Tabs,Radio  } from 'antd';
+import { Card,Tabs } from 'antd';
 
-import EditBasic from './good/editBasic.jsx'; 
+import EditBasic from './good/editBasic.jsx';
+import EditDescription from './good/editDescription.jsx'; 
 import EditSort from './good/editSort.jsx'; 
 
-import Ueditor from './good/ueditor.jsx';
-
-
-
-const FormItem = Form.Item;
-
 const TabPane = Tabs.TabPane;
-
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 
 export default class AddGood extends React.Component{
   constructor(props) {
@@ -25,8 +17,8 @@ export default class AddGood extends React.Component{
   handleSearch() {
     
   }
-  switchTab() {
-
+  switchTab(activeKey) {
+    this.setState({activeKey})
   }
 
   render() {
@@ -37,16 +29,15 @@ export default class AddGood extends React.Component{
 
     return (
       <Card title="添加商品">
-        <Tabs defaultActiveKey="basic">
+        <Tabs defaultActiveKey="sorts">
           <TabPane tab="基本信息" key="basic">
-            <EditBasic finish={this.switchTab}/>
+            <EditBasic finish={()=>{this.switchTab("description")}}/>
           </TabPane>
           <TabPane tab="商品描述" key="description">
-            <Ueditor value={formData.content} id="content" height="800" /> 
-            <div><Button type="primary" htmlType="submit" size="large">提交</Button></div>
+            <EditDescription finish={()=>{this.switchTab("sorts")}}/>
           </TabPane>
           <TabPane tab="设置分类" key="sorts">
-            
+            <EditSort finish={()=>{window.location.hash = '#/good'}}/>
           </TabPane>
         </Tabs>
       </Card>
