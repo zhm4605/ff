@@ -1,4 +1,6 @@
-import { Tag, Input, Tooltip, Button } from 'antd';
+import { Tag, Input, Tooltip, Button, Table } from 'antd';
+
+const { Column, ColumnGroup } = Table;
 
 import SearchSort from '../sort/searchSort.jsx';
 
@@ -6,9 +8,9 @@ function removeRepeat(msg,children)
 {
   msg.forEach(function(item, index) {
     children.forEach(function(child){
-      if(item.id==child.id)
+      if(item.id===child.id)
       {
-        msg.splice(index);
+        msg.splice(index,1);
       }
     })
   })
@@ -27,7 +29,7 @@ export default class EditSortChild extends React.Component {
       {
         that.msg = msg;
         msg = removeRepeat(msg,props.children);
-        console.log(msg);
+        //console.log(msg);
         that.state = {
           children: props.children||[],
           selectList: msg,
@@ -59,16 +61,8 @@ export default class EditSortChild extends React.Component {
     const state = this.state;
 
     let children = state.children;
-    /*
-    if (inputValue && children.indexOf(inputValue) === -1) 
-    {
-      children = [...children, inputValue];
-    }*/
     const target = label[label.length-1];
-    console.log(this.msg);
-    console.log([target]);
     const selectList = removeRepeat(this.msg,[target]);
-    console.log(selectList);
     children = [...children,target];
     this.setState({
       children,
@@ -76,13 +70,19 @@ export default class EditSortChild extends React.Component {
       inputValue: '',
       selectList
     });
+
+    const onChanged = this.props.onChanged;
+    if(onChanged)
+    {
+      onChanged(this.props.index,children);
+    } 
   }
 
   //saveInputRef = input => this.input = input
 
   render() {
     const { children, inputVisible, inputValue, selectList } = this.state;
-
+    //console.log(children);
     return (
       <div>
         {children.map((tag, index) => {
@@ -94,10 +94,10 @@ export default class EditSortChild extends React.Component {
           );
           return isLongTag ? <Tooltip title={tag.name}>{tagElem}</Tooltip> : tagElem;
         })}
-        {inputVisible && (
+        {inputVisible && selectList.length>0 && (
           <SearchSort list={selectList} placeholder={"添加"+this.props.name||'分类'} style={{width:111,textAlign:'left'}} onChoosed={this.handleInputConfirm}/>
         )}
-        {!inputVisible && <Button size="small" type="dashed" onClick={this.showInput}>{"添加"+this.props.name}</Button>}
+        {!inputVisible && selectList.length>0 && <Button size="small" type="dashed" onClick={this.showInput}>{"添加"+this.props.name}</Button>}
       </div>
     );
   }

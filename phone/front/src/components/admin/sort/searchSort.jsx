@@ -45,6 +45,7 @@ export default class SearchSort extends React.Component{
     this.handleSearch = this.handleSearch.bind(this);
   }
   componentWillReceiveProps(nextProps) {
+    //console.log(nextProps);
     this.setState({ defaultValue: nextProps.value});
   }
   handleChange(value,label) {
@@ -60,9 +61,8 @@ export default class SearchSort extends React.Component{
   handleSearch(name) {
   }
   render() {
-    //const options = data.map(d => <Option key={d.id}>{d.name}</Option>);
     const options = changeKey(this.props.list||data);
-    console.log(options);
+    //console.log(options);
     //defaultValue={this.state.hasOwnProperty('defaultValue')?this.state.defaultValue:[]}
     return (
       <div className="ant-search-input-wrapper" style={this.props.style}>
@@ -72,6 +72,8 @@ export default class SearchSort extends React.Component{
           placeholder={this.props.placeholder}
           showSearch
           style={{width:'100%'}}
+          expandTrigger='hover'
+          changeOnSelect
         />
       </div>
     );

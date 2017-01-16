@@ -1,6 +1,6 @@
 
 
-import { Form, Icon, Input,InputNumber,Button,Col,Row,Tabs,Tag  } from 'antd';
+import { Form, Icon, Input,InputNumber,Button,Col,Row,Tabs,Tag,Table  } from 'antd';
 
 import SearchSort from '../sort/searchSort.jsx';
 import EditSortChild from './editSortChild.jsx';
@@ -28,6 +28,7 @@ export default class EditSort extends React.Component{
     })
 
     this.addSort = this.addSort.bind(this);
+    this.updateRender = this.updateRender.bind(this);
   }
 
   handleSubmit() {
@@ -39,18 +40,23 @@ export default class EditSort extends React.Component{
   	//this.refs.sort.value
   }
 
-  updateRender(data)
+  updateRender(index,children)
   {
-  	console.log(data)
+    console.log(index);
+    console.log(children);
+    let list = this.state.list;
+    list[index]['children'] = children;
+    this.setState({list});
   }
 
   render() {
     const {list} = this.state;
-    const sorts = list.map((d) => 
+    console.log(list);
+    const sorts = list.map((d,i) => 
 	    		<Row key={d.id} style={{padding:'5px 0'}}>
 			      <Col span={4} style={{textAlign:'right',paddingRight:5}}>{d.name}：</Col>
 			      <Col span={20}>
-			      	<EditSortChild id={d.id} name={d.name} children={d.children} onChange={this.updateRender}/>
+			      	<EditSortChild index={i} id={d.id} name={d.name} children={d.children} onChanged={this.updateRender}/>
 			      </Col>
 			    </Row>
 				);
@@ -62,6 +68,7 @@ export default class EditSort extends React.Component{
 	    		<Button type='primary' onClick={this.addSort} style={{marginLeft:5,verticalAlign:'middle'}}>添加</Button>
 	      </div>
 	      {sorts}
+        <Table dataSource={list}/>
 	    </div>
     )
   }
