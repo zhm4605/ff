@@ -6,6 +6,7 @@ import SearchSort from '../sort/searchSort.jsx';
 import EditSortChild from './editSortChild.jsx';
 
 const FormItem = Form.Item;
+const { Column, ColumnGroup } = Table;
 
 export default class EditSort extends React.Component{
   constructor(props) {
@@ -60,6 +61,12 @@ export default class EditSort extends React.Component{
 			      </Col>
 			    </Row>
 				);
+    const sort_table = list.map((d,i) =>
+        <td rowspan={d.children.length}>{d.name}</td>
+        <Column title="价格（元）" key="price" render={(text, record) => (
+              <span>￥{record.priceMin} ~ ￥{record.priceMax}</span>
+            )}/>
+      );
     //
     return (
     	<div>
@@ -68,7 +75,14 @@ export default class EditSort extends React.Component{
 	    		<Button type='primary' onClick={this.addSort} style={{marginLeft:5,verticalAlign:'middle'}}>添加</Button>
 	      </div>
 	      {sorts}
-        <Table dataSource={list}/>
+        <Table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </Table>
 	    </div>
     )
   }
