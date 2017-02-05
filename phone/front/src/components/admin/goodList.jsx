@@ -5,28 +5,21 @@ import { Table,Switch,Button } from 'antd';
 
 const { Column, ColumnGroup } = Table;
 
-const data = [
-  {
-    key: '1',
-    name: 'iphone7',
-    sorts: '颜色：',
-    priceMin: '99',
-    priceMax: '9999',
-    putawayTime: '2016-10-01',
-    remain: '100',
-    lock: 0,
-  }, 
-  {
-    key: '2',
-    name: 'iphone7',
-    sorts: '颜色：',
-    priceMin: '99',
-    priceMax: '9999',
-    putawayTime: '2016-10-01',
-    remain: '100',
-    lock: 1,
-  }, 
-];
+let data = [];
+$.ajax({
+        url:"/good/good_list",
+        dataType:"json",
+        async: false,
+        success:function(msg)
+        {
+          console.log(msg);
+          data = msg;
+        },
+        error:function(msg){
+          console.log(msg);
+          document.body.innerHTML = msg.responseText;
+        }
+      })
 
 export default class GoodList extends React.Component{
   constructor(props) {
@@ -82,7 +75,7 @@ export default class GoodList extends React.Component{
         </div>
         <Table dataSource={data} onChange={this.handleChange}>
           <Column title="名称" dataIndex="name" key="name" />
-          <Column title="分类" dataIndex="sorts" key="sorts" />
+          <Column width='20%' title="分类" dataIndex="sorts" key="sorts" />
           <Column title="价格（元）" key="price" render={(text, record) => (
               <span>￥{record.priceMin} ~ ￥{record.priceMax}</span>
             )}/>
@@ -94,7 +87,7 @@ export default class GoodList extends React.Component{
           <Column title="操作" key="excute" render={(text, record) => (
                 <div>
                   <Button>删除</Button>
-                  <Button type="ghost">修改</Button>
+                  <Button type="ghost"><a href='#addGood/1'>修改</a></Button>
                 </div>
             )}/>
         </Table>

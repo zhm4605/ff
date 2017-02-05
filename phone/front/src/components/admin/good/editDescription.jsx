@@ -47,14 +47,34 @@ export default class AddGood extends React.Component{
         });
         //this.setState({editor});
         this.editor  = editor;
-        var me = this;
+        let me = this;
         editor.ready( function( ueditor ) {
-            var value = me.props.value?me.props.value:'<p></p>';
-            editor.setContent(value); 
+            let description = me.props.description?me.props.description:'<p></p>';
+            editor.setContent(description); 
         }); 
     }
   handleSubmit() {
     console.log(this.editor.getContent());
+    const description = this.editor.getContent();
+    const that = this;
+     $.ajax({
+      url:"/admin_good/editGood/"+that.props.goodId||'',
+      dataType:"json",
+      type:"post",
+      data:{description},
+      success:function(msg)
+      {
+        console.log(msg);
+        if(msg.state)
+        {
+          that.props.finish&&that.props.finish();
+        }
+        
+      },
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
   }
   render() {
     const formData = {

@@ -10,7 +10,7 @@ header{
 	color:#fff;
 	padding: 5px 2%;
 	position: relative;
-	display: none;
+	opacity: 0;
 }
 
 #mycenter{
@@ -26,7 +26,6 @@ header{
 	position: absolute;
 	left: 0;
 	top: 46px;
-	display: none;
 }
 #main{
 	margin-left: 150px;
@@ -36,4 +35,36 @@ header{
 .ant-tree-searchable-filter {
   color: #f50;
   transition: all .3s ease;
+}
+/**按钮**/
+.ant-btn{
+	margin-right: 5px;
+}
+/**树形**/
+.sort-title{
+	text-align: center;
+	margin-top: 30px;
+}
+.sort-item{
+	text-align: center;
+	.title{
+		text-align: left;
+		padding-left: 20px;
+	}
+}
+.ant-tree,.ant-tree-child-tree{
+	padding: 0;
+	&>li{
+		position: relative;
+		.ant-tree-switcher{
+			position: absolute!important;
+		    top: 8px;
+		    left: 0;
+		    z-index: 9;
+		}
+	}
+	.ant-tree-node-content-wrapper{
+		display: block;
+		padding: 5px 0;
+	}
 }

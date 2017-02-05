@@ -7,7 +7,7 @@ class Admin_good extends MY_Controller {
 		parent::__construct();
 		$this->time = time();
 		$this->load->model(array('admin_mod','good_mod','sort_mod'));
-		$this->load->helper('admin');
+		$this->load->helper('admin','common');
 		//is_login();//?登陆
 	}
 
@@ -15,9 +15,56 @@ class Admin_good extends MY_Controller {
     $this->load->view('index/index.html');
   }
 
-  public function addGood()
+  public function editGood($id)
   {
-  	
+  	$data = $_POST;
+  	//echo $id;
+  	if($id>0)
+  	{
+  		$id = $this->good_mod->update_good($data,$id);
+  	}
+  	else
+  	{
+  		$id = $this->good_mod->add_good($data);
+  	}
+  	$output = array("id"=>$id);
+  	echo json_encode($output);
+  }
+
+  public function editGoodSorts($id)
+  {
+  	//echo $id;
+  	$data = $_POST;
+
+  	$sorts["sorts"]  = serialize($data['sorts']);
+
+
+  	$id = $this->good_mod->update_good($sorts,$id);
+
+  	$sort_list = $data["sort_list"];
+  	foreach ($sort_list as $key => $value) {
+  		$sort_list[$key]["sorts"] = serialize($sort_list[$key]["sorts"]);
+  	}
+
+  	//print_r($sort_list);
+  	$this->good_mod->update_good_sort($sort_list,$id);
+
+  	$output = array("id"=>$id);
+  	echo json_encode($output);
+  }
+
+  public function removePic($id)
+  {
+  	if($this->good_mod->remove_good_pic($id))
+  	{
+  		$state = 1;
+  	}
+  	else
+  	{
+  		$state = 0;
+  	}
+  	$output = array("state"=>$state);
+  	echo json_encode($output);
   }
 
   public function default_sort()
@@ -30,7 +77,7 @@ class Admin_good extends MY_Controller {
     echo json_encode($arr);
   }
 
-  public function uploadPic()
+  public function uploadPic($goodId)
   {
   	$time = time();
 		$date = date('Ymd', $time);
@@ -97,7 +144,20 @@ class Admin_good extends MY_Controller {
 			$this->load->library('image_lib', $config);
 			$this->image_lib->resize();
 
+			if($goodId>0)
+			{
+				$data = array(
+					"goodId"=>$goodId,
+					"url"=>$url
+				);
+				$id = $this->good_mod->add_good_pic($data);
+			}
+
 			$output = array("state"=>1,"url"=>$url,"thumbUrl"=>$thumbUrl);
+			if(isset($id))
+			{
+				$output["id"] = $id;
+			}
 			echo json_encode($output);
 		}
   }

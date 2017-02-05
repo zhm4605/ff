@@ -585,3 +585,16 @@ function getIP()
 }
 
 
+//获取数组部分key
+function filter_key($arr,$keys)
+{
+	$arr1 = array();
+	foreach ($arr as $key => $value) {
+		if(in_array($key, $keys))
+		{
+			$arr1[$key] = $value;
+		}
+	}
+	return $arr1;
+}
+

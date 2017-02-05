@@ -1,67 +1,60 @@
-import React from 'react';
-//import ReactDOM from 'react-dom';
+import { Breadcrumb,Tag,Card,Icon,Pagination,BackTop } from 'antd';
 
-var yinshe = {
-  familyId: '户编码',
-  huzhu: '户主',
-  enjoyNum: '享受人数',
-  totalMoney:'总救助金额',
-  editable: '操作'
-};
+const CheckableTag = Tag.CheckableTag;
+
+import SearchGood from './common/searchGood.jsx'; 
+import GoodList from './common/goodList.jsx'; 
+
 export default class List extends React.Component{
-  constructor() {
-    super();
-  }
-  show_ziduan(key,value)
-  {
-    if(key=='editable')
-    {
-      if(value==1)
-      {
-        return (
-          <div className="buttons-wrap">
-            <button>编辑</button>
-            <button>驳回</button>
-          </div>
-        )
-      }
-      else
-      {
-        return (
-          <button>查看</button>
-        )
-      }
-    }
-    else
-    {
-      return value;
-    }
+	constructor(props) {
+    super(props);
   }
   render() {
     return (
-      <table>
-        <tr>
-          {this.props.config.map(ziduan=>{
-            return (
-              <td>{yinshe[ziduan]}</td>
-            )
-          })}
-        </tr>
-        {this.props.list.map(item=>{
-          return (
-            <tr>
-              {this.props.config.map(key=>{
-                return (
-                  <td>{this.show_ziduan(key,item[key])}</td>
-                )
-              })}
-            </tr>
-          )
-        })}
-      </table>
-    )
+    	<div id='list-page'>
+    		<SearchGood />
+    		<Breadcrumb>
+			    <Breadcrumb.Item>所有分类</Breadcrumb.Item>
+			    <Breadcrumb.Item><a href="">苹果</a></Breadcrumb.Item>
+			    <Breadcrumb.Item>An Application</Breadcrumb.Item>
+			  </Breadcrumb>
+			  <ul className='filter-good'>
+				  <li>
+		        <div className='title'>品牌：</div>
+		        <div className='children'>
+			          <CheckableTag
+			            checked={false}
+			            onChange={checked => this.handleChange(checked)}
+			            className='tag'
+			          >
+			            苹果
+			          </CheckableTag>
+		         </div>
+		       </li>
+		       <li>
+		        <div className='title'>品牌：</div>
+		        <div className='children'>
+			          <CheckableTag
+			            checked={false}
+			            onChange={checked => this.handleChange(checked)}
+			            className='tag'
+			          >
+			            苹果
+			          </CheckableTag>
+		        </div>
+		      </li>
+		    </ul>
+		    <div className='rank-good'>
+		    	<a href='#'>按销量排序<Icon type='arrow-up' /></a>
+		    	<a href='#'>按时间排序</a>
+		    </div>
+		    <Card title="" className='good-list-wrap'>
+		    	<GoodList />
+		    	<Pagination defaultCurrent={1} total={50} />
+		    </Card>
+		    <BackTop />
+    	</div>
+  	)
   }
-};
 
-
-
+}

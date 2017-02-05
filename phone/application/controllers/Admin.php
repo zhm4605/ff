@@ -14,7 +14,7 @@ class Admin extends MY_Controller {
 
     public function index(){
 
-         $this->load->view('index/index.html');
+         $this->load->view('admin.html');
     }
 
     //登录

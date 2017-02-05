@@ -14,7 +14,7 @@ export default class PicturesWall extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handlePreview = this.handlePreview.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    //this.handleRemove = this.handleRemove.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
     this.triggerChange = this.triggerChange.bind(this);
   }
 
@@ -27,24 +27,34 @@ export default class PicturesWall extends React.Component {
       previewVisible: true,
     });
   }
+  handleRemove(file)
+  {
+    //console.log(info);
+     $.ajax({
+      url:"/admin_good/removePic/"+file.uid,
+      dataType:"json",
+      success:function(msg)
+      {
+
+      },
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+  }
 
   handleChange(info){
-    let fileList = info.fileList;
-
-
-    // 2. read from response and show file link
+    let {file,fileList} = info;
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response.url;
         file.thumbUrl = file.response.thumbUrl;
+        file.uid = file.response.id;
       }
       return file;
     });
 
-    // 3. filter successfully uploaded files according to response from server
     fileList = fileList.filter((file) => {
-      console.log(file.response);
       if (file.response) {
         return file.response.state == '1';
       }
@@ -59,7 +69,12 @@ export default class PicturesWall extends React.Component {
     const onChange = this.props.onChange;
     const fileList = this.state.fileList;
     if (onChange) {
-      onChange(fileList);
+      let list = [];
+      fileList.map((file,i) => {
+        list[i] = {};
+        list[i]["url"] = file.url; 
+      });
+      onChange(list);
     }
   }
 
@@ -75,14 +90,15 @@ export default class PicturesWall extends React.Component {
       <div className="clearfix">
         <Upload
           accept="image/jpeg,image/png,image/jpg"
-          action="/admin_good/uploadPic"
+          action={"/admin_good/uploadPic/"+this.props.goodId}
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
+          onRemove={this.handleRemove}
           multiple
         >
-          {fileList.length >= 3 ? null : uploadButton}
+          {fileList.length >= 5 ? null : uploadButton}
         </Upload>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />

@@ -5,8 +5,8 @@ class Good_mod extends MY_Model {
 	public function __construct(){
 		parent::__construct();
 		$this->_table = $this->getDb('')->dbprefix.'good';
-		$this->_table_pic = $this->getDb('')->dbprefix.'pic';
-		$this->_table_sort = $this->getDb('')->dbprefix.'sort';
+		$this->_table_pic = $this->_table.'_pic';
+		$this->_table_sort = $this->_table.'_sort';
 		$this->_id = 'id';
 	}
 
@@ -24,10 +24,15 @@ class Good_mod extends MY_Model {
 		$goodId = $this->db->insert_id();
 
 		//插入商品图片
-		foreach ($pics as $key => $value) {
-			$value['goodId'] = $goodId;
-			$this->db->set($value)->insert($this->_table_pic);
+		if(isset($pics))
+		{
+			foreach ($pics as $key => $value) {
+				$value['goodId'] = $goodId;
+				$this->db->set($value)->insert($this->_table_pic);
+			}
 		}
+		
+		return $goodId;
 	}
 
 	//添加、删除分类 ，添加、删除商品分类表  --商品编辑模板  --图片库
@@ -35,17 +40,36 @@ class Good_mod extends MY_Model {
 	//更新商品基本信息
 	public function update_good($data,$id)
 	{	
-		$this->db->set($data)->where('id',$id)->update($this->_table);
+		if(isset($data["pics"]))
+		{
+			unset($data["pics"]);
+		}
+		
+		if($this->db->set($data)->where('id',$id)->update($this->_table))
+		{
+			return $id;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**商品图片操作**/
 	//添加商品图片
 	public function add_good_pic($data)
 	{
+		/*
 		if($this->db->set($data)->insert($this->_table_pic))
 		{
-			return true;
+			
 		}
+		else
+		{
+			return false;
+		}*/
+		$this->db->set($data)->insert($this->_table_pic);
+		return $this->db->insert_id();
 	}
 
 	//删除商品图片 --移动至图片垃圾站
@@ -56,20 +80,25 @@ class Good_mod extends MY_Model {
 		{
 			return true;
 		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**商品分类操作**/
 	//设置子类的库存、价格
-	public function update_good_sort($data)
+	public function update_good_sort($data,$goodId)
 	{	
 		$ids = array();
-		foreach ($date as $key => $value) 
+		foreach ($data as $key => $value) 
 		{
-			$id = $value["id"];
-			$ids[] = $id;
-			unset($value["id"]);
-			if($value["id"])
+			$value["goodId"] = $goodId;
+			if(isset($value["id"]))
 			{
+				$id = $value["id"];
+				$ids[] = $id;
+				unset($value["id"]);
 				$this->db->set($value)->where('id',$id)->update($this->_table_sort);
 			}
 			else
@@ -79,7 +108,7 @@ class Good_mod extends MY_Model {
 			}
 		}
 		//删除不存在的分类
-		$this->db->where_in('id', $ids)->delete($this->_table_sort);
+		//$this->db->where_in('id', $ids)->delete($this->_table_sort);
 		//更新good的sorts字段
 	}
 
@@ -123,7 +152,16 @@ class Good_mod extends MY_Model {
 	public function get_good_by_id($id)
 	{
 		$query = $this->db->get_where($this->_table, array('id' => $id));
-		return $query->row_array();
+		$data = $query->row_array();
+		$data["sorts"] = unserialize($data["sorts"]);
+		$query = $this->db->select('id as uid,url')->get_where($this->_table_pic, array('goodId' => $id));
+		$data["pics"] = $query->result_array();
+		$query = $this->db->get_where($this->_table_sort, array('goodId' => $id));
+		$data['sort_list'] = $query->result_array();
+		foreach ($data['sort_list'] as $key => $value) {
+			$data['sort_list'][$key]["sorts"] = unserialize($data['sort_list'][$key]["sorts"]);
+		}
+		return $data;
 	}
 
 	//搜索商品

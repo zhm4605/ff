@@ -6,15 +6,19 @@ import SearchSort from '../sort/searchSort.jsx';
 
 function removeRepeat(msg,children)
 {
-  msg.forEach(function(item, index) {
+  let no_repeat = true;
+  const msg1 = msg.filter((item) => {
+    no_repeat = true;
     children.forEach(function(child){
       if(item.id===child.id)
       {
-        msg.splice(index,1);
+        no_repeat = false;
+        return false;
       }
     })
-  })
-  return msg;
+    return no_repeat;
+  });
+  return msg1;
 }
 
 export default class EditSortChild extends React.Component {
@@ -28,11 +32,8 @@ export default class EditSortChild extends React.Component {
       success:function(msg)
       {
         that.msg = msg;
-        msg = removeRepeat(msg,props.children);
-        //console.log(msg);
         that.state = {
           children: props.children||[],
-          selectList: msg,
           inputVisible: false,
           inputValue: '',
         };
@@ -46,11 +47,15 @@ export default class EditSortChild extends React.Component {
     this.showInput = this.showInput.bind(this);
     this.handleInputConfirm = this.handleInputConfirm.bind(this);
   }
-  handleClose(removedTag){
-    /*
-    const children = this.state.children.filter(tag => tag !== removedTag);
-    console.log(children);
-    this.setState({ children });*/
+  handleClose(removeId){
+    const children = this.state.children.filter(tag => tag.id !== removeId);
+    this.setState({ children });
+
+    const onChanged = this.props.onChanged;
+    if(onChanged)
+    {
+      onChanged(this.props.index,children);
+    }
   }
 
   showInput(){
@@ -62,13 +67,12 @@ export default class EditSortChild extends React.Component {
 
     let children = state.children;
     const target = label[label.length-1];
-    const selectList = removeRepeat(this.msg,[target]);
+
     children = [...children,target];
     this.setState({
       children,
       inputVisible: false,
-      inputValue: '',
-      selectList
+      inputValue: ''
     });
 
     const onChanged = this.props.onChanged;
@@ -78,17 +82,16 @@ export default class EditSortChild extends React.Component {
     } 
   }
 
-  //saveInputRef = input => this.input = input
-
   render() {
-    const { children, inputVisible, inputValue, selectList } = this.state;
-    //console.log(children);
+    const { children, inputVisible, inputValue} = this.state;
+    const selectList = removeRepeat(this.msg,children);
+
     return (
       <div>
         {children.map((tag, index) => {
           const isLongTag = tag.name.length > 20;
           const tagElem = (
-            <Tag key={tag.id} closable={index !== 0} afterClose={() => this.handleClose(tag.id)}>
+            <Tag key={tag.id} closable afterClose={() => this.handleClose(tag.id)}>
               {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
             </Tag>
           );

@@ -7,8 +7,9 @@ class Home extends MY_Controller {
 
     }
     public function index(){
-        $data = array();
-        $this->view('index/index',$data);
+        //$data = array();
+        //$this->view('index/index',$data);
+        $this->load->view('index.html');
     }
 
     public function basic(){

@@ -1,70 +1,226 @@
-.register-form{
-	/*
-	width: 500px;
-	padding: 20px 10px;
-	margin: 0 auto;
-	*/
+@main-color:red;
+
+a{
+	color: inherit;
 }
+
 header{
-	background-color: #666;
-	color:#fff;
-	padding: 5px 2%;
-	position: relative;
-	opacity: 0;
-}
-
-#mycenter{
-	position: absolute;
-	top: 50%;
-	font-size: 16px;
-	margin-top: -15px;
-	right: 2%;
-	color: #fff;
-}
-
-#sider{
-	position: absolute;
-	left: 0;
-	top: 46px;
-}
-#main{
-	margin-left: 150px;
-	padding: 10px;
-}
-
-.ant-tree-searchable-filter {
-  color: #f50;
-  transition: all .3s ease;
-}
-/**按钮**/
-.ant-btn{
-	margin-right: 5px;
-}
-/**树形**/
-.sort-title{
-	text-align: center;
-	margin-top: 30px;
-}
-.sort-item{
-	text-align: center;
-	.title{
-		text-align: left;
-		padding-left: 20px;
+	.logo{
+		position: absolute;
+		left: 0;
+		top:0;
+		height: 100%;
+	}
+	.menu{
+		padding-left: 100px;
+		font-size: 18px;
 	}
 }
-.ant-tree,.ant-tree-child-tree{
-	padding: 0;
-	&>li{
-		position: relative;
-		.ant-tree-switcher{
-			position: absolute!important;
-		    top: 8px;
-		    left: 0;
-		    z-index: 9;
+.content{
+	width: 80%;
+	margin: 0 auto;
+	max-width: 1200px;
+	min-width: 900px;
+}
+.top-slide{
+	margin: 10px 0;
+	.item{
+		img{
+			width: 100%;
+			display: block;
 		}
 	}
-	.ant-tree-node-content-wrapper{
-		display: block;
-		padding: 5px 0;
+}
+.search-good{
+	display: block;
+	margin: 10px auto;
+	width: 350px;
+	.ant-input{
+		height: 37px;
+		font-size: 14px;
 	}
+}
+.hot-good-wrap{
+	margin-top: 10px;
+}
+.good-card-list{
+	li{
+		float: left;
+		width: 23%;
+		margin: 5px 1%;
+		.custom-image{
+			position: relative;
+			img{
+				display: block;
+				width: 100%;
+			}
+			.name{
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				padding: 4px 7px;
+				background-color: rgba(0,0,0,.3);
+				color: #fff;
+			}
+		}
+		.custom-card{
+			position: relative;
+			border:1px solid #e9e9e9;
+			border-top: 0;
+			padding: 7px 10px;
+			color: #666;
+		}
+		.price{
+			color: @main-color;
+			font-size: 14px;
+		}
+		.hot{
+			position: absolute;
+			top: 8px;
+			right: 10px;
+			.anticon{
+				margin-right: 3px;
+			}
+		}
+	}
+
+}
+
+#good-page{
+	padding-top: 3%;
+	.pics{
+		.big-pic{
+			display: block;
+			width: 100%;
+		}
+		.pic-list{
+			margin-top: 2%;
+			li{
+				float: left;
+				width: 20%;
+				margin-left: 1%;
+				position: relative;
+				&:first-child{
+					margin-left: 0;
+				}
+				img{
+					width: 100%;
+				}
+				.pic-name{
+					position: absolute;
+					right: 0;
+					bottom: 0;
+					background-color: rgba(0,0,0,.3);
+					color: #fff;
+					padding: 1px 4px;
+				}
+			}
+		}
+	}
+	.good-text{
+		position: relative;
+		padding: 0 2%;
+		font-size: 14px;
+		&>div{
+			padding: 5px 0;
+		}
+		.name{
+			font-size: 20px;
+		}
+		.price{
+			color: @main-color;
+		}
+		.tags{
+			display: inline-block;
+		}
+		.remain{
+			.tips{
+				color: #999;
+				margin-left: 5px;
+				font-size: 12px;
+			}
+		}
+		.hot{
+			position: absolute;
+			top: 0;
+			right: 2%;
+		}
+		.btn-love{
+			float: right;
+		}
+	}
+	.related-good{
+		height: 100%;
+		border-left: 1px solid #e9e9e9;
+		padding-left: 1.5%;
+		.title{
+			line-height: 1.4;
+			height: auto;
+			padding-bottom: 8px;
+			font-size: 16px;
+			text-align: center;
+		}
+		ul{
+			li{
+				position: relative;
+				margin-bottom: 2%;
+			}
+			img{
+				width: 100%;
+			}
+		}
+	}
+	.good-intro{
+		margin-top: 2%;
+	}
+}
+
+.filter-good{
+	border: 1px solid #e9e9e9;
+	padding: 4px 7px;
+	margin-top: 10px;
+	&>li{
+		position: relative;
+		padding: 5px 0;
+		border-bottom: 1px dashed #e9e9e9;
+		&:last-child{
+			border-bottom: 0;
+		}
+	}
+	.title{
+		position: absolute;
+		left: 0;
+		width: 90px;
+		text-align: right;
+		top: 7px;
+	}
+	.children{
+		padding: 0 100px;
+		.tag{
+			margin-top: 0;
+		}
+	}
+}
+
+.rank-good{
+	padding: 2px 10px;
+	background-color: #e9e9e9;
+	margin: 10px 0;
+	a{
+		padding: 5px 7px;
+		display: inline-block;
+	}
+}
+#list-page{
+	.good-list-wrap{
+		.ant-card-body{
+			padding: 10px;
+		}
+	}
+}
+
+footer{
+	margin-top: 50px;
+	padding: 10px;
+	border-top: 1px solid #ccc;
 }

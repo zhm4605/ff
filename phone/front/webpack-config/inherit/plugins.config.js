@@ -43,7 +43,7 @@ var configPlugins = [
 
 pageArr.forEach((page) => {
   const htmlPlugin = new HtmlWebpackPlugin({
-    filename: path.resolve(dirVars.staticRootDir, `./application/views/index/${page}.html`),
+    filename: path.resolve(dirVars.staticRootDir, `./application/views/${page}.html`),
     template: path.resolve(dirVars.pagesDir, `./${page}/page.html`),
     chunks: [page, 'commons/commons'],
     /*

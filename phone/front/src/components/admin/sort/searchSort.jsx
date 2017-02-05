@@ -49,9 +49,8 @@ export default class SearchSort extends React.Component{
     this.setState({ defaultValue: nextProps.value});
   }
   handleChange(value,label) {
-    console.log(value);
-    console.log(label);
-
+    //console.log(value);
+    //console.log(label);
     const onChoosed = this.props.onChoosed;
     if(onChoosed)
     {

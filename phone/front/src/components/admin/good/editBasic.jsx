@@ -1,5 +1,11 @@
 import UploadPic from './uploadPic.jsx';
 
+import moment from 'moment';
+
+// 推荐在入口文件全局设置 locale
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
+
 import { Form, Icon, Input,InputNumber,Button,Checkbox,DatePicker,Row,Col} from 'antd';
 
 const FormItem = Form.Item;
@@ -11,14 +17,15 @@ export default class EditBasic extends React.Component{
   }
 
   handleSubmit() {
+  	const that = this;
   	this.props.form.validateFields((err, values) => {
-      console.log(values);
+      //console.log(values);
       if (!err) 
       {
-        console.log('Received values of form: ', values);
-
+        //console.log('Received values of form: ', values);
+        values['putawayTime'] = values['putawayTime'].format('YYYY-MM-DD HH:mm:ss');
         $.ajax({
-          url:"/admin_good/editGood/"+this.props.goodId||'',
+          url:"/admin_good/editGood/"+that.props.goodId||'',
           dataType:"json",
           type:"post",
           data:values,
@@ -27,7 +34,7 @@ export default class EditBasic extends React.Component{
             console.log(msg);
             if(msg.state)
             {
-			  that.props.finish&&that.props.finish();
+			  			that.props.finish&&that.props.finish();
             }
             
           },
@@ -40,9 +47,10 @@ export default class EditBasic extends React.Component{
   }
 
   render() {
+  	const data = this.props.data||{};
     const { getFieldProps, getFieldError,getFieldDecorator } = this.props.form;
     const formItemLayout = {
-      labelCol: { span: 2 }
+      labelCol: { span: 3 }
     };
     return (
     	<Form horizontal onSubmit={this.handleSubmit}>
@@ -52,9 +60,10 @@ export default class EditBasic extends React.Component{
 	        label="商品名称"
 	      >
 	        {getFieldDecorator('name', {
+	        	initialValue: data.name,
 	          rules: [{ type:'string', required: true, max:50, message: '请输入商品名称（0~50字）' }],
 	        })(
-	          <Input />
+	          <Input/>
 	        )}
 	      </FormItem>
 	      <FormItem
@@ -65,7 +74,8 @@ export default class EditBasic extends React.Component{
 	      <Row gutter={20}>
 	        <Col span={7}>
 	          {getFieldDecorator('priceO', {
-	            rules: [{ type:'number', required: true, message: '请输入原价' }],
+	          	initialValue: data.priceO,
+	            //rules: [{ type:'number', required: true, message: '请输入原价' }],
 	          })(
 	            <Input type='number' placeholder='请输入原价' addonAfter='元'/>
 	          )}
@@ -73,7 +83,8 @@ export default class EditBasic extends React.Component{
 	        </Col>
 	        <Col span={7}>
 	          {getFieldDecorator('priceMin', {
-	            rules: [{ type:'number',required: true, message: '请输入现价' }],
+	          	initialValue: data.priceMin,
+	            //rules: [{ type:'number',required: true, message: '请输入现价' }],
 	          })(
 	            <Input type='number' placeholder='请输入现价' addonAfter='元'/>
 	          )}
@@ -86,7 +97,8 @@ export default class EditBasic extends React.Component{
 	        label="库存"
 	      >
 	        {getFieldDecorator('remain', {
-	          rules: [{type:'number',required: true, message: '请输入库存'}],
+	        	initialValue: data.remain,
+	          //rules: [{type:'number',required: true, message: '请输入库存'}],
 	        })(
 	          <Input type='number' placeholder='' addonAfter='件'/>
 	        )}
@@ -98,20 +110,22 @@ export default class EditBasic extends React.Component{
 	        extra="不填写则在编辑完成后立马上架"
 	      >
 	        {getFieldDecorator('putawayTime', {
-	          rules: [{ type: 'date'}]
+	        	initialValue: moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss"),
+	          //rules: [{ type: 'date'}]
 	        })(
 	          <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"/>
 	        )}
 	      </FormItem>
 	      <FormItem
 	        {...formItemLayout}
-	        wrapperCol={{ span: 22 }}
+	        wrapperCol={{ span: 21 }}
 	        label="商品图片"
 	      >
 	        {getFieldDecorator('pics', {
+	        	initialValue: data.pics,
 	          valuePropName: 'fileList'
 	        })(
-	          <UploadPic on/>
+	          <UploadPic goodId={this.props.goodId}/>
 	        )}
 	      </FormItem>
 	      <FormItem 

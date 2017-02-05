@@ -28,9 +28,7 @@ class Welcome extends MY_Controller {
 
     public function index()
 	{
-        is_login();//?登陆
-        $data['userInfo'] = $this->session->all_userdata();
-        $this->view('common/bootindex',$data);
+        $this->load->view('index.html');
 	}
 
     public function register()
