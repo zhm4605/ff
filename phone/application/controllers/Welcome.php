@@ -27,126 +27,76 @@ class Welcome extends MY_Controller {
     }
 
     public function index()
-	{
-        $this->load->view('index.html');
-	}
+  	{
+      $this->load->view('admin_welcome.html');
+  	}
+
+    //登录
+    public function login(){
+      $arr = $_POST;
+      $info = $this->admin_mod->get_admin_by_name($_POST['name']);
+      $state = 0;
+      
+      if($info)
+      {
+        if($info['password']==md5_password($_POST['password']))
+        {
+
+          $identifier = get_user_identifier($_POST['name']);
+          $token = get_user_token();
+          $timeout = time() + 60 * 60 * 24 * 7;
+          //设置cookie
+          setcookie('auth', $identifier.":".$token, $timeout,"/");
+          //更新数据库
+          $update_arr = array(
+              "token"=>$token,
+              "timeout"=>date('Y-m-d H:i:s',$timeout),
+              "lastDate"=>date('Y-m-d H:i:s'),
+              "lastIp"=>getIP(),
+              "loginNum"=>$info["loginNum"]+1
+          );
+          $this->admin_mod->update_admin($update_arr,$info['id']);
+
+          $state = 1;
+          $msg = "登录成功";
+        }
+        else
+        {
+            $msg = "密码错误";
+        }
+      }
+      else
+      {
+          $msg = "用户名不存在";
+      }
+      $output = array("state"=>$state,"msg"=>$msg);
+      echo json_encode($output);
+    }
+
 
     public function register()
     {
         $this->view('welcome/register');
     }
 
-    public function login(){
-        if(isset($_POST['username']) && isset($_POST['password']))
-        {
-            $username = trim(addslashes($this->input->post('username')));
-            $password = $this->input->post('password');
-            if(empty($username)){
-                showmsg('请输入用户名');
-            } 
-
-            if(empty($password)){
-                showmsg('请输入密码');
-            }
-            //以用户名查信息
-            $data = $this->admin_mod->get_by_username(DB_CENTER, $username);
-
-            if(empty($data)){
-                showmsg('用户输入有误');
-            }
-
-            if(md532($password) != $data['password']){
-                showmsg('密码不正确');
-            }
-
-            //登陆成功
-            $session = array(
-                'user_id'	=> $data['id'],
-                'user_name'	=> $data['username'],
-                'login_time'=> $this->time,
-                'login_ip'	=> $this->input->ip_address(),
-                'last_login_time' => $data['login_time'],
-                'last_login_ip'	=> $data['login_ip']
-            );
-
-            $_SESSION = $session;
-            $this->role_info = $this->__setCurrentUserRole($data);
-            //权限写入session
-            //$_SESSION['currentModelId'] = 1;
-            $this->_get_actions();
-            //更新数据库
-            $udata = array(
-                'login_time'	=> $this->time,
-                'login_ip'		=> $this->input->ip_address()
-            );
-
-            $this->admin_mod->update(DB_CENTER, $data['id'], $udata);
-            $link[0]['link_url'] = '?app=welcome';
-            $link[0]['link_name']= '后台管理首页';
-            showmsg('登陆成功', $link);
-        }
-
-        $this->load->view('common/bootlogin');
-    }
-
-    public function __setCurrentUserRole($data = array()){
-        $currentUserRole = $this->session->userdata('currentUserRole');
-        if(!empty($data)){
-            $this->session->unset_userdata('currentUserRole');
-            $sesData['user_id'] = $data['id'];
-            $sesData['user_name'] = $data['username'];
-            $sesData['role_id'] = isset($data['role_id']) ? $data['role_id'] : 0;
-            $this->load->model(array('admin_role_mod'));
-            $role_info = $this->returnRoleInfoByRoleID($data['role_id']);
-            $sesData['role_info'] = $role_info;
-            $this->session->unset_userdata('currentUserRole');
-            $this->session->set_userdata('currentUserRole',$sesData);
-            return $sesData;
-        }
-        return $currentUserRole;
-    }
-
-    /**
-     * @param $role_id
-     * @return mixed
-     */
-    public function returnRoleInfoByRoleID($role_id)
+    
+    public function update_password($oriPassword,$password)
     {
-        $role_info = array();
-        $this->load->model(array('admin_role_mod'));
-        $role_info = $this->admin_role_mod->get_one(DB_CENTER, $role_id);
-
-        $power_plus_num = 0;
-        $currentUserPowerCode = decbin($power_plus_num);
-        $role_info['power_code'] = $power_plus_num;
-        $role_info['power_code_binary'] = $currentUserPowerCode;
-        //$role_info['server_ids'] = empty($serverIds) ? '' :  implode(',', $serverIds);
-        //$role_info['sIDs'] = empty($sIDs) ? '' :  implode(',', $sIDs);
-        return $role_info;
-    }
-
-    //记录最后一次浏览的控制器
-    public function refreshLink(){
-        if(!(isset($_GET['refreshLink']) && !empty($_GET['refreshLink']))){
-            $data = array();
-            $data['msg'] = '参数错误';
-            $this->_error($data);
-        }
-        $this->session->unset_userdata('refreshLink');
-        delete_cookie('refreshLink');
-        $refreshLink = array('link'=>$_GET['refreshLink'],'position'=>$_GET['position']);
-        $this->session->set_userdata('refreshLink',$refreshLink);
-        $data['msg'] = json_encode($refreshLink);
-        $this->_error($data,0);
+      $name = 'zhm';
+      $update_arr = array(
+                    "token"=>get_user_token(),
+                    "identifier"=>get_user_identifier($name),
+                    "password"=>md5_password($password)
+                );
+      $this->admin_mod->update_admin($update_arr,1);
     }
 
     //登出
-    public function loginout(){
-        is_login();//登陆
-        $this->session->sess_destroy();
-        $link[0]['link_url'] = '?app=welcome&act=login';
-        $link[0]['link_name']= '登陆';
-        showmsg('退出成功', $link, 2);
+    public function logout()
+    {
+      setcookie('auth',"",time()-3600,"/");
+      header("Location: /welcome"); 
+      //header("Location: /admin"); 
     }
 
 }

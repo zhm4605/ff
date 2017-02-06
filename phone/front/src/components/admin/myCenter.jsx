@@ -26,7 +26,7 @@ export default class MyCenter extends React.Component{
     const menu = (
       <Menu onClick={this.handleClick}>
         <Menu.Item key="edit_password">修改密码</Menu.Item>
-        <Menu.Item key="logout">退出登录</Menu.Item>
+        <Menu.Item key="logout"><a href='/welcome/logout'>退出登录</a></Menu.Item>
       </Menu>
     );
     return (

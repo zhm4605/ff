@@ -125,8 +125,6 @@ function _week($num)
     return $res;
 }
 
-
-
 function randColor(){
     $colors = array();
     for($i = 0;$i<6;$i++){
@@ -134,4 +132,5 @@ function randColor(){
     }
     return implode('',$colors);
 }
+
 

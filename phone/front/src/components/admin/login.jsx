@@ -1,57 +1,79 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Card, Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Card, Form, Icon, Input, Button, message } from 'antd';
 
 const FormItem = Form.Item;
 
-class Login extends React.Component{
+export default class Login extends React.Component{
   constructor(props) {
     super(props);
-    this.handleSearch = this.handleSearch.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSearch() {
     
   }
   handleSubmit() {
+    //e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
 
+        $.ajax({
+          url:"/welcome/login/",
+          dataType:"json",
+          type:"post",
+          data:values,
+          success:function(msg)
+          {
+            console.log(msg);
+            if(msg.state)
+            {
+              window.location.href='/admin/';
+            }
+            else
+            {
+              message.error(msg.msg, 5000)
+            }
+            
+          },
+          error:function(msg){
+            document.body.innerHTML = msg.responseText;
+          }
+        })
+      }
+    });
   }
   render() {
     const { getFieldProps, getFieldError,getFieldDecorator } = this.props.form;
     const card_style = {
-      width: '500px',
-      margin: '0 auto'
+      width: '400px',
+      margin: '0 auto',
+      top: '100px'
     }
     return (
       <Card title="登录" style={card_style}>
         <Form onSubmit={this.handleSubmit} className="Login-form">
           <FormItem>
-            {getFieldDecorator('userName', {
-              rules: [{ required: true, message: 'Please input your username!' }],
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: '请输入用户名' }],
             })(
-              <Input addonBefore={<Icon type="user" />} placeholder="Username" />
+              <Input addonBefore={<Icon type="user" />} placeholder="用户名" />
             )}
           </FormItem>
           <FormItem>
-              <Input addonBefore={<Icon type="user" />} placeholder="Username" />
-          </FormItem>
-          <FormItem>
-            {getFieldDecorator('remember', {
-              valuePropName: 'checked',
-              initialValue: true,
+            {getFieldDecorator('password', {
+              rules: [{ required: true, message: '请输入密码' }],
             })(
-              <Checkbox>Remember me</Checkbox>
+              <Input addonBefore={<Icon type="lock" />} type="password" placeholder="密码" />
             )}
-            <a className="login-form-forgot">Forgot password</a>
-            <Button type="primary" htmlType="submit" className="login-form-button">
-              Log in
-            </Button>
-            Or <a>Login now!</a>
+          </FormItem>
+          <FormItem >
+            <Button style={{width:'100%'}} type="primary" htmlType="submit" className="login-form-button">确定</Button>
           </FormItem>
         </Form> 
+
       </Card>
      )
   }
 }
 
 Login = Form.create({})(Login);
-ReactDOM.render(<Login />, document.getElementById('container'));
+
