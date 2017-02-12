@@ -1,93 +1,123 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Table,Switch,Button } from 'antd';
+import { Table,Switch,Button,message } from 'antd';
 
 const { Column, ColumnGroup } = Table;
 
-let data = [];
-$.ajax({
-        url:"/good/good_list",
-        dataType:"json",
-        async: false,
-        success:function(msg)
-        {
-          console.log(msg);
-          data = msg;
-        },
-        error:function(msg){
-          console.log(msg);
-          document.body.innerHTML = msg.responseText;
-        }
-      })
+//let data = [];
 
 export default class GoodList extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {
-      filteredInfo: null,
-      sortedInfo: null,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.clearFilters = this.clearFilters.bind(this);
-    this.clearAll = this.clearAll.bind(this);
-    this.setAgeSort = this.setAgeSort.bind(this);
-  }
-  handleChange(pagination, filters, sorter) {
-    console.log('Various parameters', pagination, filters, sorter);
-    this.setState({
-      filteredInfo: filters,
-      sortedInfo: sorter,
-    });
-  }
-  clearFilters(e) {
-    e.preventDefault();
-    this.setState({ filteredInfo: null });
-  }
-  clearAll(e) {
-    e.preventDefault();
-    this.setState({
-      filteredInfo: null,
-      sortedInfo: null,
-    });
-  }
-  setAgeSort(e) {
-    e.preventDefault();
-    this.setState({
-      sortedInfo: {
-        order: 'descend',
-        columnKey: 'age',
+    const that = this;
+    $.ajax({
+      url:"/good/good_list",
+      dataType:"json",
+      async: false,
+      success:function(msg)
+      {
+        console.log(msg);
+        that.state = {
+          data:msg,
+        }
       },
-    });
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+
+    this.handleChange = this.handleChange.bind(this);
+    this.removeGood = this.removeGood.bind(this);
+  }
+  handleChange()
+  {
+
+  }
+  //锁定、解锁
+  changeLock(checked,id)
+  {
+    const text = checked?'锁定':'解锁';
+    $.ajax({
+      url:"/admin_good/editGood/"+id,
+      dataType:"json",
+      type:"post",
+      data:{lock:checked?1:0},
+      success:function(msg)
+      {
+        if(msg.id)
+        {
+          message.success(text+'成功');
+        }
+      },
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+
+  }
+  //删除
+  removeGood(index)
+  {
+    const data = [...this.state.data];
+    const that = this;
+    $.ajax({
+      url:"/admin_good/removeGood/"+data[index].id,
+      dataType:"json",
+      type:"post",
+      success:function(msg)
+      {
+        if(msg.state)
+        {
+          message.success(msg.info);
+          data.splice(index, 1);
+          that.setState({ data });
+        }
+        else
+        {
+          message.error(msg.info);
+        }
+      },
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+
   }
   render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
+    //console.log(this.state);
+    const data = [...this.state.data];
 
     return (
       <div>
         <div className="table-operations">
-          <a href="#" onClick={this.setAgeSort}>Age descending order</a>
-          <a href="#" onClick={this.clearFilters}>清除筛选</a>
-          <a href="#" onClick={this.clearAll}>清除筛选和排序</a>
-          <Button type="primary">添加商品</Button>
+          <Button type="primary"><a href='#/addGood'>添加商品</a></Button>
         </div>
         <Table dataSource={data} onChange={this.handleChange}>
-          <Column title="名称" dataIndex="name" key="name" />
-          <Column width='20%' title="分类" dataIndex="sorts" key="sorts" />
-          <Column title="价格（元）" key="price" render={(text, record) => (
+          <Column title="名称" dataIndex="name" key="name" render={(text, record) => (
+            <a href={'/home/#/good/'+record.id} style={{cusor:'pointer'}} target='_blank'>{record.name}</a>
+          )}/>
+          <Column width='20%' title="分类" dataIndex="sorts" key="sorts" render={(text, record) => (
+              text.map((d,i) => 
+                <div key={i}>
+                   {d.name}：{d.children.map((child,j)=>
+                      <span key={j}>{j==0?'':' | '}{child.name}</span>
+                    )}
+                </div>
+              )
+            )}/>
+          <Column title="价格（元）" dataIndex="price" key="price" render={(text, record) => (
               <span>￥{record.priceMin} ~ ￥{record.priceMax}</span>
             )}/>
           <Column title="上架时间" dataIndex="putawayTime" key="putawayTime" />
           <Column title="库存" dataIndex="remain" key="remain" />
-          <Column title="锁定" key="lock" render={(text, record) => (
-              <Switch defaultChecked={record.lock?true:false}/>
+          <Column title="锁定" dataIndex="lock" key="lock" render={(text, record) => (
+              <Switch defaultChecked={record.lock==1?true:false} onChange={(checked)=>this.changeLock(checked,record.id)}/>
             )}/>
-          <Column title="操作" key="excute" render={(text, record) => (
+          <Column title="操作" key="id" render={(id,record,i) => (
                 <div>
-                  <Button>删除</Button>
-                  <Button type="ghost"><a href='#addGood/1'>修改</a></Button>
+                  <Button onClick={()=>this.removeGood(i)}>删除</Button>
+                  <Button type="ghost"><a href={'#addGood/'+record.id}>编辑</a></Button>
                 </div>
             )}/>
         </Table>
@@ -96,4 +126,3 @@ export default class GoodList extends React.Component{
   }
 };
 
-//ReactDOM.render(<Sider />, document.getElementById('container'));

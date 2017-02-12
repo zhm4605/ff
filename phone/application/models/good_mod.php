@@ -59,17 +59,15 @@ class Good_mod extends MY_Model {
 	//添加商品图片
 	public function add_good_pic($data)
 	{
-		/*
 		if($this->db->set($data)->insert($this->_table_pic))
 		{
-			
+			return $this->db->insert_id();
 		}
 		else
 		{
 			return false;
-		}*/
-		$this->db->set($data)->insert($this->_table_pic);
-		return $this->db->insert_id();
+		}
+		
 	}
 
 	//删除商品图片 --移动至图片垃圾站
@@ -93,7 +91,6 @@ class Good_mod extends MY_Model {
 		$ids = array();
 		foreach ($data as $key => $value) 
 		{
-			$value["goodId"] = $goodId;
 			if(isset($value["id"]))
 			{
 				$id = $value["id"];
@@ -103,13 +100,22 @@ class Good_mod extends MY_Model {
 			}
 			else
 			{
+				$value["goodId"] = $goodId;
 				$this->db->set($value)->insert($this->_table_sort);
 				$ids[] = $this->db->insert_id();
 			}
 		}
 		//删除不存在的分类
-		//$this->db->where_in('id', $ids)->delete($this->_table_sort);
-		//更新good的sorts字段
+		$this->db->where_not_in('id', $ids)->where('goodId', $goodId)->delete($this->_table_sort);
+		//更新good的库存、价格
+		if($this->db->query("update ".$this->_table." as g left join (select goodId,MIN(price) as priceMin,MAX(price) as priceMax,sum(remain) as remain from ".$this->_table_sort." where goodId='".$goodId."') s on s.goodId=g.id set g.priceMin=s.priceMin,g.priceMax=s.priceMax,g.remain=s.remain where g.id='".$goodId."'"))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 
@@ -119,13 +125,25 @@ class Good_mod extends MY_Model {
 	{
 		$data = $this->get_good_by_id($id);
 		unset($data['id']);
+		$sort_list = $data['sort_list'];
+		unset($data['sort_list']);
+		$pics = $data['pics'];
+		unset($data['pics']);
 		$this->db->set($data)->insert($this->_table.'_bin');
+		foreach ($sort_list as $key => $value) {
+			unset($value['id']);
+			$this->db->set($value)->insert($this->_table_sort.'_bin');
+		}
+		foreach ($pics as $key => $value) {
+			unset($value['id']);
+			$this->db->set($value)->insert($this->_table_pic.'_bin');
+		}
+		$this->db->where('goodId', $id)->delete($this->_table_sort);
+		$this->db->where('goodId', $id)->delete($this->_table_pic);
 
-		$data = $this->get_good_by_id($id);
-		unset($data['id']);
-		$this->db->set($data)->insert($this->_table.'_bin');
+		return $this->db->where('id', $id)->delete($this->_table);
 
-		$this->db->where('id', $id)->delete($this->_table);
+
 	}
 
 	//彻底删除商品
@@ -145,7 +163,19 @@ class Good_mod extends MY_Model {
 		$this->db->order_by($order,'desc');
 		$this->db->limit(($page-1)*20,20);
 		$query = $this->db->get($this->_table);
-		return $query->result_array();
+		$result = $query->result_array();
+		foreach ($result as $key => $value) {
+			if($value['sorts'])
+			{
+				$result[$key]['sorts'] = unserialize($value['sorts']);
+			}
+			else
+			{
+				$result[$key]['sorts'] = array();
+			}
+			
+		}
+		return $result;
 	}
 
 	//获取单个商品详情
@@ -153,14 +183,12 @@ class Good_mod extends MY_Model {
 	{
 		$query = $this->db->get_where($this->_table, array('id' => $id));
 		$data = $query->row_array();
-		$data["sorts"] = unserialize($data["sorts"]);
-		$query = $this->db->select('id as uid,url')->get_where($this->_table_pic, array('goodId' => $id));
+		
+		$query = $this->db->get_where($this->_table_pic, array('goodId' => $id));
 		$data["pics"] = $query->result_array();
+
 		$query = $this->db->get_where($this->_table_sort, array('goodId' => $id));
 		$data['sort_list'] = $query->result_array();
-		foreach ($data['sort_list'] as $key => $value) {
-			$data['sort_list'][$key]["sorts"] = unserialize($data['sort_list'][$key]["sorts"]);
-		}
 		return $data;
 	}
 

@@ -24,7 +24,7 @@ class Page extends React.Component{
                   <Menu.Item key="setting:1"><a href='#/list'>苹果</a></Menu.Item>
               </SubMenu>
               <Menu.Item key="alipay">
-                <a href="='#/list" target="_blank" rel="noopener noreferrer"><Icon type="like" />热门</a>
+                <a href="#/list" target="_blank" rel="noopener noreferrer"><Icon type="like" />热门</a>
               </Menu.Item>
             </Menu>
         </header>
@@ -42,7 +42,7 @@ import { Router, Route, hashHistory } from 'react-router';
 const routes = <Router history={hashHistory}>
                   <Route path="/" component={Page}>
                     <Route path="/home" component={require('componentsDir/home.jsx')}/>
-                    <Route path="/good" component={require('componentsDir/good.jsx')}/>
+                    <Route path="/good/:id" component={require('componentsDir/good.jsx')}/>
                     <Route path="/list" component={require('componentsDir/list.jsx')}/>
                   </Route>
               </Router>

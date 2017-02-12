@@ -15,10 +15,11 @@ class Admin_good extends MY_Controller {
     $this->load->view('index/index.html');
   }
 
+  //编辑商品信息
   public function editGood($id)
   {
   	$data = $_POST;
-  	//echo $id;
+
   	if($id>0)
   	{
   		$id = $this->good_mod->update_good($data,$id);
@@ -30,29 +31,43 @@ class Admin_good extends MY_Controller {
   	$output = array("id"=>$id);
   	echo json_encode($output);
   }
-
+  //商品默认分类
+  public function defaultSort()
+  {
+    $sort_config = ["5","6"];
+    $arr = array();
+    foreach ($sort_config as $key => $value) {
+    	$arr[] = $this->sort_mod->get_sort_by_id($value);
+    }
+    echo json_encode($arr);
+  }
+  //编辑商品分类
   public function editGoodSorts($id)
   {
-  	//echo $id;
   	$data = $_POST;
 
   	$sorts["sorts"]  = serialize($data['sorts']);
-
-
   	$id = $this->good_mod->update_good($sorts,$id);
+  	
 
   	$sort_list = $data["sort_list"];
   	foreach ($sort_list as $key => $value) {
   		$sort_list[$key]["sorts"] = serialize($sort_list[$key]["sorts"]);
   	}
 
-  	//print_r($sort_list);
-  	$this->good_mod->update_good_sort($sort_list,$id);
+  	if($this->good_mod->update_good_sort($sort_list,$id))
+  	{
+  		$output = array("id"=>$id);
+  	}
+  	else
+  	{
+  		$output = array("id"=>0);
+  	}
 
-  	$output = array("id"=>$id);
+  	
   	echo json_encode($output);
   }
-
+  //删除商品图片
   public function removePic($id)
   {
   	if($this->good_mod->remove_good_pic($id))
@@ -66,17 +81,7 @@ class Admin_good extends MY_Controller {
   	$output = array("state"=>$state);
   	echo json_encode($output);
   }
-
-  public function default_sort()
-  {
-    $sort_config = ["5","6"];
-    $arr = array();
-    foreach ($sort_config as $key => $value) {
-    	$arr[] = $this->sort_mod->get_sort_by_id($value);
-    }
-    echo json_encode($arr);
-  }
-
+  //上传商品图片
   public function uploadPic($goodId)
   {
   	$time = time();
@@ -162,6 +167,33 @@ class Admin_good extends MY_Controller {
 		}
   }
 
+  //删除商品
+  public function removeGood($id)
+  {
+  	if($this->good_mod->move_good($id))
+  	{
+  		$output = array("state"=>1,"info"=>'删除成功');
+  	}
+  	else
+  	{
+  		$output = array("state"=>0,"info"=>'删除失败，请稍后重试');
+  	}
+  	echo json_encode($output);
+  }
+
+  //
+  public function goodDetails($id)
+  {
+  	$data = $this->good_mod->get_good_by_id($id);
+  	foreach ($data['pics'] as $key => $value) {
+  		$data['pics'][$key]['uid'] = $value['id'];
+  	}
+  	foreach ($data['sort_list'] as $key => $value) {
+			$data['sort_list'][$key]["sorts"] = unserialize($data['sort_list'][$key]["sorts"]);
+		}
+		$data["sorts"] = unserialize($data["sorts"]);
+  	echo json_encode($data);
+  }
 
 }
 

@@ -1,6 +1,6 @@
 
 
-import { Form, Icon, Input,InputNumber,Button,Col,Row,Tabs,Tag,Table  } from 'antd';
+import { Form, Icon, Input,InputNumber,Button,Col,Row,Tabs,Tag,Table,message } from 'antd';
 
 import SearchSort from '../sort/searchSort.jsx';
 import EditSortChild from './editSortChild.jsx';
@@ -33,7 +33,7 @@ export default class EditSort extends React.Component{
       list: props.data.sorts?props.data.sorts:[],
       sort_list: props.data.sort_list?props.data.sort_list:[]
     };
-
+    //console.log(props.data.sort_list);
     this.addSort = this.addSort.bind(this);
     this.addSortValue = this.addSortValue.bind(this);
     this.updateRender = this.updateRender.bind(this);
@@ -41,12 +41,8 @@ export default class EditSort extends React.Component{
     this.changePrice = this.changePrice.bind(this);
     this.updateSortList = this.updateSortList.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.removeSort = this.removeSort.bind(this);
   }
-
-  handleSubmit() {
-
-  }
-
   addSortValue(value,label)
   {
     this.setState({label});
@@ -55,11 +51,31 @@ export default class EditSort extends React.Component{
   addSort()
   {
     let {list,label} = this.state;
-    label = label[label.length-1];
-    //label['children'] = [];
-    list.push(label);
-    this.setState({list});
-    this.updateSortList(list)
+    if(label)
+    {
+      label = label[label.length-1];
+      //console.log(label);
+      let is_repeat = 0;
+      list.forEach(function(item, index, arr){
+        if(item.id==label.id)
+        {
+          is_repeat=1;
+          return;
+        }
+      })
+      if(!is_repeat)
+      {
+        list.push(label);
+        this.setState({list});
+        this.updateSortList(list)
+      }
+    }
+    else
+    {
+      message.info('请选择要添加的分类');
+    }
+    
+    
   }
 
   updateRender(index,children)
@@ -72,11 +88,8 @@ export default class EditSort extends React.Component{
 
   changeRemain(e,i)
   {
-    console.log(e.target.value);
-    console.log(i);
     let {sort_list} = this.state;
     sort_list[i]["remain"] = e.target.value;
-    console.log(sort_list);
     this.setState({sort_list});
   }
 
@@ -96,7 +109,7 @@ export default class EditSort extends React.Component{
     const validList = list.filter((item) => {
       return item.children.length>0;
     });
-
+    const default_price = this.props.data.priceMin;
     const loop = function(i){
       let item = {};
       for(var j=0; j<validList[i].children.length; j++){
@@ -108,22 +121,14 @@ export default class EditSort extends React.Component{
             sort_list[num] = {};
             sort_list[num]['sorts'] = {};
           }
-          /*
-          if(num!=0&&i!=0&&!sort_list[num].hasOwnProperty([validList[i-1].id]))
-          {
-             sort_list[num][validList[i-1].id] = sort_list[num-1][validList[i-1].id];
-          }*/
           sort_list[num]['sorts'][validList[i].id] = item;
           if(i==validList.length-1)
           {
-            /*
-            if(i!=0)
-            {
-              sort_list[num][validList]
-            }*/
             sort_list[num]['remain'] = 0;
-            sort_list[num]['price'] = 0;
+            sort_list[num]['price'] = default_price;
             num++;
+            sort_list[num] = {};
+            sort_list[num]['sorts'] = $.extend({},sort_list[num-1]['sorts']);
           }
         }
         if(i<validList.length-1)
@@ -138,6 +143,7 @@ export default class EditSort extends React.Component{
       loop(0);
     }
     
+    sort_list.pop();
     console.log(sort_list);
     this.setState({sort_list});
   }
@@ -146,7 +152,7 @@ export default class EditSort extends React.Component{
   handleSubmit()
   {
     const {goodId} = this.props;
-    console.log(goodId);
+    //console.log(goodId);
 
     const data = {
       sorts: this.state.list,
@@ -160,6 +166,7 @@ export default class EditSort extends React.Component{
         success:function(msg)
         {
           console.log(msg);
+          window.location.href='/good/'+goodId;
         },
         error:function(msg){
           console.log(msg);
@@ -167,7 +174,14 @@ export default class EditSort extends React.Component{
         }
       })
   }
-
+  //删除分类
+  removeSort(i)
+  {
+    let {list} = this.state;
+    list.splice(i,1);
+    this.setState({list});
+    this.updateSortList(list);
+  }
   render() {
     const {list,sort_list} = this.state;
 
@@ -177,11 +191,12 @@ export default class EditSort extends React.Component{
 
     //分类选择
     const sorts = list.map((d,i) => 
-	    		<Row key={d.id} style={{padding:'5px 0'}}>
-			      <Col span={2} style={{textAlign:'right',paddingRight:5}}>{d.name}：</Col>
+	    		<Row key={d.id} className='good-sort-wrap'>
+			      <Col span={2} className='sort-name'>{d.name}：</Col>
 			      <Col span={20}>
 			      	<EditSortChild index={i} id={d.id} name={d.name} children={d.children} onChanged={this.updateRender}/>
 			      </Col>
+            <Icon type="minus-square-o" className='remove' title='删除' onClick={()=>this.removeSort(i)}/>
 			    </Row>
 				);
 
@@ -192,7 +207,7 @@ export default class EditSort extends React.Component{
             )}/>
         );
     const sort_table = sort_list.length>0?<div>
-      <Table dataSource={sort_list} pagination={false} bordered>
+      <Table dataSource={sort_list} pagination={false} bordered style={{marginTop:10}}>
          {columns}
          <Column title="库存" kwy='remain' render={(text, record, i) => (
               <Input type='number' addonAfter='件' onChange={(e)=>this.changeRemain(e,i)} value={record.remain}/>
@@ -209,7 +224,7 @@ export default class EditSort extends React.Component{
 	    		<SearchSort placeholder="搜索要添加的分类" style={{width:200,textAlign:'left'}} onChoosed = {this.addSortValue}/>
 	    		<Button type='primary' onClick={this.addSort} style={{marginLeft:5,verticalAlign:'middle'}}>添加</Button>
 	      </div>
-	      {sorts}
+	      <div>{sorts}</div>
         {sort_table}
 	    </div>
     )

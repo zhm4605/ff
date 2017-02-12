@@ -11,7 +11,6 @@ export default class Login extends React.Component{
     
   }
   handleSubmit() {
-    //e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
@@ -30,7 +29,7 @@ export default class Login extends React.Component{
             }
             else
             {
-              message.error(msg.msg, 5000)
+              message.error(msg.info);
             }
             
           },
@@ -49,7 +48,7 @@ export default class Login extends React.Component{
       top: '100px'
     }
     return (
-      <Card title="登录" style={card_style}>
+      <Card title="后台登录" style={card_style}>
         <Form onSubmit={this.handleSubmit} className="Login-form">
           <FormItem>
             {getFieldDecorator('name', {

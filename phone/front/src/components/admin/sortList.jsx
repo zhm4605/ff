@@ -159,8 +159,6 @@ export default class SortList extends React.Component {
     });
   }
   editSort(item){
-    //const editSort_modal = <SortModal visible=true item={item} />
-    //ReactDOM.render(<SortModal visible=true item={item} />,document.getElementById('container'));
     this.setState({
       visible: true,
       item:item

@@ -30,22 +30,28 @@ class Welcome extends MY_Controller {
   	{
       $this->load->view('admin_welcome.html');
   	}
-
+    
     //登录
-    public function login(){
+    public function login()
+    {
       $arr = $_POST;
       $info = $this->admin_mod->get_admin_by_name($_POST['name']);
       $state = 0;
       
       if($info)
       {
-        if($info['password']==md5_password($_POST['password']))
+        if($info['wrongNum']>=3||$info['lock']==1)
         {
-
+          $this->admin_mod->lock_admin($info['id']);
+          $msg = "账号被锁定，请联系管理员解锁";
+        }
+        else if($info['password']==md5_password($_POST['password']))
+        {
           $identifier = get_user_identifier($_POST['name']);
           $token = get_user_token();
           $timeout = time() + 60 * 60 * 24 * 7;
           //设置cookie
+          setcookie('name', $info['name'], $timeout,"/");
           setcookie('auth', $identifier.":".$token, $timeout,"/");
           //更新数据库
           $update_arr = array(
@@ -62,33 +68,17 @@ class Welcome extends MY_Controller {
         }
         else
         {
-            $msg = "密码错误";
+          //$update_arr = array("wrongNum"=>"wrongNum+1");
+          $this->admin_mod->wrong_password($info['id']);
+          $msg = "密码错误";
         }
       }
       else
       {
           $msg = "用户名不存在";
       }
-      $output = array("state"=>$state,"msg"=>$msg);
+      $output = array("state"=>$state,"info"=>$msg);
       echo json_encode($output);
-    }
-
-
-    public function register()
-    {
-        $this->view('welcome/register');
-    }
-
-    
-    public function update_password($oriPassword,$password)
-    {
-      $name = 'zhm';
-      $update_arr = array(
-                    "token"=>get_user_token(),
-                    "identifier"=>get_user_identifier($name),
-                    "password"=>md5_password($password)
-                );
-      $this->admin_mod->update_admin($update_arr,1);
     }
 
     //登出

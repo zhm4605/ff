@@ -14,9 +14,11 @@ class Admin_mod extends MY_Model {
 		return $query->row_array();
 	}
 
-	public function get_admin($where)
+	public function get_password($where)
 	{
-
+		$query = $this->db->select('password')->get_where($this->_table,$where);
+		$info = $query->row_array();
+		return $info['password'];
 	}
 
 	//更新管理员表
@@ -32,7 +34,7 @@ class Admin_mod extends MY_Model {
 		$clean = array();
 		list($identifier, $token) = explode(':', $_COOKIE['auth']);
  
-		if (ctype_alnum($identifier) && ctype_alnum($token))
+		if (ctype_alnum($identifier) && ctype_alnum($token) && isset($_COOKIE['name']))
 		{
 		  $clean['identifier'] = $identifier;
 		  $clean['token'] = $token;
@@ -59,9 +61,19 @@ class Admin_mod extends MY_Model {
 		}
 	}
 
-	public function update_password($oriPassword,$password)
+	public function update_password($password,$where)
   {
-  	
+  	$this->db->set("password",$password)->where($where)->update($this->_table);
+  }
+
+  public function wrong_password($id)
+  {
+  	$this->db->set('wrongNum','wrongNum+1', false)->where('id',$id)->update($this->_table);
+  }
+
+  public function lock_admin($id)
+  {
+  	$this->db->set('lock','1')->where('id',$id)->update($this->_table);
   }
 
 }

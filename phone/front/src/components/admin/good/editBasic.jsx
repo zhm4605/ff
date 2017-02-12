@@ -18,21 +18,21 @@ export default class EditBasic extends React.Component{
 
   handleSubmit() {
   	const that = this;
+  	const goodId = this.props.goodId>0?this.props.goodId:0;
   	this.props.form.validateFields((err, values) => {
       //console.log(values);
       if (!err) 
       {
-        //console.log('Received values of form: ', values);
-        values['putawayTime'] = values['putawayTime'].format('YYYY-MM-DD HH:mm:ss');
+        values['putawayTime'] = values['putawayTime']?values['putawayTime'].format('YYYY-MM-DD HH:mm:ss'):null;
+
         $.ajax({
-          url:"/admin_good/editGood/"+that.props.goodId||'',
+          url:"/admin_good/editGood/"+goodId,
           dataType:"json",
           type:"post",
           data:values,
           success:function(msg)
           {
-            console.log(msg);
-            if(msg.state)
+            if(msg.id)
             {
 			  			that.props.finish&&that.props.finish();
             }
@@ -52,6 +52,7 @@ export default class EditBasic extends React.Component{
     const formItemLayout = {
       labelCol: { span: 3 }
     };
+    //console.log(moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss"));
     return (
     	<Form horizontal onSubmit={this.handleSubmit}>
 	      <FormItem
@@ -110,8 +111,7 @@ export default class EditBasic extends React.Component{
 	        extra="不填写则在编辑完成后立马上架"
 	      >
 	        {getFieldDecorator('putawayTime', {
-	        	initialValue: moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss"),
-	          //rules: [{ type: 'date'}]
+	        	initialValue: moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss")._isValid?moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss"):null,
 	        })(
 	          <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"/>
 	        )}

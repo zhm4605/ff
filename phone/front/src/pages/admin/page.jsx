@@ -17,7 +17,7 @@ class Page extends React.Component{
     return (
       <div>
         <header>
-          <h1>管理系统 </h1>
+          <h1>商城后台管理系统 </h1>
           <MyCenter />
         </header>
         <Sider defaultOpenKeys='sortList' current='sortList'/>
@@ -45,7 +45,10 @@ const routes = <Router history={hashHistory}>
 render(routes, document.getElementById('container'));
 
 
-//window.location.hash = '#/addGood';
+if(!window.location.hash)
+{
+  window.location.hash = '#/goodList';
 
+}
 //console.log(window.location)
 
