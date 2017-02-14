@@ -1,6 +1,12 @@
 
 import {render} from 'react-dom';
 
+import { addLocaleData, IntlProvider, FormattedMessage } from 'react-intl';
+
+import en_US from '../../language/en-US.js';
+import zh_CN from '../../language/zh-CN.js';
+import intl from 'intl';
+//addLocaleData([...en,...zh]);
 import './style.less';
 
 import { Menu, Icon } from 'antd';
@@ -13,7 +19,16 @@ class Page extends React.Component{
   }
   render() {
     return (
+      <IntlProvider 
+            locale={'en'} 
+            messages={zh_CN}
+        >
       <div className="layout">
+        <FormattedMessage
+        id='hello'
+        description='say hello to Howard.'
+        defaultMessage='111'
+      />
         <header>
           <div className="logo">logo</div>
            <Menu mode="horizontal" className='menu'>
@@ -31,6 +46,7 @@ class Page extends React.Component{
         <div className='content'>{this.props.children}</div>
         <footer style={{ textAlign: 'center' }}>版权所有</footer>
       </div>
+      </IntlProvider>
     );
   }
 };

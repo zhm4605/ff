@@ -8,6 +8,23 @@ import GoodList from './common/goodList.jsx';
 export default class List extends React.Component{
 	constructor(props) {
     super(props);
+
+    const that = this;
+    $.ajax({
+      url:"/good/goodList",
+      dataType:"json",
+      async: false,
+      success:function(msg)
+      {
+        console.log(msg);
+        that.state = {
+          data:msg,
+        }
+      },
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
   }
   render() {
     return (

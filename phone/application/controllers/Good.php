@@ -14,7 +14,7 @@ class Good extends MY_Controller {
     $this->load->view('index/index.html');
   }
 
-  public function good_list()
+  public function goodList()
   {
   	$list = $this->good_mod->get_good_list();
   	echo json_encode($list);

@@ -158,7 +158,26 @@ class Good_mod extends MY_Model {
 	/************查询************/
 	
 	//商品列表（页码，排序方式）
-	public function get_good_list($page=1,$order='updateTime')
+	public function get_good_list($where=array(),$page=1,$order='updateTime');
+	{	
+
+		$basic_where = array(
+			"lock"=>0,
+			"UNIX_TIMESTAMP(putawayTime)<"=>time()
+		);
+		$where = array_merge($basic_where,$where);
+		$this->db->select('id,name,priceMin,priceMax,picUrl,updateTime');
+		$this->db->order_by($order,'desc');
+		$this->db->where($where);
+		$this->db->limit(($page-1)*20,20);
+		$query = $this->db->get($this->_table);
+		$result = $query->result_array();
+		
+		return $result;
+	}
+
+	//后台商品列表
+	public function admin_good_list($page=1,$order='updateTime')
 	{	
 		$this->db->order_by($order,'desc');
 		$this->db->limit(($page-1)*20,20);
