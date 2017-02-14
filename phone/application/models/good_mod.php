@@ -158,7 +158,7 @@ class Good_mod extends MY_Model {
 	/************查询************/
 	
 	//商品列表（页码，排序方式）
-	public function get_good_list($where=array(),$page=1,$order='updateTime');
+	public function get_good_list($where=array(),$page=1,$order='updateTime')
 	{	
 
 		$basic_where = array(
@@ -166,7 +166,7 @@ class Good_mod extends MY_Model {
 			"UNIX_TIMESTAMP(putawayTime)<"=>time()
 		);
 		$where = array_merge($basic_where,$where);
-		$this->db->select('id,name,priceMin,priceMax,picUrl,updateTime');
+		$this->db->select('id,name,priceMin,priceMax,picUrl,hot,updateTime');
 		$this->db->order_by($order,'desc');
 		$this->db->where($where);
 		$this->db->limit(($page-1)*20,20);
@@ -177,7 +177,7 @@ class Good_mod extends MY_Model {
 	}
 
 	//后台商品列表
-	public function admin_good_list($page=1,$order='updateTime')
+	public function admin_good_list($where=array(),$page=1,$order='updateTime')
 	{	
 		$this->db->order_by($order,'desc');
 		$this->db->limit(($page-1)*20,20);
@@ -203,7 +203,7 @@ class Good_mod extends MY_Model {
 		$query = $this->db->get_where($this->_table, array('id' => $id));
 		$data = $query->row_array();
 		
-		$query = $this->db->get_where($this->_table_pic, array('goodId' => $id));
+		$query = $this->db->select('id,id as uid,url')->get_where($this->_table_pic, array('goodId' => $id));
 		$data["pics"] = $query->result_array();
 
 		$query = $this->db->get_where($this->_table_sort, array('goodId' => $id));

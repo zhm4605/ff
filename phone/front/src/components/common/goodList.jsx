@@ -24,9 +24,9 @@ export default class Home extends React.Component{
     return (
     	<ul className='good-card-list clearfix'>
     		{
-    			list.map((good,i)=>
-    				<li>
-			    		<a href="#">
+    			this.data.map((good,i)=>
+    				<li key={good.id}>
+			    		<a href={"#/good/"+good.id+'?'+(window.location.hash.split('?')[1]?window.location.hash.split('?')[1]:'lang=zh-CN')} target='_blank'>
 				    		<div className="custom-image">
 						      <img alt="example" width="100%" src={good.picUrl} />
 						      <div className='name'>{good.name}</div>

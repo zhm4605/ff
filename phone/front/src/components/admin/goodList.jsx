@@ -12,7 +12,7 @@ export default class GoodList extends React.Component{
     super(props);
     const that = this;
     $.ajax({
-      url:"/good/goodList",
+      url:"/admin_good/goodList",
       dataType:"json",
       async: false,
       success:function(msg)

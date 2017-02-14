@@ -181,20 +181,22 @@ class Admin_good extends MY_Controller {
   	echo json_encode($output);
   }
 
-  //
+  //商品列表
+  public function goodList()
+  {
+    $list = $this->good_mod->admin_good_list();
+    echo json_encode($list);
+  }
+  //编辑商品详情
   public function goodDetails($id)
   {
-  	$data = $this->good_mod->get_good_by_id($id);
-  	foreach ($data['pics'] as $key => $value) {
-  		$data['pics'][$key]['uid'] = $value['id'];
-  	}
-  	foreach ($data['sort_list'] as $key => $value) {
-			$data['sort_list'][$key]["sorts"] = unserialize($data['sort_list'][$key]["sorts"]);
-		}
-		$data["sorts"] = unserialize($data["sorts"]);
-  	echo json_encode($data);
+    $data = $this->good_mod->get_good_by_id($id);
+    foreach ($data['sort_list'] as $key => $value) {
+      $data['sort_list'][$key]["sorts"] = unserialize($data['sort_list'][$key]["sorts"]);
+    }
+    $data["sorts"] = unserialize($data["sorts"]);
+    echo json_encode($data);
   }
-
 }
 
 

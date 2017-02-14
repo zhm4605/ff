@@ -3,45 +3,53 @@ import {render} from 'react-dom';
 
 import { addLocaleData, IntlProvider, FormattedMessage } from 'react-intl';
 
-import en_US from '../../language/en-US.js';
-import zh_CN from '../../language/zh-CN.js';
+
 import intl from 'intl';
 //addLocaleData([...en,...zh]);
 import './style.less';
 
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Select } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
+const {Option} = Select;
 
 class Page extends React.Component{
   constructor(props) {
     super(props);
+
+  }
+  toggleLang(value)
+  {
+    window.location.hash = window.location.hash.split('?')[0]+'?lang='+value;
   }
   render() {
+    //console.log(this.props);
+    const query = this.props.location.query;
+    const lang = query.lang?query.lang:'zh-CN';
+    //const lang = 'zh-CN';
     return (
       <IntlProvider 
             locale={'en'} 
-            messages={zh_CN}
+            messages={require('../../language/'+lang+'.js')}
         >
       <div className="layout">
-        <FormattedMessage
-        id='hello'
-        description='say hello to Howard.'
-        defaultMessage='111'
-      />
         <header>
           <div className="logo">logo</div>
-           <Menu mode="horizontal" className='menu'>
-              <Menu.Item key="home">
-                <a href='#/home'><Icon type="home" />首页</a>
-              </Menu.Item>
-              <SubMenu title={<span><a href='#/list'><Icon type="mobile" />手机</a></span>}>
-                  <Menu.Item key="setting:1"><a href='#/list'>苹果</a></Menu.Item>
-              </SubMenu>
-              <Menu.Item key="alipay">
-                <a href="#/list" target="_blank" rel="noopener noreferrer"><Icon type="like" />热门</a>
-              </Menu.Item>
-            </Menu>
+         <Menu mode="horizontal" className='menu'>
+            <Menu.Item key="home">
+              <a href='#/home'><Icon type="home" /><FormattedMessage id='home'/></a>
+            </Menu.Item>
+            <SubMenu title={<span><a href='#/list'><Icon type="mobile" /><FormattedMessage id='phone_brand'/></a></span>}>
+                <Menu.Item key="setting:1"><a href='#/list'>苹果</a></Menu.Item>
+            </SubMenu>
+            <Menu.Item key="alipay">
+              <a href="#/list" target="_blank" rel="noopener noreferrer"><Icon type="like" /><FormattedMessage id='hot_good'/></a>
+            </Menu.Item>
+          </Menu>
+          <Select className='toggle-language' onChange={this.toggleLang} defaultValue={lang}>
+            <Option value='zh-CN'><FormattedMessage id='lang_zh'/></Option>
+            <Option value='en-US'><FormattedMessage id='lang_en'/></Option>
+          </Select>
         </header>
         <div className='content'>{this.props.children}</div>
         <footer style={{ textAlign: 'center' }}>版权所有</footer>
