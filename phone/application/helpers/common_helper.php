@@ -597,4 +597,99 @@ function filter_key($arr,$keys)
 	}
 	return $arr1;
 }
+//去除html标签
+function cut_tags($string, $replace_with_space = true)
+{
+    if ($replace_with_space) {
+            return preg_replace('!<[^>]*?>!', ' ', $string);
+    } else {
+        return strip_tags($string);
+    } 
+} 
+//
+function get($sUrl,$aGetParam=false)
+{
+  $oCurl = curl_init();
+  if(stripos($sUrl,"https://")!==FALSE)
+  {
+    curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, FALSE);
+  }
+  if($aGetParam)
+  {
+    $aGet = array();
+    foreach($aGetParam as $key=>$val)
+    {
+      $aGet[] = $key."=".urlencode($val);
+    }
+    $sUrl.="?".join("&",$aGet);
+  }
+  curl_setopt($oCurl, CURLOPT_URL, $sUrl);
+  curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1 );
+  $sContent = curl_exec($oCurl);
+  $aStatus = curl_getinfo($oCurl);
+  curl_close($oCurl);
+  if(intval($aStatus["http_code"])==200)
+  {
+    return $sContent;
+  }
+  else
+  {
+    return FALSE;
+  }
+}
 
+function post($sUrl,$aPOSTParam,$files=array())
+{ 
+	$oCurl = curl_init(); 
+	if(stripos($sUrl,"https://")!==FALSE)
+	{ 
+		curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE); 
+		curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false); 
+	} 
+	$aPOST = array(); 
+	if($files)
+	{ //如果有上传文件 
+		foreach($aPOSTParam as $key=>$val)
+		{ 
+			$aPOST[$key] = urlencode($val); 
+		} 
+		foreach($files as $n=>$file)
+		{ 
+			if(is_array($file))
+			{ 
+				foreach($file as $key=>$v)
+				{ //文件必需是绝对路径 
+					$aPOST[$key] = '@'.$v; 
+				} 
+			}
+			else
+			{ 
+				$aPOST[$n] = '@'.$file; 
+			} 
+		} 
+	}
+	else
+	{ 
+		foreach($aPOSTParam as $key=>$val)
+		{ 
+			$aPOST[] = $key."=".urlencode($val); 
+		} 
+		$aPOST=join("&", $aPOST); 
+	} 
+	curl_setopt($oCurl, CURLOPT_URL, $sUrl); 
+	curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1 ); 
+	curl_setopt($oCurl, CURLOPT_POST,true); 
+	curl_setopt($oCurl, CURLOPT_POSTFIELDS, $aPOST); 
+	$sContent = curl_exec($oCurl); 
+	$aStatus = curl_getinfo($oCurl); 
+	curl_close($oCurl); 
+	if(intval($aStatus["http_code"])==200)
+	{ 
+		return $sContent; 
+	}
+	else
+	{ 
+		return FALSE; 
+	} 
+} 

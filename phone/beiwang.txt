@@ -34,3 +34,6 @@ confirm 框（删除确认按钮）
 	发布资讯
 
 https://segmentfault.com/a/1190000005824920#articleHeader8
+
+参数：
+汇率
