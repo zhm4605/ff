@@ -1,7 +1,7 @@
 
 import ReactDOM from 'react-dom';
 
-import { Tree, Input, Button, Modal, Row, Col, message } from 'antd';
+import { Tree, Input, Button, Modal, Row, Col, message,Switch } from 'antd';
 
 import SortModal from './sort/sortModal.jsx';
 
@@ -66,7 +66,7 @@ export default class SortList extends React.Component {
             visible: false,
             item:{
               id:0,
-              parentId:0
+              parent_id:0
             }
           };
         },
@@ -159,6 +159,7 @@ export default class SortList extends React.Component {
     });
   }
   editSort(item){
+    console.log(item);
     this.setState({
       visible: true,
       item:item
@@ -193,6 +194,7 @@ export default class SortList extends React.Component {
       })
     }
   }
+  //删除子分类
   removeItem(remove_item){
     const data = [...this.state.gData];
     console.log(data);
@@ -215,12 +217,35 @@ export default class SortList extends React.Component {
   updateList(gData,visible) {
     this.setState({gData,visible});
   }
+
+  change_filter_condition(checked,id)
+  {
+    const text = checked?'设为导航':'取消导航';
+    $.ajax({
+      url:"/admin_sort/editSortNav/"+id,
+      dataType:"json",
+      type:"post",
+      data:{filter_condition:checked?1:0},
+      success:function(msg)
+      {
+        if(msg.state)
+        {
+          message.success(text+'成功');
+        }
+      },
+      error:function(msg){
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+  }
+
   render() {
     const { searchValue, expandedKeys, autoExpandParent } = this.state;
     const loop = data => data.map((item) => {
       const index = item.name.search(searchValue);
       const beforeStr = item.name.substr(0, index);
       const afterStr = item.name.substr(index + searchValue.length);
+      //item.parent_ids.push(item.id)
       const title = index > -1 ? (
         <span>
           {beforeStr}
@@ -234,10 +259,13 @@ export default class SortList extends React.Component {
                     <Col span={5}>{item.description}</Col>
                     <Col span={2}>{item.id}</Col>
                     <Col span={2}>{item.orderId}</Col>
+                    <Col span={2}>
+                      {item.level==0?<Switch defaultChecked={item.filter_condition==1?true:false} onChange={(checked)=>this.change_filter_condition(checked,item.id)}/>:''}
+                    </Col>
                     <Col span={8}>
                       <Button type="ghost" size="small" onClick={()=>{this.removeSort(item)}}>删除</Button>
                       <Button type="ghost" size="small" onClick={()=>{this.editSort(item)}}>编辑</Button>
-                      <Button type="primary" size="small" onClick={()=>this.editSort({parentId:item.id,id:0})}>添加子分类</Button>
+                      <Button type="primary" size="small" onClick={()=>this.editSort({parent_ids:[...item.parent_ids,item.id],id:0,name:'',description:''})}>添加子分类</Button>
                     </Col>
                    </Row>
 
@@ -258,12 +286,13 @@ export default class SortList extends React.Component {
           placeholder="Search"
           onChange={this.onChange}
         />
-        <Button style={{marginLeft:10}} type='primary' onClick={()=>this.editSort({parentId:'0',id:0})}>添加分类</Button>
+        <Button style={{marginLeft:10}} type='primary' onClick={()=>this.editSort({parent_ids:[],id:0,name:'',description:''})}>添加分类</Button>
         <Row className='sort-title'>
           <Col span={3} style={{textAlign:'left'}}>分类名称</Col>
           <Col span={5}>分类描述</Col>
           <Col span={2}>分类id</Col>
           <Col span={2}>排序</Col>
+          <Col span={2}>设为导航</Col>
           <Col span={8}>操作</Col>
         </Row>
         <Tree

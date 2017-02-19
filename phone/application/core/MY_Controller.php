@@ -10,11 +10,7 @@ class MY_Controller extends CI_Controller {
 
     public function __construct(){
         parent::__construct();
-        $this->load->library(array('MY_Lang','upload'));
-//        $this->load->library('chinese');
-	$this->load->model('admin_role_action_mod');
-//        $this->checkAction();
-        $this->__setLang();//语言
+
     }
 
     private function __setLang(){

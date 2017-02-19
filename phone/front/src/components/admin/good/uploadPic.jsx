@@ -8,7 +8,8 @@ export default class PicturesWall extends React.Component {
       previewVisible: false,
       previewImage: '',
       fileList: props.fileList||[],
-      text: ''
+      text: '',
+      good_id: props.good_id
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -17,7 +18,19 @@ export default class PicturesWall extends React.Component {
     this.handleRemove = this.handleRemove.bind(this);
     this.triggerChange = this.triggerChange.bind(this);
   }
-
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.good_id!=this.state.good_id)
+    {
+      this.setState({
+        previewVisible: false,
+        previewImage: '',
+        fileList: nextProps.fileList||[],
+        text: '',
+        good_id: nextProps.good_id
+      });
+    }
+    
+  }
   handleCancel() {
     this.setState({ previewVisible: false })
   }
@@ -49,7 +62,7 @@ export default class PicturesWall extends React.Component {
       if (file.response) {
         file.url = file.response.url;
         file.thumbUrl = file.response.thumbUrl;
-        file.uid = file.response.id;
+        //file.uid = file.response.id;
       }
       return file;
     });
@@ -79,7 +92,7 @@ export default class PicturesWall extends React.Component {
   }
 
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
+    const { previewVisible, previewImage, fileList, good_id } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -90,7 +103,7 @@ export default class PicturesWall extends React.Component {
       <div className="clearfix">
         <Upload
           accept="image/jpeg,image/png,image/jpg"
-          action={"/admin_good/uploadPic/"+this.props.goodId}
+          action={"/admin_good/uploadPic/"+good_id}
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}

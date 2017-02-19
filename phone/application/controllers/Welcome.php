@@ -40,7 +40,7 @@ class Welcome extends MY_Controller {
       
       if($info)
       {
-        if($info['wrongNum']>=3||$info['lock']==1)
+        if($info['password_wrong_count']>=3||$info['lock']==1)
         {
           $this->admin_mod->lock_admin($info['id']);
           $msg = "账号被锁定，请联系管理员解锁";
@@ -57,9 +57,9 @@ class Welcome extends MY_Controller {
           $update_arr = array(
               "token"=>$token,
               "timeout"=>date('Y-m-d H:i:s',$timeout),
-              "lastDate"=>date('Y-m-d H:i:s'),
-              "lastIp"=>getIP(),
-              "loginNum"=>$info["loginNum"]+1
+              "last_login_time"=>date('Y-m-d H:i:s'),
+              "last_ip"=>getIP(),
+              "login_count"=>$info["login_count"]+1
           );
           $this->admin_mod->update_admin($update_arr,$info['id']);
 
@@ -68,7 +68,7 @@ class Welcome extends MY_Controller {
         }
         else
         {
-          //$update_arr = array("wrongNum"=>"wrongNum+1");
+          //$update_arr = array("password_wrong_count"=>"password_wrong_count+1");
           $this->admin_mod->wrong_password($info['id']);
           $msg = "密码错误";
         }

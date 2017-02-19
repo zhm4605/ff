@@ -536,3 +536,10 @@ $config['validTime'] = 600;
  */
 $config["orderValidTime"] = 900;        //秒
 
+
+//汇率自动更新周期 每天
+$config["rateUpdatePeriod"] = 60*60*24*1;
+
+//商品分页数
+$config["pageCount"] = 2;
+

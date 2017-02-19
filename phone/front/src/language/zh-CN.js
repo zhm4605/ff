@@ -7,7 +7,7 @@ const zh_CN =
   hot_good:"热门商品",
   //语言
   lang_zh:'中文',
-  lang_en:'英语',
+  lang_en:'English',
   //商品详情页
   good_price:'价格',
   good_count:'数量',

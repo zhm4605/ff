@@ -5,7 +5,7 @@ const en_US =
   phone_brand:"Phone Brand",
   hot_good:"Hot Good",
   //语言
-  lang_zh:'Chinese',
+  lang_zh:'中文',
   lang_en:'English',
   //商品详情页
   good_price:'Price',

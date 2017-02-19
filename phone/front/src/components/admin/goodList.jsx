@@ -107,7 +107,7 @@ export default class GoodList extends React.Component{
               )
             )}/>
           <Column title="价格（元）" dataIndex="price" key="price" render={(text, record) => (
-              <span>￥{record.priceMin} ~ ￥{record.priceMax}</span>
+              <span>￥{record.price_min} ~ ￥{record.price_max}</span>
             )}/>
           <Column title="上架时间" dataIndex="putawayTime" key="putawayTime" />
           <Column title="库存" dataIndex="remain" key="remain" />

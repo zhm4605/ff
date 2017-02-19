@@ -45,16 +45,18 @@ export default class SearchSort extends React.Component{
     this.handleSearch = this.handleSearch.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    //console.log(nextProps);
     this.setState({ defaultValue: nextProps.value});
   }
   handleChange(value,label) {
-    //console.log(value);
-    //console.log(label);
     const onChoosed = this.props.onChoosed;
     if(onChoosed)
     {
       onChoosed(value,label);
+    }
+    console.log(value);
+    const onChange = this.props.onChange;
+    if (onChange) {
+      onChange(value);
     }
   }
   handleSearch(name) {
@@ -72,6 +74,7 @@ export default class SearchSort extends React.Component{
           showSearch
           style={{width:'100%'}}
           expandTrigger='hover'
+          value={this.props.value}
           changeOnSelect
         />
       </div>

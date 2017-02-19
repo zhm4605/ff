@@ -39,7 +39,7 @@ class Admin_mod extends MY_Model {
 		  $clean['identifier'] = $identifier;
 		  $clean['token'] = $token;
 
-		  $query = $this->db->select('id,name,token,timeout,loginNum')->get_where($this->_table,array("identifier" => $clean["identifier"]));
+		  $query = $this->db->select('id,name,token,timeout,login_count')->get_where($this->_table,array("identifier" => $clean["identifier"]));
 			$info = $query->row_array();
 			if($info&&date('Y-m-d H:i:s')<$info["timeout"]&&$clean["token"]==$info["token"]&&get_user_identifier($info['name'])==$clean["identifier"])
 			{
@@ -47,7 +47,7 @@ class Admin_mod extends MY_Model {
 				//更新数据库
 	      $data = array(
 	          "timeout"=>date('Y-m-d H:i:s',strtotime("+1 week")),
-	          "lastDate"=>date('Y-m-d H:i:s')
+	          "last_login_time"=>date('Y-m-d H:i:s')
 	      );
 				$this->update_admin($data,$info['id']);
 				$login = 1;
@@ -68,7 +68,7 @@ class Admin_mod extends MY_Model {
 
   public function wrong_password($id)
   {
-  	$this->db->set('wrongNum','wrongNum+1', false)->where('id',$id)->update($this->_table);
+  	$this->db->set('passowrd_wrong_count','passowrd_wrong_count+1', false)->where('id',$id)->update($this->_table);
   }
 
   public function lock_admin($id)

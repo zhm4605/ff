@@ -20,12 +20,22 @@ class Admin_good extends MY_Controller {
   {
   	$data = $_POST;
 
+    //商品分类处理
+    if(isset($data['category']))
+    {
+      $data['category'] = implode(',', $data['category']);
+    }
+
   	if($id>0)
   	{
   		$id = $this->good_mod->update_good($data,$id);
   	}
   	else
   	{
+      if($data['putaway_time']=="")
+      {
+        $data['putaway_time'] = date('Y-m-d H:i:s');
+      }
   		$id = $this->good_mod->add_good($data);
   	}
   	$output = array("id"=>$id);
@@ -82,7 +92,7 @@ class Admin_good extends MY_Controller {
   	echo json_encode($output);
   }
   //上传商品图片
-  public function uploadPic($goodId)
+  public function uploadPic($good_id)
   {
   	$time = time();
 		$date = date('Ymd', $time);
@@ -149,10 +159,10 @@ class Admin_good extends MY_Controller {
 			$this->load->library('image_lib', $config);
 			$this->image_lib->resize();
 
-			if($goodId>0)
+			if($good_id>0)
 			{
 				$data = array(
-					"goodId"=>$goodId,
+					"good_id"=>$good_id,
 					"url"=>$url
 				);
 				$id = $this->good_mod->add_good_pic($data);
@@ -195,6 +205,9 @@ class Admin_good extends MY_Controller {
       $data['sort_list'][$key]["sorts"] = unserialize($data['sort_list'][$key]["sorts"]);
     }
     $data["sorts"] = unserialize($data["sorts"]);
+
+    //商品所属分类
+    $data["category"] = explode(',', $data["category"]);
     echo json_encode($data);
   }
 }

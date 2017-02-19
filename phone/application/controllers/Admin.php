@@ -7,7 +7,6 @@ class Admin extends MY_Controller {
 		parent::__construct();
 		$this->time = time();
 		$this->load->model(array('admin_mod'));
-		$this->load->library('form_validation');
 		$this->load->helper('admin');
     $this->admin_mod->is_login(); 
 	}

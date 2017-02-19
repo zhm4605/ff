@@ -7,7 +7,6 @@ class Admin_sort extends MY_Controller {
 		parent::__construct();
 		$this->time = time();
 		$this->load->model(array('admin_mod','sort_mod'));
-		$this->load->library('form_validation');
 		$this->load->helper('admin');
 		//is_login();//?登陆
 	}
@@ -30,6 +29,20 @@ class Admin_sort extends MY_Controller {
     public function editSort($id=0)
     {
     	$data = $_POST;
+
+        if(isset($data['parent_ids'])&&count($data['parent_ids'])>0)
+        {
+            $data['parent_id'] = $data['parent_ids'][count($data['parent_ids'])-1];
+            $data["level"] = count($data['parent_ids']);
+            $data['parent_ids'] = implode(',', $data['parent_ids']);
+        }
+        else
+        {
+            $data['parent_id'] = 0;
+            $data["level"] = 0;
+        }
+        
+
     	if($id>0)
     	{
     		$state = $this->sort_mod->update_sort($data,$id);
@@ -38,9 +51,17 @@ class Admin_sort extends MY_Controller {
     	{
     		$state = $this->sort_mod->add_sort($data);
     	}
-        $output = array();
+        
         $output["state"] = $state;
         $output["list"] = $this->sort_mod->get_sort_list();
+        echo json_encode($output);
+    }
+    public function editSortNav($id)
+    {
+        $data = $_POST;
+        $state = $this->sort_mod->update_sort($data,$id);
+        $output = array();
+        $output["state"] = $state;
         echo json_encode($output);
     }
     //删除分类

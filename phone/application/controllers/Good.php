@@ -16,8 +16,19 @@ class Good extends MY_Controller {
 
   public function goodList()
   {
-  	$list = $this->good_mod->get_good_list();
-  	echo json_encode($list);
+    $where = isset($_POST)?$_POST:array();
+
+    if(isset($where['page']))
+    {
+      $page=$where['page'];
+      unset($where['page']);
+    }
+    else
+    {
+      $page=1;
+    }
+  	$output = $this->good_mod->get_good_list($where,$page);
+  	echo json_encode($output);
   }
 
   public function goodDetails($id)
@@ -27,6 +38,11 @@ class Good extends MY_Controller {
       $data['sort_list'][$key]["sorts"] = unserialize($data['sort_list'][$key]["sorts"]);
     }
     $data["sorts"] = unserialize($data["sorts"]);
+    if(!$data["sorts"]){
+       $data["sorts"] = array(); 
+    }
+    //商品所属分类
+    $data["category"] = explode(',', $data["category"]);
     echo json_encode($data);
   }
 }

@@ -1,6 +1,6 @@
 
 
-import { Button } from 'antd';
+import { Button,message } from 'antd';
 
 function get_editor()
 {
@@ -74,6 +74,7 @@ export default class AddGood extends React.Component{
         console.log(msg);
         if(msg.id)
         {
+          message.success('保存成功');
           that.props.finish&&that.props.finish();
         }
         

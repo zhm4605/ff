@@ -31,7 +31,8 @@ export default class EditSort extends React.Component{
     //console.log(props);
     this.state = {
       list: props.data.sorts?props.data.sorts:[],
-      sort_list: props.data.sort_list?props.data.sort_list:[]
+      sort_list: props.data.sort_list?props.data.sort_list:[],
+      default_price: props.data.price_min
     };
     //console.log(props.data.sort_list);
     this.addSort = this.addSort.bind(this);
@@ -42,6 +43,9 @@ export default class EditSort extends React.Component{
     this.updateSortList = this.updateSortList.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.removeSort = this.removeSort.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({default_price:nextProps.data.price_min});
   }
   addSortValue(value,label)
   {
@@ -109,7 +113,7 @@ export default class EditSort extends React.Component{
     const validList = list.filter((item) => {
       return item.children.length>0;
     });
-    const default_price = this.props.data.priceMin;
+    const default_price = this.state.default_price;
     const loop = function(i){
       let item = {};
       for(var j=0; j<validList[i].children.length; j++){
@@ -151,22 +155,26 @@ export default class EditSort extends React.Component{
   //保存分类
   handleSubmit()
   {
-    const {goodId} = this.props;
-    //console.log(goodId);
+    const {good_id} = this.props;
+    //console.log(good_id);
 
     const data = {
       sorts: this.state.list,
       sort_list: this.state.sort_list
     };
     $.ajax({
-        url:"/admin_good/editGoodSorts/"+goodId,
+        url:"/admin_good/editGoodSorts/"+good_id,
         dataType:"json",
         type: "post",
         data: data,
         success:function(msg)
         {
           console.log(msg);
-          window.location.href='/good/'+goodId;
+          if(msg.id>0)
+          {
+            message.success('保存成功');
+          }
+          
         },
         error:function(msg){
           console.log(msg);

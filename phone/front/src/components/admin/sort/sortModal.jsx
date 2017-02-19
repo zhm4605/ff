@@ -18,6 +18,7 @@ export default class SortModal extends React.Component{
 
   componentWillReceiveProps(nextProps) {
     //console.log(nextProps);
+    //this.setState({item:nextProps.item,visible:nextProps.visible});
     this.setState(nextProps);
   }
   handleOk(e) {
@@ -84,8 +85,8 @@ export default class SortModal extends React.Component{
               wrapperCol={{ span: 16 }}
               label="父分类"
             >
-              {getFieldDecorator('parentId', {
-                initialValue:this.state.item.parentId
+              {getFieldDecorator('parent_ids', {
+                initialValue:this.state.item.parent_ids
               })(
                 <SearchSort placeholder="选择父分类" style={{width:200}}/>
               )}

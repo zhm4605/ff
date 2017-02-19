@@ -6,27 +6,31 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 
-import { Form, Icon, Input,InputNumber,Button,Checkbox,DatePicker,Row,Col} from 'antd';
+import SearchSort from '../sort/searchSort.jsx';
+
+import { Form, Icon, Input,InputNumber,Button,Checkbox,DatePicker,Row,Col,message} from 'antd';
 
 const FormItem = Form.Item;
 
 export default class EditBasic extends React.Component{
   constructor(props) {
     super(props);
+    this.state = props;
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
+  componentWillReceiveProps(nextProps) {
+  	this.setState(nextProps);
+  }
   handleSubmit() {
   	const that = this;
-  	const goodId = this.props.goodId>0?this.props.goodId:0;
+  	const good_id = this.state.good_id>0?this.state.good_id:0;
   	this.props.form.validateFields((err, values) => {
-      //console.log(values);
       if (!err) 
       {
-        values['putawayTime'] = values['putawayTime']?values['putawayTime'].format('YYYY-MM-DD HH:mm:ss'):null;
+        values['putaway_time'] = values['putaway_time']?values['putaway_time'].format('YYYY-MM-DD HH:mm:ss'):"";
 
         $.ajax({
-          url:"/admin_good/editGood/"+goodId,
+          url:"/admin_good/editGood/"+good_id,
           dataType:"json",
           type:"post",
           data:values,
@@ -35,6 +39,11 @@ export default class EditBasic extends React.Component{
             if(msg.id)
             {
 			  			that.props.finish&&that.props.finish();
+			  			if(good_id==0)
+			  			{
+			  				message.success('保存成功');
+			  				window.location.href = "#/addGood/"+msg.id+"?nav=description";
+			  			}
             }
             
           },
@@ -47,14 +56,26 @@ export default class EditBasic extends React.Component{
   }
 
   render() {
-  	const data = this.props.data||{};
+  	const data = this.state.data||{};
+  	//console.log(data);
     const { getFieldProps, getFieldError,getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: { span: 3 }
     };
-    //console.log(moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss"));
+    //console.log(moment(data.putaway_time,"YYYY-MM-DD HH:mm:ss"));
     return (
     	<Form horizontal onSubmit={this.handleSubmit}>
+    		<FormItem
+	        {...formItemLayout}
+	        wrapperCol={{ span: 14 }}
+	        label="商品分类"
+	      >
+	        {getFieldDecorator('category', {
+	        	initialValue: data.category
+	        })(
+	          <SearchSort placeholder="选择分类" style={{width:200,textAlign:'left'}}/>
+	        )}
+	      </FormItem>
 	      <FormItem
 	        {...formItemLayout}
 	        wrapperCol={{ span: 14 }}
@@ -74,8 +95,8 @@ export default class EditBasic extends React.Component{
 	      >
 	      <Row gutter={20}>
 	        <Col span={7}>
-	          {getFieldDecorator('priceO', {
-	          	initialValue: data.priceO,
+	          {getFieldDecorator('price_origin', {
+	          	initialValue: data.price_origin,
 	            //rules: [{ type:'number', required: true, message: '请输入原价' }],
 	          })(
 	            <Input type='number' placeholder='请输入原价' addonAfter='元'/>
@@ -83,8 +104,8 @@ export default class EditBasic extends React.Component{
 	          
 	        </Col>
 	        <Col span={7}>
-	          {getFieldDecorator('priceMin', {
-	          	initialValue: data.priceMin,
+	          {getFieldDecorator('price_min', {
+	          	initialValue: data.price_min,
 	            //rules: [{ type:'number',required: true, message: '请输入现价' }],
 	          })(
 	            <Input type='number' placeholder='请输入现价' addonAfter='元'/>
@@ -110,8 +131,8 @@ export default class EditBasic extends React.Component{
 	        label="上架时间"
 	        extra="不填写则在编辑完成后立马上架"
 	      >
-	        {getFieldDecorator('putawayTime', {
-	        	initialValue: moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss")._isValid?moment(data.putawayTime,"YYYY-MM-DD HH:mm:ss"):null,
+	        {getFieldDecorator('putaway_time', {
+	        	initialValue: moment(data.putaway_time,"YYYY-MM-DD HH:mm:ss")._isValid?moment(data.putaway_time,"YYYY-MM-DD HH:mm:ss"):null,
 	        })(
 	          <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"/>
 	        )}
@@ -125,7 +146,7 @@ export default class EditBasic extends React.Component{
 	        	initialValue: data.pics,
 	          valuePropName: 'fileList'
 	        })(
-	          <UploadPic goodId={this.props.goodId}/>
+	          <UploadPic good_id={this.state.good_id}/>
 	        )}
 	      </FormItem>
 	      <FormItem 

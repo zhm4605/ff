@@ -49,7 +49,8 @@ export default class Good extends React.Component{
 		      		</Col>
 		      		<Col className='good-text' span={14}>
 		      			<h3 className='name'>{data.name}</h3>
-		      			<div className='price'>价格：￥{data.priceMin}</div>
+		      			<div className='price'>价格：{data.price_min}~{data.price_max}</div>
+		      			<div>
 		      			{
 		      				data['sorts'].map((d,i)=>
 			      				<div className='sorts' key={d.id}>
@@ -63,6 +64,7 @@ export default class Good extends React.Component{
 				      			</div>
 			      			)
 		      			}
+		      			</div>
 		      			<div className='remain'>
 		      				数量：
 		      				<Input type='number' value='1' style={{width:100}}/>
