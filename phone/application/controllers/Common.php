@@ -13,6 +13,32 @@ class Common extends MY_Controller {
 
   }
 
+  public function send_email()
+  {
+    $this->load->library('email');
+    $config['protocol'] = 'smtp';
+    $config['smtp_host'] = 'smtp.163.com';
+    $config['smtp_user'] = '18768122041@163.com';
+    $config['smtp_pass'] = 'zhm123456';
+    $config['mailtype'] = 'html';
+    $config['validate'] = true;
+    $config['priority'] = 1;
+    $config['crlf'] = "\r\n";
+    $config['smtp_port'] = 25;
+    $config['charset'] = 'utf-8';
+    $config['wordwrap'] = TRUE;
+    $this->email->initialize($config);
+
+    $this->email->from('18768122041@163.com', '我是名称而已');
+    $this->email->to('460569137@qq.com');
+
+    $this->email->subject('文字随意');
+    $this->email->message('本次验证码是请在3分钟内输入');
+
+    $this->email->send();
+    //echo $this->email->print_debugger();
+  }
+
   //用于筛选的分类
   public function get_category()
   {
