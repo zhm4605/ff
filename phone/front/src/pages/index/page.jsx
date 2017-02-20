@@ -68,6 +68,7 @@ const routes = <Router history={hashHistory}>
                     <Route path="/home" component={require('componentsDir/home.jsx')}/>
                     <Route path="/good/:id" component={require('componentsDir/good.jsx')}/>
                     <Route path="/list" component={require('componentsDir/list.jsx')}/>
+                    <Route path="/register" component={require('componentsDir/register.jsx')}/>
                   </Route>
               </Router>
 

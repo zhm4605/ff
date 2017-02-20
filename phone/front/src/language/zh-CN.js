@@ -13,6 +13,21 @@ const zh_CN =
   good_count:'数量',
   good_remain:'库存',
   good_details:'商品详情',
-  good_parameter:'商品参数'
+  good_parameter:'商品参数',
+  //注册页面
+  email:'邮箱',
+  email_hint:'请输入您的邮箱，验证码将发送至您的邮箱',
+  valid_email_hint:'请输入有效的邮箱',
+  password:'密码',
+  password_hint:'请输入密码',
+  confirm_password:'确认密码',
+  confirm_password_hint:'请确认密码',
+  nickname:'昵称',
+  nickname_hint:'请输入昵称',
+  captcha:'验证码',
+  captcha_hint:'请输入您收到的验证码',
+  get_captcha:'获取验证码',
+  register:'注册',
+  login:'登录',
 }
 export default zh_CN;    
