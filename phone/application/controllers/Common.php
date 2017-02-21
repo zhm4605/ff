@@ -6,44 +6,43 @@ class Common extends MY_Controller {
 		parent::__construct();
 		$this->time = time();
 		$this->load->model(array('good_mod','sort_mod'));
+    $this->lang->load('common', 'chinese');
+    $this->load->library('session');
 	}
 
   public function index()
   {
 
   }
-
-  public function send_email()
+  //注册邮件发送
+  public function send_email($to_email)
   {
+
+    $to_email = '460569137@qq.com';
+
+    $captcha = generate_captcha();
+
     $this->load->library('email');
-    $config['protocol'] = 'smtp';
-    $config['smtp_host'] = 'smtp.163.com';
-    $config['smtp_user'] = '18768122041@163.com';
-    $config['smtp_pass'] = 'zhm123456';
-    $config['mailtype'] = 'html';
-    $config['validate'] = true;
-    $config['priority'] = 1;
-    $config['crlf'] = "\r\n";
-    $config['smtp_port'] = 25;
-    $config['charset'] = 'utf-8';
-    $config['wordwrap'] = TRUE;
-    $this->email->initialize($config);
 
-    $this->email->from('18768122041@163.com', '我是名称而已');
-    $this->email->to('460569137@qq.com');
+    $this->email->from('18768122041@163.com', $this->lang->line('email_name'));
+    $this->email->to($to_email);
 
-    $this->email->subject('文字随意');
-    $this->email->message('本次验证码是请在3分钟内输入');
+    $this->email->subject($this->lang->line('user_register'));
+    $this->email->message($this->lang->line('send_email_info').'<br>'.$captcha);
 
     $this->email->send();
-    //echo $this->email->print_debugger();
+    $this->session->set_userdata('captcha', $captcha);
+
+    $output = array();
+    $output['state'] = 1;
+    echo json_encode($output);
   }
 
   //用于筛选的分类
   public function get_category()
   {
-      $list = $this->sort_mod->get_filter_condition();
-      echo json_encode($list);
+    $list = $this->sort_mod->get_filter_condition();
+    echo json_encode($list);
   }
 
   //汇率 7天自动更新

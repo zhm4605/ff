@@ -4,24 +4,16 @@ class Home extends MY_Controller {
 
     public function __construct(){
         parent::__construct();
-
+        $this->load->model(array('user_mod'));
     }
     public function index(){
-        //$data = array();
-        //$this->view('index/index',$data);
-        $this->load->view('index.html');
+      $this->load->view('index.html');
     }
 
-    public function basic(){
-        $data = array("aa"=>"bb");
+    public function get_login_state(){
+        $data = $this->user_mod->is_login();
         echo json_encode($data);
     }
-
-    public function upload()
-    {
-        echo json_encode($_FILES);
-    }
-    
 }
 
 

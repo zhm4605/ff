@@ -51,8 +51,8 @@ class Welcome extends MY_Controller {
           $token = get_user_token();
           $timeout = time() + 60 * 60 * 24 * 7;
           //设置cookie
-          setcookie('name', $info['name'], $timeout,"/");
-          setcookie('auth', $identifier.":".$token, $timeout,"/");
+          setcookie('name', $info['name'], $timeout,"/admin");
+          setcookie('auth', $identifier.":".$token, $timeout,"/admin");
           //更新数据库
           $update_arr = array(
               "token"=>$token,
@@ -84,7 +84,7 @@ class Welcome extends MY_Controller {
     //登出
     public function logout()
     {
-      setcookie('auth',"",time()-3600,"/");
+      setcookie('auth',"",time()-3600,"/admin");
       header("Location: /welcome"); 
       //header("Location: /admin"); 
     }

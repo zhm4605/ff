@@ -693,3 +693,16 @@ function post($sUrl,$aPOSTParam,$files=array())
 		return FALSE; 
 	} 
 } 
+
+//生成6位验证码
+function  generate_captcha()
+{
+	$ychar="0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+	$list=explode(",",$ychar);
+	$authnum = "";
+	for($i=0;$i<6;$i++){
+		$randnum=rand(0,35); // 10+26;
+		$authnum.=$list[$randnum];
+	}
+	return $authnum;
+}

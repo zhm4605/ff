@@ -75,12 +75,6 @@ function _html_list($mod = 'scenic/index', $page, $newhtml){
 	}
 	return create_html($newhtml, $content);
 }
-//登录 
-function is_login(){
-	
-	
-
-}
 
 function sortarray($classification,$pid='0'){
 	$arr=array();
