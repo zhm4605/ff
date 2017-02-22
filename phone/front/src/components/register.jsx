@@ -1,4 +1,4 @@
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, Card } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, Card, message } from 'antd';
 
 import { addLocaleData, IntlProvider, FormattedMessage } from 'react-intl';
 
@@ -17,13 +17,38 @@ export default class Register extends React.Component{
 
     this.state = {
       passwordDirty: false,
+      captcha_send: false
     };
   }
-  handleSubmit(){
+  //提交
+  handleSubmit(e){
   	e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log(values);
+        delete values.confirm;
+        $.ajax({
+		      url:"/register",
+		      dataType:"json",
+		      type: "post",
+		      data: values,
+		      success:function(msg)
+		      {
+		      	if(msg.state)
+		      	{
+		      		message.success(msg.info);
+		      		window.location.href='#/login';
+		      	}
+		      	else
+		      	{
+		      		message.error(msg.info);
+		      	}
+		      },
+		      error:function(msg){
+		        console.log(msg);
+		        document.body.innerHTML = msg.responseText;
+		      }
+		    })
       }
     });
   }
@@ -46,11 +71,37 @@ export default class Register extends React.Component{
     }
     callback();
   }
+  //获取验证码
   get_captcha()
   {
   	const email = this.props.form.getFieldValue('email');
-  	//getFieldError
-  	console.log(email);
+  	const that = this;
+  	$.ajax({
+      url:"/register/send_email",
+      dataType:"json",
+      type: 'post',
+      data: {email},
+      success:function(msg)
+      {
+      	if(msg.state)
+      	{
+      		that.setState({captcha_send:true});
+      		setTimeout(function(){
+      			that.setState({captcha_send:false});
+      		},2000);
+
+      	}
+      	else
+      	{
+      		message.error(msg.info);
+      	}
+      },
+      error:function(msg){
+        console.log(msg);
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+
   }
   render(){
   	const { getFieldDecorator } = this.props.form;
@@ -64,9 +115,9 @@ export default class Register extends React.Component{
         offset: 8,
       },
     };
-    
+    //<div><FormattedMessage id='nickname_hint'/></div>
     return (
-    	<Card title="用户注册" extra={<a href='#/login'><FormattedMessage id='login'/></a>} style={{margin:'50px auto',width:600}}>
+    	<Card title={<FormattedMessage id='user_register'/>} extra={<a href='#/login'><FormattedMessage id='login'/>>></a>} style={{margin:'50px auto',width:600}}>
 	      <Form onSubmit={this.handleSubmit}>
 	      	<FormItem
 	          {...formItemLayout}
@@ -74,7 +125,7 @@ export default class Register extends React.Component{
 	          hasFeedback
 	        >
 	          {getFieldDecorator('nickname', {
-	            rules: [{ required: true, message: <FormattedMessage id='nickname_hint'/> }],
+	            rules: [{ required: true, message:  <b>Name is required</b>}],
 	          })(
 	            <Input />
 	          )}
@@ -137,7 +188,11 @@ export default class Register extends React.Component{
 	              )}
 	            </Col>
 	            <Col span={12}>
-	              <Button size="large" onClick={this.get_captcha}><FormattedMessage id='get_captcha'/></Button>
+	            	{
+	            		this.state.captcha_send?
+	            		<FormattedMessage id='captcha_has_send'/>
+	            		:<Button size="large" onClick={this.get_captcha}><FormattedMessage id='get_captcha'/></Button>
+	            	}
 	            </Col>
 	          </Row>
 	        </FormItem>

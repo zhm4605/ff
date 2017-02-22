@@ -5,6 +5,7 @@
 	$lang['email_name'] = '网上商城';
 	$lang['user_register'] = '用户注册';
 	$lang['send_email_info'] = '您的验证码如下，请在3分钟内输入！';
+	$lang['captcha_outdate'] = '验证码过期，请重新获取';
 
 	//注册返回信息
 	$lang['register_success'] = '注册成功';
@@ -17,4 +18,5 @@
 	$lang['user_locked'] = '账号被锁定，前往解锁';
 	$lang['user_inexist'] = '该邮箱尚未注册，请前往注册';
 	$lang['login_success'] = '登录成功';
+	$lang['password_error'] = '密码错误';
 	//$lang[''] = '';

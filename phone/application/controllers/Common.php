@@ -14,29 +14,7 @@ class Common extends MY_Controller {
   {
 
   }
-  //注册邮件发送
-  public function send_email($to_email)
-  {
-
-    $to_email = '460569137@qq.com';
-
-    $captcha = generate_captcha();
-
-    $this->load->library('email');
-
-    $this->email->from('18768122041@163.com', $this->lang->line('email_name'));
-    $this->email->to($to_email);
-
-    $this->email->subject($this->lang->line('user_register'));
-    $this->email->message($this->lang->line('send_email_info').'<br>'.$captcha);
-
-    $this->email->send();
-    $this->session->set_userdata('captcha', $captcha);
-
-    $output = array();
-    $output['state'] = 1;
-    echo json_encode($output);
-  }
+  
 
   //用于筛选的分类
   public function get_category()

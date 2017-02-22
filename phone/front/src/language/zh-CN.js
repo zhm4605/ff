@@ -29,5 +29,8 @@ const zh_CN =
   get_captcha:'获取验证码',
   register:'注册',
   login:'登录',
+  captcha_has_send:"验证码已发送，请在3分钟内输入",
+  user_register:'用户注册',
+  user_login:'用户登录',
 }
 export default zh_CN;    

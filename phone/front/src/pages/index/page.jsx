@@ -26,10 +26,10 @@ class Page extends React.Component{
     //console.log(this.props);
     const query = this.props.location.query;
     const lang = query.lang?query.lang:'zh-CN';
-    //const lang = 'zh-CN';
+    //const lang = 'zh-CN'; 
     return (
       <IntlProvider 
-            locale={'en'} 
+            locale='en'
             messages={require('../../language/'+lang+'.js')}
         >
       <div className="layout">
@@ -69,6 +69,7 @@ const routes = <Router history={hashHistory}>
                     <Route path="/good/:id" component={require('componentsDir/good.jsx')}/>
                     <Route path="/list" component={require('componentsDir/list.jsx')}/>
                     <Route path="/register" component={require('componentsDir/register.jsx')}/>
+                    <Route path="/login" component={require('componentsDir/login.jsx')}/>
                   </Route>
               </Router>
 
