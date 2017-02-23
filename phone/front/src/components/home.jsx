@@ -30,9 +30,32 @@ export default class Home extends React.Component{
 			    </div>
 			  </Carousel>
 			  <Card title="热门商品" extra={<a href="#">More</a>} className='hot-good-wrap'>
-			    <GoodList />
+			    <GoodList list={get_hot_list()}/>
 			  </Card>
 		  </div>
     );
   }
 };
+
+function get_hot_list()
+{
+  let list  = {};
+  const query = {};
+  $.ajax({
+    url: "/good/goodList",
+    dataType: "json",
+    type: 'post',
+    async: false,
+    data: query,
+    success:function(msg)
+    {
+      //console.log(msg);
+      list = msg.list;
+      
+    },
+    error:function(msg){
+      document.body.innerHTML = msg.responseText;
+    }
+  })
+  return list;
+}

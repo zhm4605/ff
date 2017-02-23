@@ -105,7 +105,7 @@ class Register extends MY_Controller {
     {
       $arr = $_POST;
 
-      $user = $this->user_mod->get_user(array('email'=>$arr['email']));
+      $user = $this->user_mod->get_user(array('name'=>$arr['name']));
       $state = 0;
       
       if($user)
@@ -119,17 +119,18 @@ class Register extends MY_Controller {
         }
         else if($user['password']==md5_password($arr['password']))
         {
-          $identifier = get_user_identifier($arr['email']);
+          $identifier = get_user_identifier($arr['name']);
+          //echo $identifier.'<br>';
           $token = get_user_token();
+          //echo $token.'<br>';
           $timeout = time() + 60 * 60 * 24 * 7;
           //设置cookie
           setcookie('email', $user['email'], $timeout,"/home");
-          setcookie('name', $user['nickname'], $timeout,"/home");
+          setcookie('name', $user['name'], $timeout,"/home");
           setcookie('auth', $identifier.":".$token, $timeout,"/home");
           //更新数据库
           $update_arr = array(
               "token"=>$token,
-              "timeout"=>date('Y-m-d H:i:s',$timeout),
               "last_login_time"=>date('Y-m-d H:i:s'),
               "last_ip"=>getIP(),
               "login_count"=>$user["login_count"]+1
@@ -156,6 +157,8 @@ class Register extends MY_Controller {
     public function logout()
     {
       setcookie('auth',"",time()-3600,"/home");
+      $data = $this->user_mod->is_login();
+      echo json_encode($data);
     }
 
 }

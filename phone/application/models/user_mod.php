@@ -32,32 +32,35 @@ class user_mod extends MY_Model {
 		return $info['password'];
 	}
 
-	//更新管理员表
+	//更新用户表
 	public function update_user($data,$id)
 	{	
-		$this->db->set($data)->where('id',$id)->update($this->_table);
+		return $this->db->set($data)->where('id',$id)->update($this->_table);
 	}
 
 	//是否登录
 	function is_login()
 	{
 		$login = 0;
-		$clean = array();
-		list($identifier, $token) = explode(':', $_COOKIE['auth']);
- 
-		if (ctype_alnum($identifier) && ctype_alnum($token) && isset($_COOKIE['name']))
+		
+		if (isset($_COOKIE['auth']))
 		{
+			$clean = array();
+			list($identifier, $token) = explode(':', $_COOKIE['auth']);
+
 		  $clean['identifier'] = $identifier;
 		  $clean['token'] = $token;
+		  //print_r($clean);
 
-		  $query = $this->db->select('id,name,token,timeout,login_count')->get_where($this->_table,array("identifier" => $clean["identifier"]));
+		  $query = $this->db->select('id,name,token,login_count')->get_where($this->_table,array("identifier" => $clean["identifier"]));
 			$info = $query->row_array();
-			if($info&&date('Y-m-d H:i:s')<$info["timeout"]&&$clean["token"]==$info["token"]&&get_user_identifier($info['name'])==$clean["identifier"])
+			//print_r($info);
+
+			if($info&&$clean["token"]==$info["token"]&&get_user_identifier($info['name'])==$clean["identifier"])
 			{
 				//自动登录成功，更新数据库
 				//更新数据库
 	      $data = array(
-	          "timeout"=>date('Y-m-d H:i:s',strtotime("+1 week")),
 	          "last_login_time"=>date('Y-m-d H:i:s')
 	      );
 				$this->update_user($data,$info['id']);

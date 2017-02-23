@@ -14,7 +14,7 @@ const zh_CN =
   good_remain:'库存',
   good_details:'商品详情',
   good_parameter:'商品参数',
-  //注册页面
+  //注册登录页面
   email:'邮箱',
   email_hint:'请输入您的邮箱，验证码将发送至您的邮箱',
   valid_email_hint:'请输入有效的邮箱',

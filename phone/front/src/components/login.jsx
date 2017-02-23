@@ -13,6 +13,7 @@ export default class Login extends React.Component{
     
   }
   handleSubmit() {
+  	const that = this;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
@@ -27,7 +28,16 @@ export default class Login extends React.Component{
             console.log(msg);
             if(msg.state)
             {
-              //window.location.href='/admin/';
+            	const query = that.props.location.query;
+            	if(query.from)
+            	{
+            		window.location.href='#/'+query.from;
+            	}
+            	else
+            	{
+            		window.location.href='#/home';
+            	}
+              
             }
             else
             {
@@ -52,17 +62,17 @@ export default class Login extends React.Component{
       <Card title={<FormattedMessage id='user_login'/>} style={card_style}>
         <Form onSubmit={this.handleSubmit} className="Login-form">
           <FormItem>
-            {getFieldDecorator('email', {
+            {getFieldDecorator('name', {
               rules: [{ required: true, message: '请输入用户名' }],
             })(
-              <Input addonBefore={<Icon type="mail" />} />
+              <Input addonBefore={<Icon type="user" />} placeholder='name'/>
             )}
           </FormItem>
           <FormItem>
             {getFieldDecorator('password', {
               rules: [{ required: true, message: '请输入密码' }],
             })(
-              <Input addonBefore={<Icon type="lock" />} type="password" />
+              <Input addonBefore={<Icon type="lock" />} type="password" placeholder='password'/>
             )}
           </FormItem>
           <FormItem >
