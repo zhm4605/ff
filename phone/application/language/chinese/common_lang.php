@@ -11,7 +11,8 @@
 	$lang['register_success'] = '注册成功';
 
 	$lang['captcha_error'] = '验证码错误';
-	$lang['user_has_exist'] = '该邮箱已经注册，请直接登录';
+	$lang['email_has_exist'] = '该邮箱已经被注册，请直接登录';
+	$lang['name_has_exist'] = '用户名被占用';
 	$lang['register_later'] = '注册失败，请稍候重试';
 
 	//登录返回信息

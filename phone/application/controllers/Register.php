@@ -21,9 +21,9 @@ class Register extends MY_Controller {
       if(!isset($_SESSION['captcha']))
       {
         $output = array(
-            "state"=>0,
-            "info"=>$this->lang->line('captcha_outdate')
-          );
+          "state"=>0,
+          "info"=>$this->lang->line('captcha_outdate')
+        );
       }
       else
       {
@@ -36,7 +36,14 @@ class Register extends MY_Controller {
           {
             $output = array(
               "state"=>2,
-              "info"=>$this->lang->line('user_has_exist')
+              "info"=>$this->lang->line('email_has_exist')
+            );
+          }
+          else if($this->user_mod->get_user(array('name'=>$data['name'])))
+          {
+            $output = array(
+              "state"=>0,
+              "info"=>$this->lang->line('name_has_exist')
             );
           }
           else
@@ -62,7 +69,7 @@ class Register extends MY_Controller {
                 "info"=>$this->lang->line('register_later')
               );
             }
-          } 
+          }
         }
         else
         {

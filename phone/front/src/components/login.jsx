@@ -16,8 +16,6 @@ export default class Login extends React.Component{
   	const that = this;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-
         $.ajax({
           url:"/register/login/",
           dataType:"json",
@@ -31,11 +29,11 @@ export default class Login extends React.Component{
             	const query = that.props.location.query;
             	if(query.from)
             	{
-            		window.location.href='#/'+query.from;
+            		window.location.href = decodeURIComponent(query.from);
             	}
             	else
             	{
-            		window.location.href='#/home';
+            		window.location.href = '/#/home';
             	}
               
             }

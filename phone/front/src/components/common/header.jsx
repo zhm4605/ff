@@ -18,13 +18,15 @@ export default class header extends React.Component{
     	login:login(),
     }
   }
+  componentWillReceiveProps() {
+    this.setState({login:login()});
+  }
   toggleLang(value)
   {
     window.location.hash = window.location.hash.split('?')[0]+'?lang='+value;
   }
   handleClick(e)
   {
-  	//console.log(e);
   	if(e.key=='logout')
   	{
   		this.logout();
@@ -55,6 +57,7 @@ export default class header extends React.Component{
         <Menu.Item key="logout" onClick={this.logout}>退出登录</Menu.Item>
       </Menu>
     ); 
+
   	return(
   		<header>
         <div className="logo">logo</div>
@@ -89,7 +92,7 @@ export default class header extends React.Component{
 			            hello,{login.info.name}<Icon type="down" />
 			          </a>
 			        </Dropdown>
-	        	:<span><a href='#/login'><FormattedMessage id='login'/></a> | <a href='#/register'><FormattedMessage id='register'/></a></span>
+	        	:<span><a href={'#/login?from='+encodeURIComponent(window.location.href)}><FormattedMessage id='login'/></a> | <a href='#/register'><FormattedMessage id='register'/></a></span>
 	        }
 	        </div>
         </div>
