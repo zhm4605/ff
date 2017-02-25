@@ -5,6 +5,7 @@ class user_mod extends MY_Model {
 	public function __construct(){
 		parent::__construct();
 		$this->_table = $this->getDb('')->dbprefix.'user';
+		$this->_table_address = $this->getDb('')->dbprefix.'address';
 		$this->_id = 'id';
 	}
 
@@ -39,7 +40,7 @@ class user_mod extends MY_Model {
 	}
 
 	//是否登录
-	function is_login()
+	function is_login($auto=false)
 	{
 		$login = 0;
 		
@@ -60,10 +61,14 @@ class user_mod extends MY_Model {
 			{
 				//自动登录成功，更新数据库
 				//更新数据库
-	      $data = array(
-	          "last_login_time"=>date('Y-m-d H:i:s')
-	      );
-				$this->update_user($data,$info['id']);
+				if($auto)
+				{
+					$data = array(
+		          "last_login_time"=>date('Y-m-d H:i:s')
+		      );
+					$this->update_user($data,$info['id']);
+				}
+	      
 				$login = 1;
 			}
 		}
@@ -89,5 +94,49 @@ class user_mod extends MY_Model {
   {
   	$this->db->set('lock','1')->where('id',$id)->update($this->_table);
   }
+
+  //添加收货地址
+  public function add_address($data)
+  {
+  	$this->db->set($data)->insert($this->_table_address);
+		return $this->db->insert_id();
+  }
+  //编辑收货地址
+  public function update_address($data,$where)
+  {
+  	return $this->db->set($data)->where($where)->update($this->_table_address);
+  }
+  //删除收货地址
+  public function remove_address($where)
+  {
+  	return $this->db->where($where)->delete($this->_table_address);
+  }
+
+  public function address_list($where=array(),$page=1,$order='update_time')
+	{	
+		$limit = $this->config->item('pageCount');
+		//查询条件
+		$this->db->start_cache();
+		$this->db->where($where);
+		$this->db->stop_cache();
+
+		$this->db->order_by($order,'desc');
+		$this->db->limit($limit,($page-1)*$limit);
+		$query = $this->db->get($this->_table_address);
+
+		$result['list'] = $query->result_array();
+
+		$query = $this->db->get($this->_table);
+		$result['total'] = $query->num_rows();
+		$this->db->flush_cache();
+		$result['pageSize'] = $limit;
+		$result['page'] = $page;
+		return $result;
+	}
+	public function get_address($id)
+	{
+		$query = $this->db->where('id',$id)->get($this->_table_address);
+		return $query->row_array();
+	}
 
 }

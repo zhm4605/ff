@@ -30,7 +30,7 @@ class Cart extends MY_Controller {
     {
       $output = array(
         "state"=>2,
-        "info"=>$this->$this->lang->line('unlogin')
+        "info"=>$this->lang->line('unlogin')
       );
     }
 
@@ -51,14 +51,14 @@ class Cart extends MY_Controller {
       {
         $output = array(
           "state"=>1,
-          "info"=>$this->$this->lang->line('add_success')
+          "info"=>$this->lang->line('add_success')
         );
       }
       else
       {
         $output = array(
           "state"=>0,
-          "info"=>$this->$this->lang->line('add_error')
+          "info"=>$this->lang->line('add_error')
         );
       }
     }
@@ -66,7 +66,7 @@ class Cart extends MY_Controller {
     {
       $output = array(
         "state"=>2,
-        "info"=>$this->$this->lang->line('unlogin')
+        "info"=>$this->lang->line('unlogin')
       );
     }
     echo json_encode($output);
@@ -86,14 +86,14 @@ class Cart extends MY_Controller {
         {
           $output = array(
             "state"=>1,
-            "info"=>$this->$this->lang->line('remove_success')
+            "info"=>$this->lang->line('remove_success')
           );
         }
         else
         {
           $output = array(
             "state"=>0,
-            "info"=>$this->$this->lang->line('remove_error')
+            "info"=>$this->lang->line('remove_error')
           );
         }
       }
@@ -103,7 +103,7 @@ class Cart extends MY_Controller {
     {
       $output = array(
         "state"=>2,
-        "info"=>$this->$this->lang->line('unlogin')
+        "info"=>$this->lang->line('unlogin')
       );
     }
   }

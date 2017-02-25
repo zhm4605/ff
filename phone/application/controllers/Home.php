@@ -10,8 +10,9 @@ class Home extends MY_Controller {
       $this->load->view('index.html');
     }
 
-    public function get_login_state(){
-        $data = $this->user_mod->is_login();
+    public function get_login_state()
+    {
+        $data = $this->user_mod->is_login(true);
         echo json_encode($data);
     }
 }

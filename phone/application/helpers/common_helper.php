@@ -706,3 +706,16 @@ function  generate_captcha()
 	}
 	return $authnum;
 }
+
+//过滤数组
+function fetch_arr($keys,$arr)
+{
+  $arr1 = array();
+  foreach ($arr as $key => $value) {
+  	if(in_array($key, $keys))
+  	{
+  		$arr1[$key] = $value;
+  	}
+  }
+  return $arr1;
+}
