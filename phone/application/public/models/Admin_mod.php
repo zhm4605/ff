@@ -32,19 +32,15 @@ class Admin_mod extends MY_Model {
 	{
 		$login = 0;
 		$clean = array();
-		list($identifier, $token) = explode(':', $_COOKIE['admin_auth']);
-
-		//print_r($_COOKIE);
+		list($identifier, $token) = explode(':', $_COOKIE['auth']);
  
-		if (ctype_alnum($identifier) && ctype_alnum($token) && isset($_COOKIE['admin_name']))
+		if (ctype_alnum($identifier) && ctype_alnum($token) && isset($_COOKIE['name']))
 		{
 		  $clean['identifier'] = $identifier;
 		  $clean['token'] = $token;
 
 		  $query = $this->db->select('id,name,token,timeout,login_count')->get_where($this->_table,array("identifier" => $clean["identifier"]));
 			$info = $query->row_array();
-			//print_r($info);
-
 			if($info&&date('Y-m-d H:i:s')<$info["timeout"]&&$clean["token"]==$info["token"]&&get_user_identifier($info['name'])==$clean["identifier"])
 			{
 				//自动登录成功，更新数据库
@@ -58,10 +54,9 @@ class Admin_mod extends MY_Model {
 			}
 		}
 
-		//echo $login;
 		if($login==0)  //自动登录失败
 		{
-			header("Location: /admin_welcome"); 
+			header("Location: /welcome"); 
 			exit;
 		}
 	}
@@ -82,10 +77,5 @@ class Admin_mod extends MY_Model {
   }
 
   //添加用户
-  public function add_admin($data)
-  {
-  	$this->db->set($data)->insert($this->_table);
-  	return $this->db->insert_id();	
-  }
 
 }

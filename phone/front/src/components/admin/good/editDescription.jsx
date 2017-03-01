@@ -65,7 +65,7 @@ export default class AddGood extends React.Component{
     const description = this.editor.getContent();
     const goodId = this.props.goodId>0?this.props.goodId:0;
     $.ajax({
-      url:"/admin_good/editGood/"+goodId,
+      url:"/admin/good/editGood/"+goodId,
       dataType:"json",
       type:"post",
       data:{description},

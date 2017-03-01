@@ -1,4 +1,6 @@
-import { Row,Col,Tag,Input,Button,Card,Tabs} from 'antd';
+import { Row,Col,Tag,Input,Button,Card,Tabs,message} from 'antd';
+
+import  Price from './common/price.jsx';
 
 const TabPane = Tabs.TabPane;
 export default class Good extends React.Component{
@@ -16,6 +18,31 @@ export default class Good extends React.Component{
       },
       error:function(msg){
         console.log(msg);
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+    this.state = {count:1};
+    this.setCount = this.setCount.bind(this);
+    this.addCart = this.addCart.bind(this);
+  }
+  setCount(count)
+  {
+  	this.setState({count});
+  }
+  addCart(id)
+  {
+  	const data = {id,number:this.state.count};
+  	$.ajax({
+      url:"/cart/add_good/",
+      dataType:"json",
+      type: "post",
+      data: data,
+      success:function(msg)
+      {
+      	console.log(msg);
+      	message.info(msg.info);
+      },
+      error:function(msg){;
         document.body.innerHTML = msg.responseText;
       }
     })
@@ -49,7 +76,7 @@ export default class Good extends React.Component{
 		      		</Col>
 		      		<Col className='good-text' span={14}>
 		      			<h3 className='name'>{data.name}</h3>
-		      			<div className='price'>价格：{data.price_min}~{data.price_max}</div>
+		      			<div className='price'>价格：<Price {...data} /></div>
 		      			<div>
 		      			{
 		      				data['sorts'].map((d,i)=>
@@ -67,12 +94,14 @@ export default class Good extends React.Component{
 		      			</div>
 		      			<div className='remain'>
 		      				数量：
-		      				<Input type='number' value='1' style={{width:100}}/>
+		      				<Input type='number' value={this.state.count} style={{width:100}} onChange={this.setCount}/>
 		      				<span className='tips'>库存{data.remain}件</span>
 		      			</div>
 		      			<div className='hot'>100</div>
 		      			<div className='buttons-wrap'>
-		      				<Button className='btn-love' size='large'>收藏</Button>
+		      				{ //<Button className='btn-love' size='large'>收藏</Button>
+		      				}
+		      				<Button className='btn-add-cart' size='large' type='primary' onClick={()=>this.addCart(data.id)}>加入购物车</Button>
 		      			</div>
 		      		</Col>
 		      	</Row>

@@ -16,7 +16,7 @@ export default class Login extends React.Component{
         console.log('Received values of form: ', values);
 
         $.ajax({
-          url:"/welcome/login/",
+          url:"/admin_welcome/login/",
           dataType:"json",
           type:"post",
           data:values,

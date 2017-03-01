@@ -51,7 +51,7 @@ export default class AddGood extends React.Component{
     if(good_id>0)
     {
       $.ajax({
-        url:"/admin_good/goodDetails/"+good_id,
+        url:"/admin/good/goodDetails/"+good_id,
         dataType:"json",
         async: false,
         success:function(msg)

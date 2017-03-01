@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : lsmz
 Source Server Version : 50524
 Source Host           : 127.0.0.1:3306
 Source Database       : phone
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2017-02-25 16:44:49
+Date: 2017-03-01 16:54:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -100,11 +100,14 @@ CREATE TABLE `user_cart` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`,`good_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='购物车表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='购物车表';
 
 -- ----------------------------
 -- Records of user_cart
 -- ----------------------------
+INSERT INTO `user_cart` VALUES ('1', '2', null, null, null, null, null, null, null, '2017-03-01 16:31:39', '2017-03-01 16:31:39');
+INSERT INTO `user_cart` VALUES ('2', '2', null, null, null, null, null, null, null, '2017-03-01 16:34:47', '2017-03-01 16:34:47');
+INSERT INTO `user_cart` VALUES ('3', '2', null, null, null, null, null, null, null, '2017-03-01 16:35:54', '2017-03-01 16:35:54');
 
 -- ----------------------------
 -- Table structure for `user_address`
@@ -158,4 +161,4 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', 'a6332ee1c97d026e998654c45fbfa64c', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-02-25 10:20:14', '127.0.0.1', '2017-02-22 19:35:32', '13', '2017-02-25 10:53:21');
+INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', '9f149bd85e825cd7da4fbdf0631982cf', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-03-01 16:35:42', '127.0.0.1', '2017-02-22 19:35:32', '14', '2017-03-01 16:35:42');

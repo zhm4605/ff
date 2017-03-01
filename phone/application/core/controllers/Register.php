@@ -132,9 +132,9 @@ class Register extends MY_Controller {
           //echo $token.'<br>';
           $timeout = time() + 60 * 60 * 24 * 7;
           //设置cookie
-          setcookie('email', $user['email'], $timeout,"/");
-          setcookie('name', $user['name'], $timeout,"/");
-          setcookie('auth', $identifier.":".$token, $timeout,"/");
+          setcookie('email', $user['email'], $timeout,"/home");
+          setcookie('name', $user['name'], $timeout,"/home");
+          setcookie('auth', $identifier.":".$token, $timeout,"/home");
           //更新数据库
           $update_arr = array(
               "token"=>$token,

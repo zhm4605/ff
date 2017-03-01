@@ -15,7 +15,7 @@ export default class MyCenter extends React.Component{
     };
     const that = this;
     $.ajax({
-      url:"/admin/adminInfo",
+      url:"/admin/admin/adminInfo",
       dataType:"json",
       async:false,
       success:function(msg)
@@ -52,7 +52,7 @@ export default class MyCenter extends React.Component{
         else
         {
           $.ajax({
-            url: "/admin/updatePassword",
+            url: "/admin/admin/updatePassword",
             dataType: "json",
             type: "post",
             data: values,
@@ -63,7 +63,7 @@ export default class MyCenter extends React.Component{
               {
                 message.success(msg.info);
                 setTimeout(function(){
-                  window.location.href = '/welcome'
+                  window.location.href = '/admin_welcome'
                 },1500);
               }
               else
@@ -90,7 +90,7 @@ export default class MyCenter extends React.Component{
     const menu = (
       <Menu onClick={this.handleClick}>
         <Menu.Item key="edit_password">修改密码</Menu.Item>
-        <Menu.Item key="logout"><a href='/welcome/logout'>退出登录</a></Menu.Item>
+        <Menu.Item key="logout"><a href='/admin_welcome/logout'>退出登录</a></Menu.Item>
       </Menu>
     ); 
     const { getFieldProps, getFieldError,getFieldDecorator } = this.props.form;

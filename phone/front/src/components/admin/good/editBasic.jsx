@@ -30,7 +30,7 @@ export default class EditBasic extends React.Component{
         values['putaway_time'] = values['putaway_time']?values['putaway_time'].format('YYYY-MM-DD HH:mm:ss'):"";
 
         $.ajax({
-          url:"/admin_good/editGood/"+good_id,
+          url:"/admin/good/editGood/"+good_id,
           dataType:"json",
           type:"post",
           data:values,

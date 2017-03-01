@@ -12,7 +12,7 @@ export default class GoodList extends React.Component{
     super(props);
     const that = this;
     $.ajax({
-      url:"/admin_good/goodList",
+      url:"/admin/good/goodList",
       dataType:"json",
       async: false,
       success:function(msg)
@@ -39,7 +39,7 @@ export default class GoodList extends React.Component{
   {
     const text = checked?'锁定':'解锁';
     $.ajax({
-      url:"/admin_good/editGood/"+id,
+      url:"/admin/good/editGood/"+id,
       dataType:"json",
       type:"post",
       data:{lock:checked?1:0},
@@ -62,7 +62,7 @@ export default class GoodList extends React.Component{
     const data = [...this.state.data];
     const that = this;
     $.ajax({
-      url:"/admin_good/removeGood/"+data[index].id,
+      url:"/admin/good/removeGood/"+data[index].id,
       dataType:"json",
       type:"post",
       success:function(msg)

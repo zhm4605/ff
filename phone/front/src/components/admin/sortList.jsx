@@ -49,7 +49,7 @@ export default class SortList extends React.Component {
     let that = this;
     
     $.ajax({
-        url:"/admin_sort/sortList",
+        url:"/admin/sort/sortList",
         dataType:"json",
         async: false,
         success:function(msg)
@@ -176,7 +176,7 @@ export default class SortList extends React.Component {
     if(confirm("确认删除该分类?"+text))
     {
       $.ajax({
-        url:"/admin_sort/removeSort/"+item.id,
+        url:"/admin/sort/removeSort/"+item.id,
         dataType:"json",
         async: false,
         success:function(msg)
@@ -222,7 +222,7 @@ export default class SortList extends React.Component {
   {
     const text = checked?'设为导航':'取消导航';
     $.ajax({
-      url:"/admin_sort/editSortNav/"+id,
+      url:"/admin/sort/editSortNav/"+id,
       dataType:"json",
       type:"post",
       data:{filter_condition:checked?1:0},

@@ -43,7 +43,7 @@ class user_mod extends MY_Model {
 	function is_login($auto=false)
 	{
 		$login = 0;
-		//print_r($_COOKIE);
+		
 		if (isset($_COOKIE['auth']))
 		{
 			$clean = array();

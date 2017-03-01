@@ -1,36 +1,44 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-//购物车
-class Cart_mod extends MY_Model {
+//订单
+class Order_mod extends MY_Model {
 	
 	public function __construct(){
 		parent::__construct();
-		$this->_table = $this->getDb('')->dbprefix.'user_cart';
+		$this->_table = $this->getDb('')->dbprefix.'user_order';
 		$this->_table_good = $this->getDb('')->dbprefix.'good';
 		$this->_table_sort = $this->_table_good.'_sort';
 	}
 
-	//加入购物车 相同商品增加数量
-	public function add_good($data)
+	public function get_count($where)
 	{
-		$data['add_time'] = date('Y-m-d H:i:s');
-		$this->db->set($data)->insert($this->_table);
-		$id = $this->db->insert_id();		
-		if($id>0)
-		{
-			//更新
-			$this->db->query("update ".$this->_table." c left join ".$this->_table_good." g on c.good_id=g.id set c.good_name=g.name,c.good_pic=g.pic_url,c.price=g.priceMin where c.id='".$id."'");
+		$this->db->where($where)->from($this->_table);
 
-			if(isset($data['sort_id'])&&$data['sort_id']>0)
-			{
-				$this->db->query("update ".$this->_table." c left join ".$this->_table_sort." s on c.sort_id=s.id set c.sorts=s.sorts,c.price=s.price where c.id='".$id."'");
-			}
-		}
-		return $id;
+		return $this->db->count_all_result();
 	}
 
-	//删除商品
-	public function remove_good($id)
+	public function get_total_count($order_id)
+	{
+		$this->db->like('order_id',$order_id,'after')->from($this->_table);
+
+		return $this->db->count_all_result();
+	}
+
+	//生成订单
+	public function create_order($data)
+	{
+		//地址
+		$address_id = $data['address_id'];
+
+		$this->db
+
+		$this->db->set($data)->insert($this->_table);
+		$data['add_time'] = date('Y-m-d H:i:s');
+		return $this->db->insert_id();
+	}
+
+	//删除
+	public function remove_order($id)
 	{
 		return $this->db->where('id', $id)->delete($this->_table);
 	}
@@ -39,7 +47,7 @@ class Cart_mod extends MY_Model {
 	/************查询************/
 	
 	//商品列表（页码，排序方式）
-	public function get_cart_list($where=array(),$page=1,$order='add_time desc')
+	public function get_order_list($where=array(),$page=1,$order='add_time desc')
 	{	
 		$limit = $this->config->item('pageCount');
 		//查询条件
@@ -67,7 +75,7 @@ class Cart_mod extends MY_Model {
 	}	
 	
 	//某条记录
-	public function get_cart_by_id($id)
+	public function get_order_by_id($id)
 	{
 		$query = $this->db->select('id,good_id,user_id,count')->get_where("id",$id);
 		return $query->row_array();

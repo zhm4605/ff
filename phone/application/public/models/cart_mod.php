@@ -10,11 +10,11 @@ class Cart_mod extends MY_Model {
 		$this->_table_sort = $this->_table_good.'_sort';
 	}
 
-	//加入购物车 相同商品增加数量
+	//加入购物车
 	public function add_good($data)
 	{
-		$data['add_time'] = date('Y-m-d H:i:s');
 		$this->db->set($data)->insert($this->_table);
+		$data['add_time'] = date('Y-m-d H:i:s');
 		$id = $this->db->insert_id();		
 		if($id>0)
 		{

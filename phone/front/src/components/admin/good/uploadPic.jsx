@@ -44,7 +44,7 @@ export default class PicturesWall extends React.Component {
   {
     //console.log(info);
      $.ajax({
-      url:"/admin_good/removePic/"+file.uid,
+      url:"/admin/good/removePic/"+file.uid,
       dataType:"json",
       success:function(msg)
       {
@@ -103,7 +103,7 @@ export default class PicturesWall extends React.Component {
       <div className="clearfix">
         <Upload
           accept="image/jpeg,image/png,image/jpg"
-          action={"/admin_good/uploadPic/"+good_id}
+          action={"/admin/good/uploadPic/"+good_id}
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}

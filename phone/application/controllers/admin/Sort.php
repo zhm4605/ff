@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Admin_sort extends MY_Controller {
+class Sort extends MY_Controller {
 	public $_tpl_path = 'admin/admin/';
 	public $time;
 	public function __construct(){
@@ -8,7 +8,7 @@ class Admin_sort extends MY_Controller {
 		$this->time = time();
 		$this->load->model(array('admin_mod','sort_mod'));
 		$this->load->helper('admin');
-		//is_login();//?登陆
+		$this->admin_mod->is_login();
 	}
 
     public function index(){

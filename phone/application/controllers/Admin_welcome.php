@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends MY_Controller {
+class Admin_welcome extends MY_Controller {
 	/**
 	 * Index Page for this controller.
 	 *
@@ -35,9 +35,10 @@ class Welcome extends MY_Controller {
     public function login()
     {
       $arr = $_POST;
-      $info = $this->admin_mod->get_admin_by_name($_POST['name']);
+      //$arr = array("name"=>"zhm","password"=>"123456");
+      $info = $this->admin_mod->get_admin_by_name($arr['name']);
       $state = 0;
-      
+      $msg = '';
       if($info)
       {
         if($info['password_wrong_count']>=3||$info['lock']==1)
@@ -45,14 +46,14 @@ class Welcome extends MY_Controller {
           $this->admin_mod->lock_admin($info['id']);
           $msg = "账号被锁定，请联系管理员解锁";
         }
-        else if($info['password']==md5_password($_POST['password']))
+        else if($info['password']==md5_password($arr['password']))
         {
-          $identifier = get_user_identifier($_POST['name']);
+          $identifier = get_user_identifier($arr['name']);
           $token = get_user_token();
           $timeout = time() + 60 * 60 * 24 * 7;
           //设置cookie
-          setcookie('name', $info['name'], $timeout,"/admin");
-          setcookie('auth', $identifier.":".$token, $timeout,"/admin");
+          setcookie('admin_name', $info['name'], $timeout,"/admin");
+          setcookie('admin_auth', $identifier.":".$token, $timeout,"/admin");
           //更新数据库
           $update_arr = array(
               "token"=>$token,
@@ -77,6 +78,7 @@ class Welcome extends MY_Controller {
       {
           $msg = "用户名不存在";
       }
+
       $output = array("state"=>$state,"info"=>$msg);
       echo json_encode($output);
     }
@@ -84,8 +86,8 @@ class Welcome extends MY_Controller {
     //登出
     public function logout()
     {
-      setcookie('auth',"",time()-3600,"/admin");
-      header("Location: /welcome"); 
+      setcookie('admin_auth',"",time()-3600,"/admin");
+      header("Location: /admin_welcome"); 
       //header("Location: /admin"); 
     }
 

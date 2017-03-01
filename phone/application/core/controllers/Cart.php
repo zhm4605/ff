@@ -39,9 +39,8 @@ class Cart extends MY_Controller {
   //加入购物车
   public function add_good()
   {
-    //$data = $_POST;
+    $data = $_POST;
     $login = $this->user_mod->is_login();
-    //print_r($login);
     if($login['state'])
     {
       $user = $login['info'];

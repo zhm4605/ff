@@ -4,7 +4,7 @@ const Option = Select.Option;
 
 let data = []; 
 $.ajax({
-  url:"/admin_sort/sortList/true",
+  url:"/admin/sort/sortList/true",
   dataType:"json",
   async: false,
   success:function(msg)

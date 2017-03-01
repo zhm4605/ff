@@ -26,7 +26,7 @@ export default class EditSortChild extends React.Component {
     super(props);
     const that = this;
     $.ajax({
-      url:"/admin_sort/sortList/true/"+props.id,
+      url:"/admin/sort/sortList/true/"+props.id,
       dataType:"json",
       async: false,
       success:function(msg)

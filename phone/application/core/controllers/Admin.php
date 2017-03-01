@@ -8,7 +8,7 @@ class Admin extends MY_Controller {
 		$this->time = time();
 		$this->load->model(array('admin_mod'));
 		$this->load->helper('admin');
-    $this->admin_mod->is_login(); 
+    //$this->admin_mod->is_login();
 	}
 
   public function index(){
@@ -37,9 +37,20 @@ class Admin extends MY_Controller {
   	echo json_encode($output);
   }
   
+  public function updtae_admin()
+  {
+    $id = 1;
+    $data = array(
+      "password"=>md5_password('123456'),
+      "identifier"=>get_user_identifier('zhm'),
+      "token"=>get_user_token()
+    );
+    $this->admin_mod->update_admin($data,$id);
+  }
   public function adminInfo()
   {
-  	$output = array("name"=>$_COOKIE['name']);
+  	//$output = array("name"=>$_COOKIE['name']);
+    $output = array("name"=>"zhm");
   	echo json_encode($output);
   }
 

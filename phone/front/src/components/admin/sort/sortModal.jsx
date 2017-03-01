@@ -33,7 +33,7 @@ export default class SortModal extends React.Component{
         console.log('Received values of form: ', values);
         const id = this.state.item.id;
         $.ajax({
-          url:"/admin_sort/editSort/"+id,
+          url:"/admin/sort/editSort/"+id,
           dataType:"json",
           type:"post",
           data:values,
