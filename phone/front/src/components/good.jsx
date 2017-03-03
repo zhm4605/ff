@@ -25,13 +25,13 @@ export default class Good extends React.Component{
     this.setCount = this.setCount.bind(this);
     this.addCart = this.addCart.bind(this);
   }
-  setCount(count)
+  setCount(e)
   {
-  	this.setState({count});
+  	this.setState({count:e.target.value});
   }
-  addCart(id)
+  addCart(good_id)
   {
-  	const data = {id,number:this.state.count};
+  	const data = {good_id,number:this.state.count};
   	$.ajax({
       url:"/cart/add_good/",
       dataType:"json",
@@ -94,7 +94,7 @@ export default class Good extends React.Component{
 		      			</div>
 		      			<div className='remain'>
 		      				数量：
-		      				<Input type='number' value={this.state.count} style={{width:100}} onChange={this.setCount}/>
+		      				<Input type='number' defaultValue='1' style={{width:100}} onChange={this.setCount}/>
 		      				<span className='tips'>库存{data.remain}件</span>
 		      			</div>
 		      			<div className='hot'>100</div>

@@ -44,6 +44,7 @@ const routes = <Router history={hashHistory}>
                     <Route path="/list" component={require('componentsDir/list.jsx')}/>
                     <Route path="/register" component={require('componentsDir/register.jsx')}/>
                     <Route path="/login" component={require('componentsDir/login.jsx')}/>
+                    <Route path="/cart" component={require('componentsDir/cart_list.jsx')}/>
                   </Route>
               </Router>
 

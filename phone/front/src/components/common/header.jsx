@@ -51,13 +51,6 @@ export default class header extends React.Component{
   	const {lang} = this.props;
   	const {login} = this.state;
 
-  	const my_menu = (
-      <Menu>
-        <Menu.Item key="mycentr"><a href="#/mycentr">个人中心</a></Menu.Item>
-        <Menu.Item key="logout" onClick={this.logout}>退出登录</Menu.Item>
-      </Menu>
-    ); 
-
   	return(
   		<header>
         <div className="logo">logo</div>
@@ -84,6 +77,7 @@ export default class header extends React.Component{
 	        	login.state==1?
 	        		<Dropdown overlay={
 	        			 <Menu onClick={this.handleClick}>
+                  <Menu.Item key="cart"><a href="#/cart">购物车</a></Menu.Item>
 					        <Menu.Item key="mycentr"><a href="#/mycentr">个人中心</a></Menu.Item>
 					        <Menu.Item key="logout">退出登录</Menu.Item>
 					      </Menu>

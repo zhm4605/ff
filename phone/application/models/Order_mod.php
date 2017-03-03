@@ -8,6 +8,19 @@ class Order_mod extends MY_Model {
 		$this->_table = $this->getDb('')->dbprefix.'user_order';
 		$this->_table_good = $this->getDb('')->dbprefix.'good';
 		$this->_table_sort = $this->_table_good.'_sort';
+		$this->_table_address = $this->getDb('')->dbprefix.'user_address';
+	}
+
+	public function get_goods($ids)
+	{
+		$query = $this->db->select('id,name,pic_url')->where_in($ids)->get($this->_table_good);
+		return $query->result_array();
+	}
+
+	public function get_address($user_id)
+	{
+		$query = $this->db->select('id,name,mobile,areatext,defaut')->where('user_id',$user_id)->get($this->_table_address);
+		return $query->result_array();
 	}
 
 	public function get_count($where)

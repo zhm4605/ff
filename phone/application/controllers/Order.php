@@ -14,6 +14,40 @@ class Order extends MY_Controller {
     //$this->load->view('index.html');
   }
 
+  //array(1=>5,2=>6); 1号商品数量6 2号商品数量6
+  public function order_details($details)
+  {
+    $login = $this->user_mod->is_login();
+    if($login['state'])
+    {
+      $user = $login['info'];
+      $item = explode(',', $details);
+      $arr = array();
+      $ids = array();
+      foreach ($item as $key => $value) {
+        $val = explode(':', $value);
+        $arr[$value[0]] = $value[1];
+        $ids[] = $value[0];
+      }
+      $list = $this->order_mod->get_goods($ids);
+      foreach ($list as $key => $value) {
+        $list[$key]["count"] = $arr[$value['id']];
+      }
+      $address = $this->order_mod->get_address($user['id']);
+      $output = array(
+        "list"=>$list,
+        "address"=>$address
+      );
+    }
+    else
+    {
+      $output = array(
+        "state"=>2,
+        "info"=>$this->lang->line('unlogin')
+      );
+    }
+
+  }
   //列表
   public function order_list()
   {

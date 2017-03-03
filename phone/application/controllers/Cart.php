@@ -14,13 +14,13 @@ class Cart extends MY_Controller {
   }
 
   //列表
-  public function card_list()
+  public function cart_list()
   {
     $login = $this->user_mod->is_login();
     if($login['state'])
     {
       $user = $login['info'];
-      $list = $this->cart_mod->get_cart_list(array('user_id',$user['id']));
+      $list = $this->cart_mod->get_cart_list(array('user_id'=>$user['id']));
       $output = array(
         "state"=>1,
         "info"=>$list
@@ -34,14 +34,14 @@ class Cart extends MY_Controller {
       );
     }
 
+    echo json_encode($output);
   }
 
   //加入购物车
   public function add_good()
   {
-    //$data = $_POST;
+    $data = $_POST;
     $login = $this->user_mod->is_login();
-    //print_r($login);
     if($login['state'])
     {
       $user = $login['info'];

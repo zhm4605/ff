@@ -7,19 +7,37 @@ class Cart_mod extends MY_Model {
 		parent::__construct();
 		$this->_table = $this->getDb('')->dbprefix.'user_cart';
 		$this->_table_good = $this->getDb('')->dbprefix.'good';
-		$this->_table_sort = $this->_table_good.'_sort';
+		$this->_table_good_sort = $this->_table_good.'_sort';
 	}
 
 	//加入购物车 相同商品增加数量
 	public function add_good($data)
 	{
+		//print_r($data);
+		$data = fetch_arr(array("user_id","good_id","sort_id","number"),$data);
 		$data['add_time'] = date('Y-m-d H:i:s');
-		$this->db->set($data)->insert($this->_table);
-		$id = $this->db->insert_id();		
+
+		//相同商品增加数量
+		$where = fetch_arr(array("user_id","good_id","sort_id"),$data);
+		$query = $this->db->select('id,number')->where($where)->get($this->_table);
+		$has = $query->row_array();
+		//print_r($has);
+		if($has)
+		{
+			$id = $has['id'];
+			$this->db->set('number',$has['number']+$data['number'])->where('id',$id)->update($this->_table);
+		}
+		else
+		{
+			$this->db->set($data)->insert($this->_table);
+			$id = $this->db->insert_id();
+		}
+				
 		if($id>0)
 		{
 			//更新
-			$this->db->query("update ".$this->_table." c left join ".$this->_table_good." g on c.good_id=g.id set c.good_name=g.name,c.good_pic=g.pic_url,c.price=g.priceMin where c.id='".$id."'");
+			$sql = "update ".$this->_table." c left join ".$this->_table_good." g on c.good_id=g.id set c.good_name=g.name,c.good_pic=g.pic_url,c.price=g.price_min where c.id='".$id."'";
+			$this->db->query($sql);
 
 			if(isset($data['sort_id'])&&$data['sort_id']>0)
 			{
@@ -41,6 +59,7 @@ class Cart_mod extends MY_Model {
 	//商品列表（页码，排序方式）
 	public function get_cart_list($where=array(),$page=1,$order='add_time desc')
 	{	
+
 		$limit = $this->config->item('pageCount');
 		//查询条件
 		$this->db->start_cache();
@@ -50,6 +69,8 @@ class Cart_mod extends MY_Model {
 		$where = array_merge($basic_where,$where);
 		$this->db->where($where);
 		$this->db->stop_cache();
+
+		//print_r($where);
 
 		$this->db->select('id,good_id,good_name,good_pic,sort_id,sorts,number,price,add_time');
 		$this->db->order_by($order);
