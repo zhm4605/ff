@@ -2,37 +2,50 @@
 
 class Order extends MY_Controller {
 
-  public function __construct(){
+  public function __construct()
+  {
     parent::__construct();
     $this->load->model(array('order_mod','user_mod'));
 
     $this->lang->load('order', isset($_COOKIE['language'])?$_COOKIE['language']:'chinese');
   }
-  //state=2 未登录
 
   public function index(){
     //$this->load->view('index.html');
   }
 
   //array(1=>5,2=>6); 1号商品数量6 2号商品数量6
-  public function order_details($details)
+  /*array(
+    array(
+      "goodId"=>5,  
+      "number"=>5 
+    ),
+  );
+  */
+  public function order_details()
   {
+    $goods = array(
+      array(
+        "goodId"=>5,  
+        "number"=>5 
+      )
+    );
     $login = $this->user_mod->is_login();
-    if($login['state'])
+    print_r($login);
+    if($login['state']==0)
     {
-      $user = $login['info'];
-      $item = explode(',', $details);
+      //$user = $login['info'];
       $arr = array();
-      $ids = array();
-      foreach ($item as $key => $value) {
-        $val = explode(':', $value);
-        $arr[$value[0]] = $value[1];
-        $ids[] = $value[0];
+      $list = array();
+      foreach ($goods as $key => $value) {
+        $one = $this->order_mod->get_good_details(array("goodId"=>$value['goodId']));
+        $one = array
       }
-      $list = $this->order_mod->get_goods($ids);
+      
       foreach ($list as $key => $value) {
         $list[$key]["count"] = $arr[$value['id']];
       }
+
       $address = $this->order_mod->get_address($user['id']);
       $output = array(
         "list"=>$list,
@@ -46,7 +59,7 @@ class Order extends MY_Controller {
         "info"=>$this->lang->line('unlogin')
       );
     }
-
+    print_r($output);
   }
   //列表
   public function order_list()
@@ -98,7 +111,7 @@ class Order extends MY_Controller {
         }
         else
         {
-          $order_id = generate_order_id()
+          $order_id = generate_order_id();
         }
       }
       $data["order_id"] = $order_id;
@@ -137,7 +150,7 @@ class Order extends MY_Controller {
     $count = $this->order_mod->get_count(array('order_id',$order_id));
     if($count>0)
     {
-      generate_order_id()
+      generate_order_id();
     }
     else
     {

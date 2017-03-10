@@ -1,6 +1,5 @@
 import { Breadcrumb,Icon,Row,Col,Card,message,Button} from 'antd';
-import {render} from 'react-dom';
-import Order_transfer from './common/price.jsx';
+
 
 export default class CartList extends React.Component{
   constructor(props) {
@@ -37,13 +36,7 @@ export default class CartList extends React.Component{
   }
   go_account() {
     const { list } = this.state;
-
-    const account = <Order_transfer list={list}/>
-    if(!document.getElementById('account'))
-    {
-      
-    }
-    render(account, document.getElementById('account'));
+    console.log(list);
   }
   render() {
     const { list } = this.state;

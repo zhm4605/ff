@@ -11,10 +11,10 @@ class Order_mod extends MY_Model {
 		$this->_table_address = $this->getDb('')->dbprefix.'user_address';
 	}
 
-	public function get_goods($ids)
+	public function get_good_details($where)
 	{
-		$query = $this->db->select('id,name,pic_url')->where_in($ids)->get($this->_table_good);
-		return $query->result_array();
+		$query = $this->db->select('id,name,pic_url')->where($where)->get($this->_table_good);
+		return $query->row_array();
 	}
 
 	public function get_address($user_id)
@@ -42,9 +42,6 @@ class Order_mod extends MY_Model {
 	{
 		//地址
 		$address_id = $data['address_id'];
-
-		$this->db
-
 		$this->db->set($data)->insert($this->_table);
 		$data['add_time'] = date('Y-m-d H:i:s');
 		return $this->db->insert_id();
