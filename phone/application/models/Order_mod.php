@@ -47,7 +47,6 @@ class Order_mod extends MY_Model {
 		//地址
 		$address_id = $data['address_id'];
 		$this->db->select('name,mobile,areatext as address')->where('id',$address_id)->get($this->_table_address);
-
 		$address = $this->db->row_array();
 
 		$order_arr = array(
@@ -73,6 +72,13 @@ class Order_mod extends MY_Model {
 				"sort_id"=>$item["sort_id"],
 				"number"=>$item["number"]
 			);
+
+			$this->db->select('name as good_name,pic_url as good_pic,price_min as unit_price')->where('id',$item['good_id'])->get($this->_table_good);
+			$good = $this->db->row_array();
+			$value = array_merge($value,$good);
+
+			
+
 			$this->db->set($value)->insert($this->_table_item);
 			$item_id = $this->db->insert_id();
 
