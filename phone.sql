@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : lsmz
-Source Server Version : 50617
+Source Server Version : 50524
 Source Host           : 127.0.0.1:3306
 Source Database       : phone
 
 Target Server Type    : MYSQL
-Target Server Version : 50617
+Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2017-03-02 19:23:27
+Date: 2017-03-13 16:48:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -43,7 +43,7 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'zhm', null, '789c270c828211b6deae4df8d856d253', '130ad95504f1f020a310bd3a695590a3', 'faa2bf9196ce8fb0d088a0f269ad9b44', '2017-02-27 20:42:05', '1', '0', '0', '', null, '2017-02-20 20:42:05', '127.0.0.1', '19');
+INSERT INTO `admin` VALUES ('1', 'zhm', null, '789c270c828211b6deae4df8d856d253', '130ad95504f1f020a310bd3a695590a3', 'f422c6aec891a3fb80ebc4d7fdf4f4a0', '2017-03-10 13:41:29', '1', '0', '0', '', null, '2017-03-03 13:41:29', '127.0.0.1', '21');
 
 -- ----------------------------
 -- Table structure for `good`
@@ -76,8 +76,8 @@ INSERT INTO `good` VALUES ('8', 'Apple iPhone 7 (A1660) 32G 玫瑰金色 移动�
 INSERT INTO `good` VALUES ('9', '乐视(Letv) 乐Max X900+ 蓝宝石版移动联通电信4G手机 粉色 128GB', '<p>zz</p>', '1899.00', '1899.00', null, '2017-02-01 21:15:05', null, '/upload/20170212/191442_385.jpg', '10', null, '0', '0', null, null, '2017-02-14 21:15:10');
 INSERT INTO `good` VALUES ('10', '荣耀8 4GB+32GB 全网通4G手机 珠光白', null, '2199.00', '3299.00', '3299.00', '2017-02-01 21:15:55', 'a:1:{i:0;a:5:{s:2:\"id\";s:1:\"6\";s:4:\"name\";s:6:\"颜色\";s:8:\"children\";a:2:{i:0;a:4:{s:2:\"id\";s:2:\"12\";s:4:\"name\";s:6:\"红色\";s:5:\"value\";s:2:\"12\";s:5:\"label\";s:6:\"红色\";}i:1;a:4:{s:2:\"id\";s:2:\"14\";s:4:\"name\";s:6:\"黑色\";s:5:\"value\";s:2:\"14\";s:5:\"label\";s:6:\"黑色\";}}s:5:\"value\";s:1:\"6\";s:5:\"label\";s:6:\"颜色\";}}', '/upload/20170214/211607_670.jpg', '20', null, '0', '0', null, null, '2017-02-14 21:16:40');
 INSERT INTO `good` VALUES ('11', 'OPPO R9s 全网通4G+64G 双卡双待手机 玫瑰金', null, '2799.00', '2799.00', '2899.00', '2017-02-02 12:09:28', 'a:1:{i:0;a:5:{s:2:\"id\";s:1:\"6\";s:4:\"name\";s:6:\"颜色\";s:8:\"children\";a:3:{i:0;a:4:{s:2:\"id\";s:2:\"12\";s:4:\"name\";s:6:\"红色\";s:5:\"value\";s:2:\"12\";s:5:\"label\";s:6:\"红色\";}i:1;a:4:{s:2:\"id\";s:2:\"14\";s:4:\"name\";s:6:\"黑色\";s:5:\"value\";s:2:\"14\";s:5:\"label\";s:6:\"黑色\";}i:2;a:4:{s:2:\"id\";s:2:\"18\";s:4:\"name\";s:6:\"金色\";s:5:\"value\";s:2:\"18\";s:5:\"label\";s:6:\"金色\";}}s:5:\"value\";s:1:\"6\";s:5:\"label\";s:6:\"颜色\";}}', '/upload/20170212/121040_648.jpg', '30', null, '0', '0', null, null, '2017-02-14 21:15:40');
-INSERT INTO `good` VALUES ('12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', null, '3199.00', '3199.00', null, '2017-02-18 10:14:06', null, '/upload/20170218/101404_494.jpg', '20', null, '0', '0', null, '19,26', '2017-02-19 20:51:00');
-INSERT INTO `good` VALUES ('14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', null, null, null, null, '2017-02-18 11:23:11', null, '/upload/20170218/112249_178.jpg', null, null, '0', '0', null, null, '2017-02-18 12:03:19');
+INSERT INTO `good` VALUES ('12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', null, '3199.00', '3199.00', null, '2017-02-18 10:14:06', null, '/upload/20170303/100041_773.jpg', '20', null, '0', '0', null, '19,26', '2017-03-03 10:00:41');
+INSERT INTO `good` VALUES ('14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', null, '0.00', '0.00', null, '2017-02-18 11:23:11', null, '/upload/20170303/100059_911.jpg', '0', null, '0', '0', null, '19,26', '2017-03-03 10:01:17');
 INSERT INTO `good` VALUES ('15', 'ggg', null, '0.00', '0.00', null, '2017-02-18 11:26:19', null, '/upload/20170218/114832_141.jpg', '0', null, '0', '0', null, '5,7', '2017-02-18 20:11:13');
 
 -- ----------------------------
@@ -123,7 +123,7 @@ CREATE TABLE `good_pic` (
   `url` varchar(100) DEFAULT NULL COMMENT '图片地址',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
 
 -- ----------------------------
 -- Records of good_pic
@@ -133,12 +133,10 @@ INSERT INTO `good_pic` VALUES ('5', '9', null, '/upload/20170212/191442_385.jpg'
 INSERT INTO `good_pic` VALUES ('6', '8', null, '/upload/20170212/191529_498.jpg', '2017-02-12 19:15:30');
 INSERT INTO `good_pic` VALUES ('7', '10', null, '/upload/20170214/211607_670.jpg', '2017-02-14 21:16:07');
 INSERT INTO `good_pic` VALUES ('8', '10', null, '/upload/20170218/101151_879.jpg', '2017-02-18 10:11:51');
-INSERT INTO `good_pic` VALUES ('9', '12', null, '/upload/20170218/101404_494.jpg', '2017-02-18 10:14:06');
-INSERT INTO `good_pic` VALUES ('10', '12', null, '/upload/20170218/111750_867.jpg', '2017-02-18 11:17:50');
-INSERT INTO `good_pic` VALUES ('12', '14', null, '/upload/20170218/112249_178.jpg', '2017-02-18 11:23:11');
 INSERT INTO `good_pic` VALUES ('14', '15', null, '/upload/20170218/114832_141.jpg', '2017-02-18 11:48:33');
 INSERT INTO `good_pic` VALUES ('16', '15', null, '/upload/20170218/120109_568.jpg', '2017-02-18 12:01:09');
-INSERT INTO `good_pic` VALUES ('17', '14', null, '/upload/20170218/120319_473.jpg', '2017-02-18 12:03:19');
+INSERT INTO `good_pic` VALUES ('18', '12', null, '/upload/20170303/100041_773.jpg', '2017-03-03 10:00:41');
+INSERT INTO `good_pic` VALUES ('19', '14', null, '/upload/20170303/100059_911.jpg', '2017-03-03 10:00:59');
 
 -- ----------------------------
 -- Table structure for `good_pic_bin`
@@ -314,7 +312,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', '9f149bd85e825cd7da4fbdf0631982cf', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-03-01 16:35:42', '127.0.0.1', '2017-02-22 19:35:32', '14', '2017-03-01 16:35:42');
+INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', '78e10d44ac9d30b34aa5c97106bf765e', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-03-13 15:52:52', '127.0.0.1', '2017-02-22 19:35:32', '15', '2017-03-13 15:52:52');
 
 -- ----------------------------
 -- Table structure for `user_address`
@@ -329,15 +327,17 @@ CREATE TABLE `user_address` (
   `areaname` varchar(200) DEFAULT NULL COMMENT '区域名称',
   `areatext` text COMMENT '自定义区域',
   `add_time` datetime DEFAULT NULL COMMENT '添加时间',
-  `defaut` tinyint(1) DEFAULT NULL COMMENT '默认地址',
+  `default` tinyint(1) DEFAULT '0' COMMENT '默认地址',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户地址表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='用户地址表';
 
 -- ----------------------------
 -- Records of user_address
 -- ----------------------------
+INSERT INTO `user_address` VALUES ('4', '2', 'zz', '18768122041', null, null, '浙江省丽水市', null, '1', '2017-03-13 15:10:42');
+INSERT INTO `user_address` VALUES ('5', '2', 'zhm', '11111', null, null, '莲都区。。。', null, '0', '2017-03-13 15:10:42');
 
 -- ----------------------------
 -- Table structure for `user_cart`
@@ -357,14 +357,16 @@ CREATE TABLE `user_cart` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`,`good_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='购物车表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='购物车表';
 
 -- ----------------------------
 -- Records of user_cart
 -- ----------------------------
-INSERT INTO `user_cart` VALUES ('1', '2', null, null, null, null, null, null, null, '2017-03-01 16:31:39', '2017-03-01 16:31:39');
+INSERT INTO `user_cart` VALUES ('1', '2', null, null, null, null, null, '0', null, '2017-03-01 16:31:39', '2017-03-03 10:34:54');
 INSERT INTO `user_cart` VALUES ('2', '2', null, null, null, null, null, null, null, '2017-03-01 16:34:47', '2017-03-01 16:34:47');
 INSERT INTO `user_cart` VALUES ('3', '2', null, null, null, null, null, null, null, '2017-03-01 16:35:54', '2017-03-01 16:35:54');
+INSERT INTO `user_cart` VALUES ('4', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', null, null, '2', '0', '2017-03-03 10:39:09', '2017-03-03 10:40:52');
+INSERT INTO `user_cart` VALUES ('5', '2', '12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', '/upload/20170303/100041_773.jpg', null, null, '6', '3199', '2017-03-03 11:41:36', '2017-03-03 13:58:29');
 
 -- ----------------------------
 -- Table structure for `user_collect`
@@ -432,26 +434,3 @@ CREATE TABLE `user_order_item` (
 -- ----------------------------
 -- Records of user_order_item
 -- ----------------------------
-
--- ----------------------------
--- Function structure for `GET_FIRST_PINYIN_CHAR`
--- ----------------------------
-DROP FUNCTION IF EXISTS `GET_FIRST_PINYIN_CHAR`;
-DELIMITER ;;
-CREATE DEFINER=`lsmz`@`127.0.0.1` FUNCTION `GET_FIRST_PINYIN_CHAR`(PARAM VARCHAR(255)) RETURNS varchar(2) CHARSET utf8
-BEGIN
-    DECLARE V_RETURN VARCHAR(255);
-    DECLARE V_FIRST_CHAR VARCHAR(2);
-    SET V_FIRST_CHAR = UPPER(LEFT(PARAM,1));
-    SET V_RETURN = V_FIRST_CHAR;
-    IF LENGTH( V_FIRST_CHAR) <> CHARACTER_LENGTH( V_FIRST_CHAR ) THEN
-    SET V_RETURN = ELT(INTERVAL(CONV(HEX(LEFT(CONVERT(PARAM USING gbk),1)),16,10),
-        0xB0A1,0xB0C5,0xB2C1,0xB4EE,0xB6EA,0xB7A2,0xB8C1,0xB9FE,0xBBF7,
-        0xBFA6,0xC0AC,0xC2E8,0xC4C3,0xC5B6,0xC5BE,0xC6DA,0xC8BB,
-        0xC8F6,0xCBFA,0xCDDA,0xCEF4,0xD1B9,0xD4D1),
-    'A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T','W','X','Y','Z');
-    END IF;
-    RETURN V_RETURN;
-END
-;;
-DELIMITER ;
