@@ -1,5 +1,6 @@
 import { Breadcrumb,Icon,Row,Col,Card,message,Button} from 'antd';
-
+import {render} from 'react-dom';
+import OrderTransfer from './common/orderTransfer.jsx';
 
 export default class CartList extends React.Component{
   constructor(props) {
@@ -36,13 +37,24 @@ export default class CartList extends React.Component{
   }
   go_account() {
     const { list } = this.state;
-    console.log(list);
+
+    const account_inner = <OrderTransfer list={list}/>
+    if(!document.getElementById('account-page'))
+    {
+      let account = document.createElement('div');
+      account.id='account-page';
+      document.getElementById('main').appendChild(account);
+    }
+    render(account_inner, document.getElementById('account-page'));
+  }
+  componentDidMount(){
+    this.go_account();
   }
   render() {
     const { list } = this.state;
     return (
     <div id='cart-page'>
-      <Card className='card' title={<h2>购物车</h2>} extra={<a href="javascript:history.go(-1)"><Button type="dashed">返回</Button></a>} style={{ width: '100%',minHeight:'500px',marginTop:'20px'}}>
+      <Card bordered={false} className='card' title={<h2>购物车</h2>} extra={<a href="javascript:history.go(-1)"><Button type="dashed">返回</Button></a>} style={{ width: '100%',minHeight:'500px',marginTop:'20px'}}>
       {
         list.map((good,i)=>
           <a href={'/home/#/good/'+good.good_id} style={{cusor:'pointer'}} target='_blank' key={good.id}>

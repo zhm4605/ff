@@ -6,6 +6,12 @@ class User extends MY_Controller {
     parent::__construct();
     $this->load->model(array('order_mod','user_mod'));
 
+    $login = $this->user_mod->is_login();
+    if($login['state']==0)
+    {
+      exit();
+    }
+
     $this->lang->load('user', isset($_COOKIE['language'])?$_COOKIE['language']:'chinese');
   }
 
@@ -19,7 +25,7 @@ class User extends MY_Controller {
   		$user = $login['info'];
   		//可更新的用户信息
   		$keys = array("password","sex","mobile");
-  		$data = fetch_arr($keys,$data)
+  		$data = fetch_arr($keys,$data);
   		if($this->user_mod->update_user($data,$user['id']))
   		{
   			$output = array(
@@ -56,8 +62,8 @@ class User extends MY_Controller {
   		$user = $login['info'];
   		if($id>0)
   		{
-  			$where = array('id'=>$id,'user_id'=$user['id']);
-  			$id = $this->user_mod->update_address($data,$where);
+  			$where = array('id'=>$id,'user_id'=>$user['id']);
+  			$id = $this->user_mod->update_address($data,$where,$user['id']);
   		}
   		else
   		{
@@ -96,7 +102,7 @@ class User extends MY_Controller {
     if($login['state'])
     {
   		$user = $login['info'];
-  		$where = array('id'=>$id,'user_id'=$user['id']);
+  		$where = array('id'=>$id,'user_id'=>$user['id']);
 
   		if($this->user_mod->remove_address($where))
   		{
@@ -130,7 +136,7 @@ class User extends MY_Controller {
     if($login['state'])
     {
       $user = $login['info'];
-      $where = array("user_id",$user['id']);
+      $where = array("user_id"=>$user['id']);
 
       $output = array(
         "state"=>1,
@@ -147,8 +153,26 @@ class User extends MY_Controller {
     echo json_encode($output);
   }
 
-  public function get_address($id){
-    $output = $this->user_mod->get_address($id);
+  public function get_address($id)
+  {
+    $login = $this->user_mod->is_login();
+    if($login['state'])
+    {
+      $user = $login['info'];
+      $where = array("user_id"=>$user['id'],"id"=>$id);
+
+      $output = array(
+        "state"=>1,
+        "info"=>$this->user_mod->get_address($where)
+      );
+    }
+    else
+    {
+      $output = array(
+        "state"=>2,
+        "info"=>$this->lang->line('unlogin')
+      );
+    }
     echo json_encode($output);
   }
 

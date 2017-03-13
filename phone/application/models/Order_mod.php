@@ -6,9 +6,13 @@ class Order_mod extends MY_Model {
 	public function __construct(){
 		parent::__construct();
 		$this->_table = $this->getDb('')->dbprefix.'user_order';
+		$this->_table_item = $this->_table.'_item';
+
 		$this->_table_good = $this->getDb('')->dbprefix.'good';
 		$this->_table_sort = $this->_table_good.'_sort';
+
 		$this->_table_address = $this->getDb('')->dbprefix.'user_address';
+
 	}
 
 	public function get_good_details($where)
@@ -38,13 +42,49 @@ class Order_mod extends MY_Model {
 	}
 
 	//生成订单
-	public function create_order($data)
+	public function create_order($data,$user_id)
 	{
 		//地址
 		$address_id = $data['address_id'];
-		$this->db->set($data)->insert($this->_table);
+		$this->db->select('name,mobile,areatext as address')->where('id',$address_id)->get($this->_table_address);
+
+		$address = $this->db->row_array();
+
+		$order_arr = array(
+			"user_id"=>$user_id,
+			"total_price"=>$data['total_price'],
+			"state"=>0,
+			"create_time"=>date('Y-m-d H:i:s')
+		);
+
+		$order_arr = array_merge($address,$order_arr);
+
+		$this->db->set()->insert($this->_table);
 		$data['add_time'] = date('Y-m-d H:i:s');
-		return $this->db->insert_id();
+		$order_id = $this->db->insert_id();
+
+		//订单子表
+		$list = $data["list"];
+		foreach ($list as $key => $item) {
+			$value = array(
+				"user_id"=>$user_id,
+				"order_id"=>$order_id,
+				"good_id"=>$item["good_id"],
+				"sort_id"=>$item["sort_id"],
+				"number"=>$item["number"]
+			);
+			$this->db->set($value)->insert($this->_table_item);
+			$item_id = $this->db->insert_id();
+
+			$this->db->query("update ".$this->_table_item." i left join ".$this->_table_good." g on i.good_id=i.id set i.good_name=g.name,i.good_pic=g.pic_url,i.unit_price=g.price_min where i.id='".$item_id."'");
+			if($item["sort_id"]>0)
+			{
+				$this->db->query("update ".$this->_table_item." i left join ".$this->_table_sort." s on s.id=i.sort_id set i.sorts=s.sorts,i.unit_price=s.price where i.id='".$item_id."'");
+			}
+		}
+		
+		
+		
 	}
 
 	//删除

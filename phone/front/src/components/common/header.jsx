@@ -78,7 +78,7 @@ export default class header extends React.Component{
 	        		<Dropdown overlay={
 	        			 <Menu onClick={this.handleClick}>
                   <Menu.Item key="cart"><a href="#/cart">购物车</a></Menu.Item>
-					        <Menu.Item key="mycentr"><a href="#/mycentr">个人中心</a></Menu.Item>
+					        <Menu.Item key="mycentr"><a href="#/mycenter">个人中心</a></Menu.Item>
 					        <Menu.Item key="logout">退出登录</Menu.Item>
 					      </Menu>
 	        		} >

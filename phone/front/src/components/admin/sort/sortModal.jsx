@@ -17,8 +17,6 @@ export default class SortModal extends React.Component{
   }
 
   componentWillReceiveProps(nextProps) {
-    //console.log(nextProps);
-    //this.setState({item:nextProps.item,visible:nextProps.visible});
     this.setState(nextProps);
   }
   handleOk(e) {

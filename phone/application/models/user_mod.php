@@ -5,7 +5,7 @@ class user_mod extends MY_Model {
 	public function __construct(){
 		parent::__construct();
 		$this->_table = $this->getDb('')->dbprefix.'user';
-		$this->_table_address = $this->getDb('')->dbprefix.'address';
+		$this->_table_address = $this->getDb('')->dbprefix.'user_address';
 		$this->_id = 'id';
 	}
 
@@ -98,13 +98,25 @@ class user_mod extends MY_Model {
   //添加收货地址
   public function add_address($data)
   {
+  	if(isset($data['default'])&&$data['default']==1)
+  	{
+  		$this->db->set("default",0)->where('user_id',$data['user_id'])->update($this->_table_address);
+  	}
   	$this->db->set($data)->insert($this->_table_address);
-		return $this->db->insert_id();
+  	$id = $this->db->insert_id();
+  	
+		return $id;
   }
   //编辑收货地址
-  public function update_address($data,$where)
+  public function update_address($data,$where,$user_id)
   {
-  	return $this->db->set($data)->where($where)->update($this->_table_address);
+  	if(isset($data['default'])&&$data['default']==1)
+  	{
+  		$this->db->set("default",0)->where('user_id',$user_id)->update($this->_table_address);
+  	}
+  	$output = $this->db->set($data)->where($where)->update($this->_table_address);
+  	
+  	return $output;
   }
   //删除收货地址
   public function remove_address($where)
@@ -112,30 +124,22 @@ class user_mod extends MY_Model {
   	return $this->db->where($where)->delete($this->_table_address);
   }
 
-  public function address_list($where=array(),$page=1,$order='update_time')
+  public function address_list($where=array())
 	{	
-		$limit = $this->config->item('pageCount');
 		//查询条件
-		$this->db->start_cache();
 		$this->db->where($where);
-		$this->db->stop_cache();
 
-		$this->db->order_by($order,'desc');
-		$this->db->limit($limit,($page-1)*$limit);
+		$this->db->order_by('default desc,update_time desc');
+
 		$query = $this->db->get($this->_table_address);
 
-		$result['list'] = $query->result_array();
+		$result = $query->result_array();
 
-		$query = $this->db->get($this->_table);
-		$result['total'] = $query->num_rows();
-		$this->db->flush_cache();
-		$result['pageSize'] = $limit;
-		$result['page'] = $page;
 		return $result;
 	}
-	public function get_address($id)
+	public function get_address($where)
 	{
-		$query = $this->db->where('id',$id)->get($this->_table_address);
+		$query = $this->db->where($where)->get($this->_table_address);
 		return $query->row_array();
 	}
 

@@ -25,7 +25,7 @@ class Page extends React.Component{
       <IntlProvider locale='en'messages={require('../../language/'+lang+'.js')}>
         <div className="layout">
           <Header lang={lang}/>
-          <div className='content'>{this.props.children}</div>
+          <div id='main'>{this.props.children}</div>
           <footer style={{ textAlign: 'center' }}>版权所有</footer>
         </div>
       </IntlProvider>
@@ -44,7 +44,9 @@ const routes = <Router history={hashHistory}>
                     <Route path="/list" component={require('componentsDir/list.jsx')}/>
                     <Route path="/register" component={require('componentsDir/register.jsx')}/>
                     <Route path="/login" component={require('componentsDir/login.jsx')}/>
-                    <Route path="/cart" component={require('componentsDir/cart_list.jsx')}/>
+                    <Route path="/cart" component={require('componentsDir/cartList.jsx')}/>
+                    <Route path="/mycenter" component={require('componentsDir/myCenter.jsx')}/>
+                    <Route path="/user/add_address/:id" component={require('componentsDir/user/addAddress.jsx')}/>
                   </Route>
               </Router>
 
