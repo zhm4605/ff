@@ -163,8 +163,9 @@ class Register extends MY_Controller {
     //登出
     public function logout()
     {
-      setcookie('auth',"",time()-3600,"/home");
+      setcookie('auth',"",time()-3600,"/");
       $data = $this->user_mod->is_login();
+      //header("Location: /#/login"); 
       echo json_encode($data);
     }
 

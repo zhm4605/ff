@@ -40,7 +40,8 @@ export default class header extends React.Component{
 	    dataType:"json",
 	    success:function(login)
 	    {
-	    	that.setState({login});
+	    	//that.setState({login});
+        window.location.href='#/login';
 	    },
 	    error:function(msg){
 	      document.body.innerHTML = msg.responseText;
@@ -79,7 +80,7 @@ export default class header extends React.Component{
 	        			 <Menu onClick={this.handleClick}>
                   <Menu.Item key="cart"><a href="#/cart">购物车</a></Menu.Item>
 					        <Menu.Item key="mycentr"><a href="#/mycenter">个人中心</a></Menu.Item>
-					        <Menu.Item key="logout">退出登录</Menu.Item>
+					        <Menu.Item key="logout" onClick={this.logout}>退出登录</Menu.Item>
 					      </Menu>
 	        		} >
 			          <a>

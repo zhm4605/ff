@@ -39,7 +39,7 @@ class Order extends MY_Controller {
       $list = array();
       foreach ($goods as $key => $value) {
         $one = $this->order_mod->get_good_details(array("goodId"=>$value['goodId']));
-        $one = array
+        //$one = array
       }
       
       foreach ($list as $key => $value) {
@@ -68,10 +68,10 @@ class Order extends MY_Controller {
     if($login['state'])
     {
       $user = $login['info'];
-      $list = $this->order_mod->get_order_list(array('user_id',$user['id']));
+      $orders = $this->order_mod->get_order_list(array('user_id'=>$user['id']));
       $output = array(
         "state"=>1,
-        "info"=>$list
+        "info"=>$orders
       );
     }
     else
@@ -81,7 +81,7 @@ class Order extends MY_Controller {
         "info"=>$this->lang->line('unlogin')
       );
     }
-
+    echo json_encode($output);
   }
 
   //生成
@@ -93,13 +93,13 @@ class Order extends MY_Controller {
     {
       $user = $login['info'];
       //用户id
-      $data['user_id'] = $user['id'];
+      $user_id = $user['id'];
       //编号 日期4位+用户id4位+随机数4位; count %date(Ym).用户id 4位% >8000 无法生成
-      $order_id = date('Ym').str_pad(substr($user_id,-4),4,0,STR_PAD_LEFT).str_pad(rand(0,9999),4,0,STR_PAD_LEFT);
-      $count = $this->order_mod->get_count(array('order_id',$order_id));
+      $order_num = date('ymd').str_pad(substr($user_id,-4),4,0,STR_PAD_LEFT).str_pad(rand(0,9999),4,0,STR_PAD_LEFT);
+      $count = $this->order_mod->get_count(array('order_num'=>$order_num));
       if($count>0)
       {
-        $total_count = $this->order_mod->get_total_count(substr($order_id,0,8)); 
+        $total_count = $this->order_mod->get_total_count(substr($order_num,0,8));
         if($total_count>8000)
         {
           $output = array(
@@ -111,13 +111,11 @@ class Order extends MY_Controller {
         }
         else
         {
-          $order_id = generate_order_id();
+          $order_num = generate_order_num();
         }
       }
-      $data["order_id"] = $order_id;
-      //状态 0未支付未发货 1已支付未发货 2未支付已发货 3已支付已发货 4确认收货已完成
-      $data["state"] = 0;
-      $id = $this->order_mod->create_order($data);
+      
+      $id = $this->order_mod->create_order($data,$user['id'],$order_num);
       if($id>0)
       {
         $output = array(
@@ -144,17 +142,17 @@ class Order extends MY_Controller {
   }
 
   //订单编号
-  private function generate_order_id()
+  private function generate_order_num()
   {
-    $order_id = date('Ym').str_pad(substr($user_id,-4),4,0,STR_PAD_LEFT).str_pad(rand(0,9999),4,0,STR_PAD_LEFT);
-    $count = $this->order_mod->get_count(array('order_id',$order_id));
+    $order_num = date('Ym').str_pad(substr($user_id,-4),4,0,STR_PAD_LEFT).str_pad(rand(0,9999),4,0,STR_PAD_LEFT);
+    $count = $this->order_mod->get_count(array('order_num',$order_num));
     if($count>0)
     {
-      generate_order_id();
+      generate_order_num();
     }
     else
     {
-      return $order_id;
+      return $order_num;
     }
   }
 

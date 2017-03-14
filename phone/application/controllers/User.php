@@ -9,6 +9,11 @@ class User extends MY_Controller {
     $login = $this->user_mod->is_login();
     if($login['state']==0)
     {
+      $output = array(
+        "state"=>2,
+        "info"=>$this->lang->line('unlogin')
+      );
+      echo json_encode($output);
       exit();
     }
 
@@ -131,7 +136,6 @@ class User extends MY_Controller {
   //收货地址列表
   public function address_list()
   {
-    $data = $_POST;
     $login = $this->user_mod->is_login();
     if($login['state'])
     {

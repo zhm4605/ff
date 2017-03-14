@@ -52,6 +52,7 @@ export default class OrderTransfer extends React.Component{
   }
   create_order()
   {
+    const { address_id } = this.state;
     const data = {
       address_id,
       list: this.props.list
@@ -84,7 +85,7 @@ export default class OrderTransfer extends React.Component{
     const { list } = this.props;
     const { address_list,address_id } = this.state;
     return (
-    <div id='account-inner'>
+    <div id='account-wrap'>
       <Card className='card' title={<h2>确认订单</h2>} extra={<Button type="dashed" onClick={this.goBack}>返回</Button>} bordered={false}>
       <Row className='choose-address-list' gutter={10}>
         {

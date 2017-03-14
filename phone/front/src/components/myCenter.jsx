@@ -5,7 +5,8 @@ export default class MyCenter extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      address_list:[]
+      address_list:[],
+      orders:false
     }
 
     const that = this;
@@ -18,13 +19,12 @@ export default class MyCenter extends React.Component{
         console.log(msg);
         if(msg.state==1)
         {
-          that.state = ({
-            address_list:msg.info
-          })
+          that.state.address_list = msg.info;
         }
         else
         {
           message.info(msg.info);
+          window.location.href="#/login?from="+encodeURIComponent(window.location.href);
         }
         
       },
@@ -38,7 +38,29 @@ export default class MyCenter extends React.Component{
   }
 
   componentDidMount(){
-    
+    const that = this;
+    $.ajax({
+      url:"/order/order_list/",
+      dataType:"json",
+      async: false,
+      success:function(msg)
+      {
+        console.log(msg);
+        if(msg.state==1)
+        {
+          that.setState({orders:msg.info});
+        }
+        else
+        {
+          message.info(msg.info);
+        }
+        
+      },
+      error:function(msg){
+        console.log(msg);
+        document.body.innerHTML = msg.responseText;
+      }
+    })
   }
   removeAddress(i) {
     const {address_list} = this.state;
@@ -70,13 +92,14 @@ export default class MyCenter extends React.Component{
     })
   }
   render() {
-    const { address_list } = this.state;
+    const { address_list,orders } = this.state;
+
     return (
     <div id='mycenter-page'>
       <Card className='card' title={<h2>个人中心</h2>} style={{'marginTop':20}} bordered={false}>
-        <Row>
-          <Col span={11}>
-            <Card className='card' title='个人资料' extra={<a href="#/user/add_address/0"><Button size='small'>新增收货地址</Button></a>}>
+        <Row gutter={16}>
+          <Col span={8} className="gutter-row">
+            <Card className='gutter-box card' title='个人资料' extra={<a href="#/user/add_address/0"><Button size='small'>新增收货地址</Button></a>}>
               <p>收货地址：</p>
               <ul className='address-list'>
                 {
@@ -94,14 +117,42 @@ export default class MyCenter extends React.Component{
                     </li>
                   )
                 }
-                
               </ul>
             </Card>
           </Col>
-          <Col span={1}></Col>
-          <Col span={12}>
-            <Card className='card' title='我的订单'>
-              <ul>
+          <Col span={16} className="gutter-row">
+            <Card className='gutter-box card' title='我的订单'>
+              <ul className='order-list'>
+                {
+                  orders&&orders.list.map((d,i)=>
+                    <li key={d.id}>
+                      <Row>
+                        <Col span={8}>订单编号：{d.order_num}</Col>
+                        <Col span={8} className='create_time'>生成时间：{d.create_time}</Col>
+                        <Col span={8} className='state'>{d.state}</Col>
+                      </Row>
+                      <ul className='item-list'>
+                        {
+                          d.items.map((item)=>
+                            <li key={item.good_id}>
+                              <a href={'#/good/'+item.good_id} target='_blank'>
+                                <Row>
+                                  <Col span={4} className='pic'><img src={item.good_pic} width='90%'/></Col>
+                                  <Col span={16} className='name'>{item.good_name}</Col>
+                                  <Col span={4} className='price'>
+                                    <p>{item.unit_price}</p>
+                                    <p>X{item.number}</p>
+                                  </Col>
+                                </Row>
+                              </a>
+                            </li>
+                          )
+                        }
+                      </ul>
+                      <div className='total-price'>合计：{d.total_price}</div>
+                    </li>
+                  )
+                }
               </ul>
             </Card>
           </Col>

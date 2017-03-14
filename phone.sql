@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : lsmz
+Source Server         : localhost_3306
 Source Server Version : 50524
 Source Host           : 127.0.0.1:3306
 Source Database       : phone
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2017-03-13 16:48:23
+Date: 2017-03-14 15:46:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -43,7 +43,7 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'zhm', null, '789c270c828211b6deae4df8d856d253', '130ad95504f1f020a310bd3a695590a3', 'f422c6aec891a3fb80ebc4d7fdf4f4a0', '2017-03-10 13:41:29', '1', '0', '0', '', null, '2017-03-03 13:41:29', '127.0.0.1', '21');
+INSERT INTO `admin` VALUES ('1', 'zhm', null, '789c270c828211b6deae4df8d856d253', '130ad95504f1f020a310bd3a695590a3', '133b94b490492b659c1b9b14e3f37fc3', '2017-03-21 15:03:38', '1', '0', '0', '', null, '2017-03-14 15:03:38', '127.0.0.1', '22');
 
 -- ----------------------------
 -- Table structure for `good`
@@ -312,7 +312,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', '78e10d44ac9d30b34aa5c97106bf765e', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-03-13 15:52:52', '127.0.0.1', '2017-02-22 19:35:32', '15', '2017-03-13 15:52:52');
+INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', 'eb06338c8446ad38da743676893c800e', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-03-14 15:07:16', '127.0.0.1', '2017-02-22 19:35:32', '25', '2017-03-14 15:07:16');
 
 -- ----------------------------
 -- Table structure for `user_address`
@@ -391,25 +391,29 @@ CREATE TABLE `user_collect` (
 DROP TABLE IF EXISTS `user_order`;
 CREATE TABLE `user_order` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `order_id` bigint(12) DEFAULT NULL,
+  `order_num` bigint(12) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL COMMENT '用户id',
   `item_id` int(11) DEFAULT NULL COMMENT '订单子表id',
   `name` varchar(72) DEFAULT NULL COMMENT '收货人',
   `mobile` varchar(20) DEFAULT NULL COMMENT '联系电话',
-  `address` int(11) DEFAULT NULL COMMENT '地址',
+  `address` text COMMENT '地址',
   `total_price` int(11) DEFAULT NULL COMMENT '总价',
   `state` tinyint(2) DEFAULT NULL COMMENT '订单状态(支付状态，发货状态)',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `order_id` (`order_id`),
+  KEY `order_id` (`order_num`),
   KEY `user_id` (`user_id`),
   KEY `item_id` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单主表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='订单主表';
 
 -- ----------------------------
 -- Records of user_order
 -- ----------------------------
+INSERT INTO `user_order` VALUES ('1', '20170300024054', '2', null, 'zz', '18768122041', '0', '19194', '0', '2017-03-14 10:07:45', '2017-03-14 10:07:45');
+INSERT INTO `user_order` VALUES ('2', '20170300023404', '2', null, 'zz', '18768122041', '0', '19194', '0', '2017-03-14 10:09:38', '2017-03-14 10:09:38');
+INSERT INTO `user_order` VALUES ('3', '20170300026737', '2', null, 'zz', '18768122041', '0', '19194', '0', '2017-03-14 10:10:49', '2017-03-14 10:10:49');
+INSERT INTO `user_order` VALUES ('4', '17031400029859', '2', null, 'zz', '18768122041', '0', '19194', '0', '2017-03-14 10:11:49', '2017-03-14 10:11:49');
 
 -- ----------------------------
 -- Table structure for `user_order_item`
@@ -429,8 +433,12 @@ CREATE TABLE `user_order_item` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`,`good_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单子表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='订单子表';
 
 -- ----------------------------
 -- Records of user_order_item
 -- ----------------------------
+INSERT INTO `user_order_item` VALUES ('1', '3', '2', '12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', '/upload/20170303/100041_773.jpg', '0', null, '6', '3199', '2017-03-14 10:10:49');
+INSERT INTO `user_order_item` VALUES ('2', '3', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', '0', null, '2', '0', '2017-03-14 10:10:49');
+INSERT INTO `user_order_item` VALUES ('3', '4', '2', '12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', '/upload/20170303/100041_773.jpg', '0', null, '6', '3199', '2017-03-14 10:11:49');
+INSERT INTO `user_order_item` VALUES ('4', '4', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', '0', null, '2', '0', '2017-03-14 10:11:49');

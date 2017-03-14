@@ -1,4 +1,4 @@
-import { Breadcrumb,Icon,Row,Col,Card,message,Button} from 'antd';
+import { Breadcrumb,Icon,Row,Col,Card,message,Button,Input} from 'antd';
 import {render} from 'react-dom';
 import OrderTransfer from './common/orderTransfer.jsx';
 
@@ -6,8 +6,20 @@ export default class CartList extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      list:[]
+      list:[],
+      account:false
     }
+
+    this.goAccount = this.goAccount.bind(this);
+    this.editGood = this.editGood.bind(this);
+    this.removeGood = this.removeGood.bind(this);
+    this.cancelEditGood = this.cancelEditGood.bind(this);
+    this.finishEditGood = this.finishEditGood.bind(this);
+  }
+  goAccount() {
+    this.setState({'account':true});
+  }
+  componentDidMount(){
     const that = this;
     $.ajax({
       url:"/cart/cart_list/",
@@ -18,9 +30,7 @@ export default class CartList extends React.Component{
         console.log(msg);
         if(msg.state==1)
         {
-          that.state = {
-            list:msg.info.list
-          }
+          that.setState({list:msg.info.list});
         }
         else
         {
@@ -33,50 +43,118 @@ export default class CartList extends React.Component{
         document.body.innerHTML = msg.responseText;
       }
     })
-    this.go_account = this.go_account.bind(this);
   }
-  go_account() {
-    const { list } = this.state;
+  changeNumber(e,i)
+  {
+    console.log(e.target.value);
+    const {list} = this.state;
+    list[i]['number'] = e.target.value; 
+    this.setState({list});
 
-    const account_inner = <OrderTransfer list={list}/>
-    if(!document.getElementById('account-page'))
-    {
-      let account = document.createElement('div');
-      account.id='account-page';
-      document.getElementById('main').appendChild(account);
-    }
-    render(account_inner, document.getElementById('account-page'));
+    console.log(i);
   }
-  componentDidMount(){
-    this.go_account();
+  editGood(i)
+  {
+    const {list} = this.state;
+    list[i]['edit'] = true; 
+    this.setState({list});
+  }
+  cancelEditGood(i)
+  {
+    const {list} = this.state;
+    list[i]['edit'] = false; 
+    this.setState({list});
+  }
+  finishEditGood(i)
+  {
+    const {list} = this.state;
+    list[i]['edit'] = false; 
+    this.setState({list});
+    const good = list[i];
+    const that = this;
+    $.ajax({
+      url:"/cart/update_good/",
+      dataType:"json",
+      success:function(msg)
+      {
+        console.log(msg);
+        if(msg.state==1)
+        {
+          that.setState({list:msg.info.list});
+        }
+        else
+        {
+          message.info(msg.info);
+        }
+        
+      },
+      error:function(msg){
+        console.log(msg);
+        document.body.innerHTML = msg.responseText;
+      }
+    })
+
+  }
+  removeGood(i)
+  {
+    const list = [...this.state.list];
+    list.splice(i, 1);
+    this.setState({ list });
   }
   render() {
-    const { list } = this.state;
+    const { list,account } = this.state;
     return (
     <div id='cart-page'>
       <Card bordered={false} className='card' title={<h2>购物车</h2>} extra={<a href="javascript:history.go(-1)"><Button type="dashed">返回</Button></a>} style={{ width: '100%',minHeight:'500px',marginTop:'20px'}}>
+      <ul className='cart-good-list'>
       {
         list.map((good,i)=>
-          <a href={'/home/#/good/'+good.good_id} style={{cusor:'pointer'}} target='_blank' key={good.id}>
-          <Row className='cart-item'>
-            <Col span={3} className='pic'>
-              <img src={good.good_pic} width='100'/>
-            </Col>
-            <Col span={9} className='good-name'>
-              {good.good_name}
-            </Col>
-            <Col span={12} className='price'>
-              <div>单价：{good.price}</div>
-              <div>数量：*{good.number}</div>
-              <h3 className='total'>￥{good.price*good.number}</h3>
-            </Col>
-          </Row>
-          </a>
+          <li className={'cart-item '+(good.edit?'edit':'')} key={good.good_id}>
+            <Row>
+              <Col span={3} className='pic'>
+                <a href={'/home/#/good/'+good.good_id} style={{cusor:'pointer'}} target='_blank' key={good.id}>
+                  <img src={good.good_pic} width='100'/>
+                </a>
+              </Col>
+              <Col span={9} className='good-name'>
+                {good.good_name}
+              </Col>
+              {good.edit?
+                <Col span={4} className='price'>
+                  <div>单价：{good.price}</div>
+                  <div>数量: X <Input type='number' defaultValue={good.number} onChange={(e)=>this.changeNumber(e,i)} style={{width:80}}/></div>
+                  <h3 className='total'>￥{good.price*good.number}</h3>
+                </Col>
+                :
+                <Col span={4} className='price'>
+                  <div>单价：{good.price}</div>
+                  <div>数量：X {good.number}</div>
+                  <h3 className='total'>￥{good.price*good.number}</h3>
+                </Col>
+              }
+              {good.edit?'':
+              <Col className="execute" span={4}>
+                <a className='remove' onClick={()=>this.removeGood(i)}><Icon type="delete" /></a>
+                <a className='edit' onClick={()=>this.editGood(i)}><Icon type="edit" /></a>
+              </Col>
+              }
+            </Row>
+            {good.edit?
+              <div className='sure'>
+                <a onClick={()=>this.cancelEditGood(i)}><Button>取消</Button></a>
+                <a onClick={()=>this.finishEditGood(i)}><Button>完成</Button></a>
+              </div>:''
+            }
+            
+          </li>
         )
       }
-      <Button type="primary" size="large" className='btn-account' style={{float:'right'}} onClick={this.go_account}>去结算</Button>
+      </ul>
+      <Button type="primary" size="large" className='btn-account' style={{float:'right'}} onClick={this.goAccount}>去结算</Button>
       </Card>
-      
+      {account?
+        <OrderTransfer list={list}/>
+        :''}
     </div>
     	
     )

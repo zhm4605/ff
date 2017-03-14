@@ -29,68 +29,70 @@ class Order_mod extends MY_Model {
 
 	public function get_count($where)
 	{
-		$this->db->where($where)->from($this->_table);
-
-		return $this->db->count_all_result();
+		$query = $this->db->where($where)->get($this->_table);
+		return $query->num_rows();
 	}
 
 	public function get_total_count($order_id)
 	{
-		$this->db->like('order_id',$order_id,'after')->from($this->_table);
+		$query = $this->db->like('order_id',$order_id,'after')->get($this->_table);
 
-		return $this->db->count_all_result();
+		return $query->num_rows();
 	}
 
 	//生成订单
-	public function create_order($data,$user_id)
+	public function create_order($data,$user_id,$order_num)
 	{
-		//地址
-		$address_id = $data['address_id'];
-		$this->db->select('name,mobile,areatext as address')->where('id',$address_id)->get($this->_table_address);
-		$address = $this->db->row_array();
-
-		$order_arr = array(
-			"user_id"=>$user_id,
-			"total_price"=>$data['total_price'],
-			"state"=>0,
-			"create_time"=>date('Y-m-d H:i:s')
-		);
-
-		$order_arr = array_merge($address,$order_arr);
-
-		$this->db->set()->insert($this->_table);
-		$data['add_time'] = date('Y-m-d H:i:s');
-		$order_id = $this->db->insert_id();
-
-		//订单子表
+		$total_price = 0;
+		$items = array();
 		$list = $data["list"];
 		foreach ($list as $key => $item) {
 			$value = array(
 				"user_id"=>$user_id,
-				"order_id"=>$order_id,
 				"good_id"=>$item["good_id"],
 				"sort_id"=>$item["sort_id"],
 				"number"=>$item["number"]
 			);
 
-			$this->db->select('name as good_name,pic_url as good_pic,price_min as unit_price')->where('id',$item['good_id'])->get($this->_table_good);
-			$good = $this->db->row_array();
+			$query = $this->db->select('name as good_name,pic_url as good_pic,price_min as unit_price')->where('id',$item['good_id'])->get($this->_table_good);
+			$good = $query->row_array();
 			$value = array_merge($value,$good);
 
-			
-
-			$this->db->set($value)->insert($this->_table_item);
-			$item_id = $this->db->insert_id();
-
-			$this->db->query("update ".$this->_table_item." i left join ".$this->_table_good." g on i.good_id=i.id set i.good_name=g.name,i.good_pic=g.pic_url,i.unit_price=g.price_min where i.id='".$item_id."'");
 			if($item["sort_id"]>0)
 			{
-				$this->db->query("update ".$this->_table_item." i left join ".$this->_table_sort." s on s.id=i.sort_id set i.sorts=s.sorts,i.unit_price=s.price where i.id='".$item_id."'");
+				$query = $this->db->select('sorts,price as unit_price')->where('id',$item['sort_id'])->get($this->_table_sort);
+				$sort = $query->row_array();
+				$value = array_merge($value,$sort);
 			}
+
+			$items[] = $value;
+			$total_price += $value['number']*$value["unit_price"];
 		}
-		
-		
-		
+		//地址
+		$address_id = $data['address_id'];
+		$query = $this->db->select('name,mobile,areatext as address')->where('id',$address_id)->get($this->_table_address);
+		$address = $query->row_array();
+		//状态 0未支付未发货 1已支付未发货 2未支付已发货 3已支付已发货 4确认收货已完成
+		$order_arr = array(
+			"order_num"=>$order_num,
+			"user_id"=>$user_id,
+			"total_price"=>$total_price,
+			"state"=>0,  //未支付未发货
+			"create_time"=>date('Y-m-d H:i:s')
+		);
+		$order_arr = array_merge($address,$order_arr);
+
+		$this->db->set($order_arr)->insert($this->_table);
+		$order_id = $this->db->insert_id();
+
+		//订单子表
+		//print_r($items);
+		foreach ($items as $key => $item) {
+			$item['order_id'] = $order_id;
+			$this->db->set($item)->insert($this->_table_item);
+			$item_id = $this->db->insert_id();
+		}
+		return $order_id;
 	}
 
 	//删除
@@ -103,7 +105,7 @@ class Order_mod extends MY_Model {
 	/************查询************/
 	
 	//商品列表（页码，排序方式）
-	public function get_order_list($where=array(),$page=1,$order='add_time desc')
+	public function get_order_list($where=array(),$page=1,$order='create_time desc')
 	{	
 		$limit = $this->config->item('pageCount');
 		//查询条件
@@ -115,11 +117,10 @@ class Order_mod extends MY_Model {
 		$this->db->where($where);
 		$this->db->stop_cache();
 
-		$this->db->select('id,good_id,good_name,good_pic,sort_id,sorts,number,price,add_time');
+		//$this->db->select('*');
 		$this->db->order_by($order);
 		$this->db->limit($limit,($page-1)*$limit);
 		$query = $this->db->get($this->_table);
-
 		$result['list'] = $query->result_array();
 
 		$query = $this->db->get($this->_table);
@@ -127,6 +128,14 @@ class Order_mod extends MY_Model {
 		$this->db->flush_cache();
 		$result['pageSize'] = $limit;
 		$result['page'] = $page;
+
+		foreach ($result['list'] as $key => $value) {
+			$this->db->select('id,good_id,good_name,good_pic,sort_id,sorts,number,unit_price');
+			$this->db->where('order_id',$value['id']);
+			$query = $this->db->get($this->_table_item);
+			$result['list'][$key]['items'] = $query->result_array();
+		}
+		//print_r($result);
 		return $result;
 	}	
 	

@@ -234,12 +234,30 @@ header{
 	.cart-item{
 		border-bottom: 1px solid  #e9e9e9;
 		padding: 5px 0;
+		position: relative;
+		&.edit{
+			background-color: #eee;
+		}
 		.price{
 			text-align: right;
 			.total{
 				color: red;
 				font-size: 18px;
 				padding-top: 5px;
+			}
+		}
+		.execute{
+			position: relative;
+			text-align: right;
+			.anticon{
+				font-size: 16px;
+				padding: 5px;
+			}
+		}
+		.sure{
+			text-align: right;
+			button{
+				margin-left: 5px;
 			}
 		}
 	}
@@ -253,7 +271,7 @@ header{
 	}
 }
 //生成订单
-#account-page{
+#account-wrap{
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -261,6 +279,13 @@ header{
 	min-height: 100%;
 	z-index: 9;
 	background-color: #fff;
+	.amount{
+		font-size: 18px;
+		color: red;
+		text-align: right;
+		font-weight: bold;
+		margin-top: 5px;
+	}
 }
 .address-list{
 	li{
@@ -313,13 +338,35 @@ header{
 		border-bottom: 1px solid #e9e9e9;
 	}
 }
-#account-page{
-	.amount{
-		font-size: 18px;
+.order-list{
+	&>li{
+		margin-bottom: 5px;
+		border-bottom: 1px solid #e9e9e9;
+		:last-child{
+			margin-bottom: 0;
+			border-bottom: 0;
+		}
+	}
+	.state{
 		color: red;
 		text-align: right;
-		font-weight: bold;
-		margin-top: 5px;
+	}
+	.item-list{
+		&>li{
+			border-bottom: 1px solid #fff;
+			background-color: #f9f9f9;
+			padding: 5px 0;
+		}
+		.price{
+			text-align: right;
+			padding-right: 5px;
+		}
+	}
+	.total-price{
+		text-align: right;
+		font-size: 16px;
+		color: red;
+		padding: 5px;
 	}
 }
 footer{

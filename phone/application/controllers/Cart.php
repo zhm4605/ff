@@ -9,7 +9,8 @@ class Cart extends MY_Controller {
     $this->lang->load('cart', isset($_COOKIE['language'])?$_COOKIE['language']:'chinese');
   }
 
-  public function index(){
+  public function index()
+  {
     //$this->load->view('index.html');
   }
 
@@ -107,6 +108,42 @@ class Cart extends MY_Controller {
         "info"=>$this->lang->line('unlogin')
       );
     }
+  }
+
+  //编辑购物车
+  public function update_good()
+  {
+    $data = $_POST;
+    $login = $this->user_mod->is_login();
+    if($login['state'])
+    {
+      $user = $login['info'];
+      //用户id
+      $data['user_id'] = $user['id'];
+      $id = $this->cart_mod->update_good($data);
+      if($id>0)
+      {
+        $output = array(
+          "state"=>1,
+          "info"=>$this->lang->line('add_success')
+        );
+      }
+      else
+      {
+        $output = array(
+          "state"=>0,
+          "info"=>$this->lang->line('add_error')
+        );
+      }
+    }
+    else
+    {
+      $output = array(
+        "state"=>2,
+        "info"=>$this->lang->line('unlogin')
+      );
+    }
+    echo json_encode($output);
   }
 
 }
