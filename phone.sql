@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : lsmz
 Source Server Version : 50524
 Source Host           : 127.0.0.1:3306
 Source Database       : phone
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2017-03-14 15:46:58
+Date: 2017-03-17 17:00:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -43,7 +43,7 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'zhm', null, '789c270c828211b6deae4df8d856d253', '130ad95504f1f020a310bd3a695590a3', '133b94b490492b659c1b9b14e3f37fc3', '2017-03-21 15:03:38', '1', '0', '0', '', null, '2017-03-14 15:03:38', '127.0.0.1', '22');
+INSERT INTO `admin` VALUES ('1', 'zhm', null, '789c270c828211b6deae4df8d856d253', '130ad95504f1f020a310bd3a695590a3', '133b94b490492b659c1b9b14e3f37fc3', '2017-03-24 13:26:21', '1', '0', '0', '', null, '2017-03-17 13:26:21', '127.0.0.1', '22');
 
 -- ----------------------------
 -- Table structure for `good`
@@ -65,6 +65,14 @@ CREATE TABLE `good` (
   `lock` tinyint(1) DEFAULT '0' COMMENT '是否锁定',
   `rate` float(11,2) DEFAULT NULL COMMENT '人民兑欧元汇率',
   `category` varchar(20) DEFAULT NULL COMMENT '类别/型号',
+  `piecewise_price` text COMMENT '分段价格',
+  `pid` varchar(100) DEFAULT NULL COMMENT '型号',
+  `brand` varchar(100) DEFAULT NULL,
+  `model` varchar(100) DEFAULT NULL,
+  `weight` float(11,3) DEFAULT NULL COMMENT '重量',
+  `weight_wrapping` float(11,3) DEFAULT NULL COMMENT '连壳重量',
+  `condition` varchar(100) DEFAULT NULL COMMENT '新旧',
+  `import_if` tinyint(1) DEFAULT '0',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='商品表';
@@ -72,13 +80,13 @@ CREATE TABLE `good` (
 -- ----------------------------
 -- Records of good
 -- ----------------------------
-INSERT INTO `good` VALUES ('8', 'Apple iPhone 7 (A1660) 32G 玫瑰金色 移动联通电信4G手机', '<p>zz</p>', '5199.00', '5199.00', '5199.00', '2017-02-12 19:15:52', 'a:1:{i:0;a:5:{s:2:\"id\";s:2:\"15\";s:4:\"name\";s:6:\"尺寸\";s:8:\"children\";a:2:{i:0;a:4:{s:2:\"id\";s:2:\"16\";s:4:\"name\";s:6:\"4.7寸\";s:5:\"value\";s:2:\"16\";s:5:\"label\";s:6:\"4.7寸\";}i:1;a:4:{s:2:\"id\";s:2:\"17\";s:4:\"name\";s:6:\"5.1寸\";s:5:\"value\";s:2:\"17\";s:5:\"label\";s:6:\"5.1寸\";}}s:5:\"value\";s:2:\"15\";s:5:\"label\";s:6:\"尺寸\";}}', '/upload/20170212/191529_498.jpg', '20', null, '0', '0', null, null, '2017-02-14 21:03:38');
-INSERT INTO `good` VALUES ('9', '乐视(Letv) 乐Max X900+ 蓝宝石版移动联通电信4G手机 粉色 128GB', '<p>zz</p>', '1899.00', '1899.00', null, '2017-02-01 21:15:05', null, '/upload/20170212/191442_385.jpg', '10', null, '0', '0', null, null, '2017-02-14 21:15:10');
-INSERT INTO `good` VALUES ('10', '荣耀8 4GB+32GB 全网通4G手机 珠光白', null, '2199.00', '3299.00', '3299.00', '2017-02-01 21:15:55', 'a:1:{i:0;a:5:{s:2:\"id\";s:1:\"6\";s:4:\"name\";s:6:\"颜色\";s:8:\"children\";a:2:{i:0;a:4:{s:2:\"id\";s:2:\"12\";s:4:\"name\";s:6:\"红色\";s:5:\"value\";s:2:\"12\";s:5:\"label\";s:6:\"红色\";}i:1;a:4:{s:2:\"id\";s:2:\"14\";s:4:\"name\";s:6:\"黑色\";s:5:\"value\";s:2:\"14\";s:5:\"label\";s:6:\"黑色\";}}s:5:\"value\";s:1:\"6\";s:5:\"label\";s:6:\"颜色\";}}', '/upload/20170214/211607_670.jpg', '20', null, '0', '0', null, null, '2017-02-14 21:16:40');
-INSERT INTO `good` VALUES ('11', 'OPPO R9s 全网通4G+64G 双卡双待手机 玫瑰金', null, '2799.00', '2799.00', '2899.00', '2017-02-02 12:09:28', 'a:1:{i:0;a:5:{s:2:\"id\";s:1:\"6\";s:4:\"name\";s:6:\"颜色\";s:8:\"children\";a:3:{i:0;a:4:{s:2:\"id\";s:2:\"12\";s:4:\"name\";s:6:\"红色\";s:5:\"value\";s:2:\"12\";s:5:\"label\";s:6:\"红色\";}i:1;a:4:{s:2:\"id\";s:2:\"14\";s:4:\"name\";s:6:\"黑色\";s:5:\"value\";s:2:\"14\";s:5:\"label\";s:6:\"黑色\";}i:2;a:4:{s:2:\"id\";s:2:\"18\";s:4:\"name\";s:6:\"金色\";s:5:\"value\";s:2:\"18\";s:5:\"label\";s:6:\"金色\";}}s:5:\"value\";s:1:\"6\";s:5:\"label\";s:6:\"颜色\";}}', '/upload/20170212/121040_648.jpg', '30', null, '0', '0', null, null, '2017-02-14 21:15:40');
-INSERT INTO `good` VALUES ('12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', null, '3199.00', '3199.00', null, '2017-02-18 10:14:06', null, '/upload/20170303/100041_773.jpg', '20', null, '0', '0', null, '19,26', '2017-03-03 10:00:41');
-INSERT INTO `good` VALUES ('14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', null, '0.00', '0.00', null, '2017-02-18 11:23:11', null, '/upload/20170303/100059_911.jpg', '0', null, '0', '0', null, '19,26', '2017-03-03 10:01:17');
-INSERT INTO `good` VALUES ('15', 'ggg', null, '0.00', '0.00', null, '2017-02-18 11:26:19', null, '/upload/20170218/114832_141.jpg', '0', null, '0', '0', null, '5,7', '2017-02-18 20:11:13');
+INSERT INTO `good` VALUES ('8', 'Apple iPhone 7 (A1660) 32G 玫瑰金色 移动联通电信4G手机', '<p>zz</p>', '5199.00', '5199.00', '5199.00', '2017-02-12 19:15:52', 'a:1:{i:0;a:5:{s:2:\"id\";s:2:\"15\";s:4:\"name\";s:6:\"尺寸\";s:8:\"children\";a:2:{i:0;a:4:{s:2:\"id\";s:2:\"16\";s:4:\"name\";s:6:\"4.7寸\";s:5:\"value\";s:2:\"16\";s:5:\"label\";s:6:\"4.7寸\";}i:1;a:4:{s:2:\"id\";s:2:\"17\";s:4:\"name\";s:6:\"5.1寸\";s:5:\"value\";s:2:\"17\";s:5:\"label\";s:6:\"5.1寸\";}}s:5:\"value\";s:2:\"15\";s:5:\"label\";s:6:\"尺寸\";}}', '/upload/20170212/191529_498.jpg', '20', null, '0', '0', null, null, null, null, null, null, null, null, null, null, '2017-02-14 21:03:38');
+INSERT INTO `good` VALUES ('9', '乐视(Letv) 乐Max X900+ 蓝宝石版移动联通电信4G手机 粉色 128GB', '<p>zz</p>', '1899.00', '1899.00', null, '2017-02-01 21:15:05', null, '/upload/20170212/191442_385.jpg', '10', null, '0', '0', null, null, null, null, null, null, null, null, null, null, '2017-02-14 21:15:10');
+INSERT INTO `good` VALUES ('10', '荣耀8 4GB+32GB 全网通4G手机 珠光白', null, '2199.00', '3299.00', '3299.00', '2017-02-01 21:15:55', 'a:1:{i:0;a:5:{s:2:\"id\";s:1:\"6\";s:4:\"name\";s:6:\"颜色\";s:8:\"children\";a:2:{i:0;a:4:{s:2:\"id\";s:2:\"12\";s:4:\"name\";s:6:\"红色\";s:5:\"value\";s:2:\"12\";s:5:\"label\";s:6:\"红色\";}i:1;a:4:{s:2:\"id\";s:2:\"14\";s:4:\"name\";s:6:\"黑色\";s:5:\"value\";s:2:\"14\";s:5:\"label\";s:6:\"黑色\";}}s:5:\"value\";s:1:\"6\";s:5:\"label\";s:6:\"颜色\";}}', '/upload/20170214/211607_670.jpg', '20', null, '0', '0', null, null, null, null, null, null, null, null, null, null, '2017-02-14 21:16:40');
+INSERT INTO `good` VALUES ('11', 'OPPO R9s 全网通4G+64G 双卡双待手机 玫瑰金', null, '2799.00', '2799.00', '2899.00', '2017-02-02 12:09:28', 'a:1:{i:0;a:5:{s:2:\"id\";s:1:\"6\";s:4:\"name\";s:6:\"颜色\";s:8:\"children\";a:3:{i:0;a:4:{s:2:\"id\";s:2:\"12\";s:4:\"name\";s:6:\"红色\";s:5:\"value\";s:2:\"12\";s:5:\"label\";s:6:\"红色\";}i:1;a:4:{s:2:\"id\";s:2:\"14\";s:4:\"name\";s:6:\"黑色\";s:5:\"value\";s:2:\"14\";s:5:\"label\";s:6:\"黑色\";}i:2;a:4:{s:2:\"id\";s:2:\"18\";s:4:\"name\";s:6:\"金色\";s:5:\"value\";s:2:\"18\";s:5:\"label\";s:6:\"金色\";}}s:5:\"value\";s:1:\"6\";s:5:\"label\";s:6:\"颜色\";}}', '/upload/20170212/121040_648.jpg', '30', null, '0', '0', null, null, null, null, null, null, null, null, null, null, '2017-02-14 21:15:40');
+INSERT INTO `good` VALUES ('12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', null, '3199.00', '3199.00', null, '2017-02-18 10:14:06', null, '/upload/20170303/100041_773.jpg', '20', null, '0', '0', null, '19,26', null, null, null, null, null, null, null, null, '2017-03-03 10:00:41');
+INSERT INTO `good` VALUES ('14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', null, '0.00', '0.00', null, '2017-02-18 11:23:11', null, '/upload/20170303/100059_911.jpg', '0', null, '0', '0', null, '19,26', null, null, null, null, null, null, null, null, '2017-03-03 10:01:17');
+INSERT INTO `good` VALUES ('15', 'ggg', null, '0.00', '0.00', null, '2017-02-18 11:26:19', null, '/upload/20170218/114832_141.jpg', '0', null, '0', '0', null, '5,7', null, null, null, null, null, null, null, null, '2017-02-18 20:11:13');
 
 -- ----------------------------
 -- Table structure for `good_bin`
@@ -206,6 +214,52 @@ INSERT INTO `good_sort_bin` VALUES ('5', '1', 'a:2:{i:6;a:4:{s:2:\"id\";s:2:\"14
 INSERT INTO `good_sort_bin` VALUES ('6', '16', 'a:1:{i:15;a:4:{s:2:\"id\";s:2:\"16\";s:4:\"name\";s:6:\"4.7寸\";s:5:\"value\";s:2:\"16\";s:5:\"label\";s:6:\"4.7寸\";}', '10', '99', '0');
 
 -- ----------------------------
+-- Table structure for `import_sorts`
+-- ----------------------------
+DROP TABLE IF EXISTS `import_sorts`;
+CREATE TABLE `import_sorts` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL COMMENT '分类名称（10字内）',
+  `description` varchar(100) DEFAULT NULL COMMENT '分类描述（50字以内）',
+  `parent_id` int(11) DEFAULT NULL COMMENT '父分类id',
+  `parent_ids` varchar(20) DEFAULT NULL,
+  `level` tinyint(1) DEFAULT '0' COMMENT '级别',
+  `order_id` smallint(2) DEFAULT '0' COMMENT '排序',
+  `filter_condition` tinyint(1) DEFAULT NULL COMMENT '作为筛选条件',
+  `count` int(11) DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='分类表';
+
+-- ----------------------------
+-- Records of import_sorts
+-- ----------------------------
+INSERT INTO `import_sorts` VALUES ('5', '品牌', null, '0', '', '0', '0', '0', null, '2017-02-19 09:45:18');
+INSERT INTO `import_sorts` VALUES ('6', '颜色', '', '0', '', '0', '0', null, null, '2017-02-18 19:28:54');
+INSERT INTO `import_sorts` VALUES ('7', '苹果', null, '5', '5', '1', '0', null, null, '2017-02-18 19:22:45');
+INSERT INTO `import_sorts` VALUES ('8', '三星', '', '5', '5', '1', '0', null, null, '2017-02-18 19:22:47');
+INSERT INTO `import_sorts` VALUES ('9', '华为', '', '5', '5', '1', '0', null, null, '2017-02-18 19:22:48');
+INSERT INTO `import_sorts` VALUES ('10', '小米', '', '5', '5', '1', '0', null, null, '2017-02-18 19:22:48');
+INSERT INTO `import_sorts` VALUES ('11', '诺基亚', '', '5', '5', '1', '0', null, null, '2017-02-18 19:22:49');
+INSERT INTO `import_sorts` VALUES ('12', '红色', '', '6', '6', '1', '0', null, null, '2017-02-18 19:22:55');
+INSERT INTO `import_sorts` VALUES ('14', '黑色', '', '6', '6', '1', '0', null, null, '2017-02-18 19:22:56');
+INSERT INTO `import_sorts` VALUES ('15', '尺寸', null, '0', '', '0', '0', null, null, '2017-02-18 19:28:59');
+INSERT INTO `import_sorts` VALUES ('16', '4.7寸', null, '15', '15', '1', '0', null, null, '2017-02-18 19:23:04');
+INSERT INTO `import_sorts` VALUES ('17', '5.1寸', null, '15', '15', '1', '0', null, null, '2017-02-18 19:23:06');
+INSERT INTO `import_sorts` VALUES ('18', '金色', null, '6', '6', '1', '0', null, null, '2017-02-18 19:23:14');
+INSERT INTO `import_sorts` VALUES ('19', '手机配件', null, '0', null, '0', '0', '1', null, '2017-02-19 09:45:23');
+INSERT INTO `import_sorts` VALUES ('20', '手机零部件', '', '0', null, '0', '0', '1', null, '2017-02-19 09:45:24');
+INSERT INTO `import_sorts` VALUES ('21', '电脑配件', '', '0', null, '0', '0', '1', null, '2017-02-19 09:45:25');
+INSERT INTO `import_sorts` VALUES ('22', 'g', null, '5', '5', '1', '0', null, null, '2017-02-18 19:42:23');
+INSERT INTO `import_sorts` VALUES ('25', 'iphone7', null, '7', '5,7', '2', '0', null, null, '2017-02-18 21:10:05');
+INSERT INTO `import_sorts` VALUES ('26', '充电器', null, '19', '19', '1', '0', null, null, '2017-02-19 09:45:45');
+INSERT INTO `import_sorts` VALUES ('27', '屏幕', null, '19', '19', '1', '0', null, null, '2017-02-19 09:47:06');
+INSERT INTO `import_sorts` VALUES ('28', 'iphone', '', '20', '20', '1', '0', null, null, '2017-02-19 09:49:14');
+INSERT INTO `import_sorts` VALUES ('29', 'Samsung', '', '20', '20', '1', '0', null, null, '2017-02-19 09:50:11');
+INSERT INTO `import_sorts` VALUES ('30', 'iphone7', '', '28', '20,28', '2', '0', null, null, '2017-02-19 09:53:15');
+INSERT INTO `import_sorts` VALUES ('31', 'iphone6', '', '28', '20,28', '2', '0', null, null, '2017-02-19 09:53:24');
+
+-- ----------------------------
 -- Table structure for `label`
 -- ----------------------------
 DROP TABLE IF EXISTS `label`;
@@ -244,44 +298,70 @@ CREATE TABLE `slide` (
 DROP TABLE IF EXISTS `sorts`;
 CREATE TABLE `sorts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) DEFAULT NULL COMMENT '分类名称（10字内）',
+  `name` varchar(100) DEFAULT NULL COMMENT '分类名称（10字内）',
   `description` varchar(100) DEFAULT NULL COMMENT '分类描述（50字以内）',
   `parent_id` int(11) DEFAULT NULL COMMENT '父分类id',
   `parent_ids` varchar(20) DEFAULT NULL,
   `level` tinyint(1) DEFAULT '0' COMMENT '级别',
   `order_id` smallint(2) DEFAULT '0' COMMENT '排序',
   `filter_condition` tinyint(1) DEFAULT NULL COMMENT '作为筛选条件',
+  `count` int(11) DEFAULT NULL,
+  `category` int(11) DEFAULT NULL,
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8 COMMENT='分类表';
 
 -- ----------------------------
 -- Records of sorts
 -- ----------------------------
-INSERT INTO `sorts` VALUES ('5', '品牌', null, '0', '', '0', '0', '0', '2017-02-19 09:45:18');
-INSERT INTO `sorts` VALUES ('6', '颜色', '', '0', '', '0', '0', null, '2017-02-18 19:28:54');
-INSERT INTO `sorts` VALUES ('7', '苹果', null, '5', '5', '1', '0', null, '2017-02-18 19:22:45');
-INSERT INTO `sorts` VALUES ('8', '三星', '', '5', '5', '1', '0', null, '2017-02-18 19:22:47');
-INSERT INTO `sorts` VALUES ('9', '华为', '', '5', '5', '1', '0', null, '2017-02-18 19:22:48');
-INSERT INTO `sorts` VALUES ('10', '小米', '', '5', '5', '1', '0', null, '2017-02-18 19:22:48');
-INSERT INTO `sorts` VALUES ('11', '诺基亚', '', '5', '5', '1', '0', null, '2017-02-18 19:22:49');
-INSERT INTO `sorts` VALUES ('12', '红色', '', '6', '6', '1', '0', null, '2017-02-18 19:22:55');
-INSERT INTO `sorts` VALUES ('14', '黑色', '', '6', '6', '1', '0', null, '2017-02-18 19:22:56');
-INSERT INTO `sorts` VALUES ('15', '尺寸', null, '0', '', '0', '0', null, '2017-02-18 19:28:59');
-INSERT INTO `sorts` VALUES ('16', '4.7寸', null, '15', '15', '1', '0', null, '2017-02-18 19:23:04');
-INSERT INTO `sorts` VALUES ('17', '5.1寸', null, '15', '15', '1', '0', null, '2017-02-18 19:23:06');
-INSERT INTO `sorts` VALUES ('18', '金色', null, '6', '6', '1', '0', null, '2017-02-18 19:23:14');
-INSERT INTO `sorts` VALUES ('19', '手机配件', null, '0', null, '0', '0', '1', '2017-02-19 09:45:23');
-INSERT INTO `sorts` VALUES ('20', '手机零部件', '', '0', null, '0', '0', '1', '2017-02-19 09:45:24');
-INSERT INTO `sorts` VALUES ('21', '电脑配件', '', '0', null, '0', '0', '1', '2017-02-19 09:45:25');
-INSERT INTO `sorts` VALUES ('22', 'g', null, '5', '5', '1', '0', null, '2017-02-18 19:42:23');
-INSERT INTO `sorts` VALUES ('25', 'iphone7', null, '7', '5,7', '2', '0', null, '2017-02-18 21:10:05');
-INSERT INTO `sorts` VALUES ('26', '充电器', null, '19', '19', '1', '0', null, '2017-02-19 09:45:45');
-INSERT INTO `sorts` VALUES ('27', '屏幕', null, '19', '19', '1', '0', null, '2017-02-19 09:47:06');
-INSERT INTO `sorts` VALUES ('28', 'iphone', '', '20', '20', '1', '0', null, '2017-02-19 09:49:14');
-INSERT INTO `sorts` VALUES ('29', 'Samsung', '', '20', '20', '1', '0', null, '2017-02-19 09:50:11');
-INSERT INTO `sorts` VALUES ('30', 'iphone7', '', '28', '20,28', '2', '0', null, '2017-02-19 09:53:15');
-INSERT INTO `sorts` VALUES ('31', 'iphone6', '', '28', '20,28', '2', '0', null, '2017-02-19 09:53:24');
+INSERT INTO `sorts` VALUES ('1', 'Accessories - GSM ', null, '0', null, '0', '0', null, '490', '2622', '2017-03-17 15:20:15');
+INSERT INTO `sorts` VALUES ('2', 'Bags ', null, '1', '1', '1', '0', null, '2', '2671', '2017-03-17 15:20:15');
+INSERT INTO `sorts` VALUES ('3', 'Cables ', null, '1', '1', '1', '0', null, '32', '2669', '2017-03-17 15:20:15');
+INSERT INTO `sorts` VALUES ('4', 'Cases / Covers ', null, '1', '1', '1', '0', null, '333', '2661', '2017-03-17 15:20:15');
+INSERT INTO `sorts` VALUES ('5', 'Chargers - AC ', null, '1', '1', '1', '0', null, '24', '2666', '2017-03-17 15:20:15');
+INSERT INTO `sorts` VALUES ('6', 'Chargers - Car ', null, '1', '1', '1', '0', null, '5', '2667', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('7', 'Films / Security glasses ', null, '1', '1', '1', '0', null, '60', '2662', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('8', 'Google VR ', null, '1', '1', '1', '0', null, '3', '2670', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('9', 'Headsets ', null, '1', '1', '1', '0', null, '16', '2668', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('10', 'Mounts ', null, '1', '1', '1', '0', null, '6', '2664', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('11', 'Others ', null, '1', '1', '1', '0', null, '2', '2672', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('12', 'Stands / Dock Stations ', null, '1', '1', '1', '0', null, '7', '2665', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('13', 'Spare Parts - GSM ', null, '0', null, '0', '0', null, '8700', '1', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('14', 'Acer ', null, '13', '13', '1', '0', null, '562', '1989', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('15', 'Alcatel ', null, '13', '13', '1', '0', null, '1044', '1190', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('16', 'Apple ', null, '13', '13', '1', '0', null, '117', '9', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('17', 'BlackBerry ', null, '13', '13', '1', '0', null, '40', '8', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('18', 'HTC ', null, '13', '13', '1', '0', null, '267', '4', '2017-03-17 15:20:16');
+INSERT INTO `sorts` VALUES ('19', 'Huawei ', null, '13', '13', '1', '0', null, '497', '1213', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('20', 'Kazam ', null, '13', '13', '1', '0', null, '6', '1405', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('21', 'Lenovo ', null, '13', '13', '1', '0', null, '32', '2550', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('22', 'LG ', null, '13', '13', '1', '0', null, '923', '6', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('23', 'Microsoft ', null, '13', '13', '1', '0', null, '162', '1612', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('24', 'Motorola ', null, '13', '13', '1', '0', null, '26', '1016', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('25', 'myPhone ', null, '13', '13', '1', '0', null, '390', '1880', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('26', 'Nokia ', null, '13', '13', '1', '0', null, '929', '3', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('27', 'Prestigio ', null, '13', '13', '1', '0', null, '1', '1835', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('28', 'Samsung ', null, '13', '13', '1', '0', null, '2080', '5', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('29', 'Sony ', null, '13', '13', '1', '0', null, '1205', '814', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('30', 'Sony Ericsson ', null, '13', '13', '1', '0', null, '95', '7', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('31', 'Wiko ', null, '13', '13', '1', '0', null, '275', '2726', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('32', 'Xiaomi  ', null, '13', '13', '1', '0', null, '61', '2574', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('33', 'Spare Parts - Tablet ', null, '0', null, '0', '0', null, '666', '1722', '2017-03-17 15:20:17');
+INSERT INTO `sorts` VALUES ('34', 'Alcatel ', null, '33', '33', '1', '0', null, '46', '1800', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('35', 'Huawei ', null, '33', '33', '1', '0', null, '24', '2090', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('36', 'LG ', null, '33', '33', '1', '0', null, '41', '1725', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('37', 'myPhone ', null, '33', '33', '1', '0', null, '66', '1911', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('38', 'Samsung ', null, '33', '33', '1', '0', null, '382', '1724', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('39', 'Sony ', null, '33', '33', '1', '0', null, '107', '1723', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('40', 'Spare parts / Accessories - Laptop ', null, '0', null, '0', '0', null, '243', '1194', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('41', 'Samsung ', null, '40', '40', '1', '0', null, '243', '1207', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('42', 'Spare Parts - White and Household Goods ', null, '0', null, '0', '0', null, '274', '1351', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('43', 'Dishwasher ', null, '42', '42', '1', '0', null, '2', '1449', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('44', 'Fridge ', null, '42', '42', '1', '0', null, '41', '1440', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('45', 'Kitchen ', null, '42', '42', '1', '0', null, '101', '1445', '2017-03-17 15:20:18');
+INSERT INTO `sorts` VALUES ('46', 'TV and Audio ', null, '42', '42', '1', '0', null, '61', '1352', '2017-03-17 15:20:19');
+INSERT INTO `sorts` VALUES ('47', 'Vacuum Cleaner ', null, '42', '42', '1', '0', null, '64', '1353', '2017-03-17 15:20:19');
+INSERT INTO `sorts` VALUES ('48', 'Washing machine ', null, '42', '42', '1', '0', null, '5', '1450', '2017-03-17 15:20:19');
 
 -- ----------------------------
 -- Table structure for `user`
@@ -312,7 +392,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', 'eb06338c8446ad38da743676893c800e', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-03-14 15:07:16', '127.0.0.1', '2017-02-22 19:35:32', '25', '2017-03-14 15:07:16');
+INSERT INTO `user` VALUES ('2', '460569137@qq.com', '130ad95504f1f020a310bd3a695590a3', '0e0d9e0f14958f5df3c327945172a3ca', 'zhm', '789c270c828211b6deae4df8d856d253', '0', '0', '0', '18768122041', '2017-03-17 13:05:28', '127.0.0.1', '2017-02-22 19:35:32', '28', '2017-03-17 13:05:28');
 
 -- ----------------------------
 -- Table structure for `user_address`
@@ -331,13 +411,12 @@ CREATE TABLE `user_address` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='用户地址表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户地址表';
 
 -- ----------------------------
 -- Records of user_address
 -- ----------------------------
 INSERT INTO `user_address` VALUES ('4', '2', 'zz', '18768122041', null, null, '浙江省丽水市', null, '1', '2017-03-13 15:10:42');
-INSERT INTO `user_address` VALUES ('5', '2', 'zhm', '11111', null, null, '莲都区。。。', null, '0', '2017-03-13 15:10:42');
 
 -- ----------------------------
 -- Table structure for `user_cart`
@@ -357,16 +436,13 @@ CREATE TABLE `user_cart` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`,`good_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='购物车表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='购物车表';
 
 -- ----------------------------
 -- Records of user_cart
 -- ----------------------------
-INSERT INTO `user_cart` VALUES ('1', '2', null, null, null, null, null, '0', null, '2017-03-01 16:31:39', '2017-03-03 10:34:54');
-INSERT INTO `user_cart` VALUES ('2', '2', null, null, null, null, null, null, null, '2017-03-01 16:34:47', '2017-03-01 16:34:47');
-INSERT INTO `user_cart` VALUES ('3', '2', null, null, null, null, null, null, null, '2017-03-01 16:35:54', '2017-03-01 16:35:54');
-INSERT INTO `user_cart` VALUES ('4', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', null, null, '2', '0', '2017-03-03 10:39:09', '2017-03-03 10:40:52');
-INSERT INTO `user_cart` VALUES ('5', '2', '12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', '/upload/20170303/100041_773.jpg', null, null, '6', '3199', '2017-03-03 11:41:36', '2017-03-03 13:58:29');
+INSERT INTO `user_cart` VALUES ('6', '2', '12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', '/upload/20170303/100041_773.jpg', null, null, '4', '3199', '2017-03-15 11:00:54', '2017-03-17 09:54:21');
+INSERT INTO `user_cart` VALUES ('9', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', null, null, '3', '0', '2017-03-17 09:50:55', '2017-03-17 10:02:09');
 
 -- ----------------------------
 -- Table structure for `user_collect`
@@ -405,7 +481,7 @@ CREATE TABLE `user_order` (
   KEY `order_id` (`order_num`),
   KEY `user_id` (`user_id`),
   KEY `item_id` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='订单主表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='订单主表';
 
 -- ----------------------------
 -- Records of user_order
@@ -414,6 +490,7 @@ INSERT INTO `user_order` VALUES ('1', '20170300024054', '2', null, 'zz', '187681
 INSERT INTO `user_order` VALUES ('2', '20170300023404', '2', null, 'zz', '18768122041', '0', '19194', '0', '2017-03-14 10:09:38', '2017-03-14 10:09:38');
 INSERT INTO `user_order` VALUES ('3', '20170300026737', '2', null, 'zz', '18768122041', '0', '19194', '0', '2017-03-14 10:10:49', '2017-03-14 10:10:49');
 INSERT INTO `user_order` VALUES ('4', '17031400029859', '2', null, 'zz', '18768122041', '0', '19194', '0', '2017-03-14 10:11:49', '2017-03-14 10:11:49');
+INSERT INTO `user_order` VALUES ('5', '17031500028715', '2', null, 'zz', '18768122041', '浙江省丽水市', '19194', '0', '2017-03-15 10:12:43', '2017-03-15 10:12:43');
 
 -- ----------------------------
 -- Table structure for `user_order_item`
@@ -433,7 +510,7 @@ CREATE TABLE `user_order_item` (
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`,`good_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='订单子表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='订单子表';
 
 -- ----------------------------
 -- Records of user_order_item
@@ -442,3 +519,5 @@ INSERT INTO `user_order_item` VALUES ('1', '3', '2', '12', '努比亚(nubia)【6
 INSERT INTO `user_order_item` VALUES ('2', '3', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', '0', null, '2', '0', '2017-03-14 10:10:49');
 INSERT INTO `user_order_item` VALUES ('3', '4', '2', '12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', '/upload/20170303/100041_773.jpg', '0', null, '6', '3199', '2017-03-14 10:11:49');
 INSERT INTO `user_order_item` VALUES ('4', '4', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', '0', null, '2', '0', '2017-03-14 10:11:49');
+INSERT INTO `user_order_item` VALUES ('5', '5', '2', '12', '努比亚(nubia)【6+64GB】Z11 （百合金）移动联通电信4G手机 双卡双待', '/upload/20170303/100041_773.jpg', '0', null, '6', '3199', '2017-03-15 10:12:43');
+INSERT INTO `user_order_item` VALUES ('6', '5', '2', '14', '小米5 全网通 高配版 3GB内存 64GB ROM 白色 移动联通电信4G手机', '/upload/20170303/100059_911.jpg', '0', null, '2', '0', '2017-03-15 10:12:43');
