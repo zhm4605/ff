@@ -62,13 +62,13 @@ class Order extends MY_Controller {
     print_r($output);
   }
   //列表
-  public function order_list()
+  public function order_list($page=1)
   {
     $login = $this->user_mod->is_login();
     if($login['state'])
     {
       $user = $login['info'];
-      $orders = $this->order_mod->get_order_list(array('user_id'=>$user['id']));
+      $orders = $this->order_mod->get_order_list(array('user_id'=>$user['id']),$page);
       $output = array(
         "state"=>1,
         "info"=>$orders

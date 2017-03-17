@@ -7,11 +7,36 @@ class Cart extends MY_Controller {
     $this->load->model(array('cart_mod','user_mod'));
 
     $this->lang->load('cart', isset($_COOKIE['language'])?$_COOKIE['language']:'chinese');
+
+    $login = $this->user_mod->is_login();
+    if($login['state']==0)
+    {
+      $output = array(
+        "state"=>2,
+        "info"=>$this->lang->line('unlogin')
+      );
+      echo json_encode($output);
+      exit();
+    }
+    else
+    {
+      $this->user = $login['info'];
+    }
+
   }
 
   public function index()
   {
     //$this->load->view('index.html');
+  }
+  public function cart_number()
+  {
+    $count = $this->cart_mod->get_cart_number($this->user['id']);
+    $output = array(
+        "state"=>1,
+        "count"=>$count
+      );
+    echo json_encode($output);
   }
 
   //列表
@@ -108,20 +133,21 @@ class Cart extends MY_Controller {
         "info"=>$this->lang->line('unlogin')
       );
     }
+    echo json_encode($output);
   }
 
   //编辑购物车
-  public function update_good()
+  public function update_good($id)
   {
     $data = $_POST;
+    //print_r($data);
     $login = $this->user_mod->is_login();
     if($login['state'])
     {
       $user = $login['info'];
       //用户id
       $data['user_id'] = $user['id'];
-      $id = $this->cart_mod->update_good($data);
-      if($id>0)
+      if($this->cart_mod->update_good($data,$id))
       {
         $output = array(
           "state"=>1,

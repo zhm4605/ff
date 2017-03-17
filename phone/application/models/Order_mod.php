@@ -13,6 +13,8 @@ class Order_mod extends MY_Model {
 
 		$this->_table_address = $this->getDb('')->dbprefix.'user_address';
 
+		$this->lang->load('order', isset($_COOKIE['language'])?$_COOKIE['language']:'chinese');
+
 	}
 
 	public function get_good_details($where)
@@ -130,10 +132,13 @@ class Order_mod extends MY_Model {
 		$result['page'] = $page;
 
 		foreach ($result['list'] as $key => $value) {
+			//订单下的商品列表
 			$this->db->select('id,good_id,good_name,good_pic,sort_id,sorts,number,unit_price');
 			$this->db->where('order_id',$value['id']);
 			$query = $this->db->get($this->_table_item);
 			$result['list'][$key]['items'] = $query->result_array();
+			//订单状态
+			$result['list'][$key]['state']  = $this->lang->line('order_state'.$value['state']);
 		}
 		//print_r($result);
 		return $result;

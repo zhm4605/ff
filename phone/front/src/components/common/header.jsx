@@ -1,7 +1,7 @@
 import { addLocaleData, IntlProvider, FormattedMessage } from 'react-intl';
 import intl from 'intl';
 
-import { Menu, Icon, Select, Dropdown } from 'antd';
+import { Menu, Icon, Select, Dropdown,Badge } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const {Option} = Select;
@@ -14,12 +14,44 @@ export default class header extends React.Component{
     this.logout = this.logout.bind(this);
     this.handleClick = this.handleClick.bind(this);
 
-    this.state = {
-    	login:login(),
+    const login = is_login();
+    let cart_number = 0;
+    if(login.state)
+    {
+      $.ajax({
+        url:"/cart/cart_number",
+        dataType:"json",
+        async:false,
+        success:function(msg)
+        {
+          cart_number = msg.count;
+        },
+        error:function(msg){
+          document.body.innerHTML = msg.responseText;
+        }
+      })
     }
+    this.state = {login,cart_number};
   }
   componentWillReceiveProps() {
-    this.setState({login:login()});
+    const login = is_login();
+    let cart_number = 0;
+    if(login.state)
+    {
+      $.ajax({
+        url:"/cart/cart_number",
+        dataType:"json",
+        async:false,
+        success:function(msg)
+        {
+          cart_number = msg.count;
+        },
+        error:function(msg){
+          document.body.innerHTML = msg.responseText;
+        }
+      })
+    }
+    this.setState({login,cart_number});
   }
   toggleLang(value)
   {
@@ -50,7 +82,7 @@ export default class header extends React.Component{
   }
   render() {
   	const {lang} = this.props;
-  	const {login} = this.state;
+  	const {login,cart_number} = this.state;
 
   	return(
   		<header>
@@ -73,9 +105,14 @@ export default class header extends React.Component{
 	          <Option value='zh-CN'><FormattedMessage id='lang_zh'/></Option>
 	          <Option value='en-US'><FormattedMessage id='lang_en'/></Option>
 	        </Select>
-	        <div className='my'>
 	        {//登录状态
 	        	login.state==1?
+            <div className='my'>
+              <Badge count={cart_number} className='shopping-cart'>
+                <a href="#/cart">
+                  <Icon type="shopping-cart" />
+                </a>
+              </Badge>
 	        		<Dropdown overlay={
 	        			 <Menu onClick={this.handleClick}>
                   <Menu.Item key="cart"><a href="#/cart">购物车</a></Menu.Item>
@@ -87,16 +124,19 @@ export default class header extends React.Component{
 			            hello,{login.info.name}<Icon type="down" />
 			          </a>
 			        </Dropdown>
-	        	:<span><a href={'#/login?from='+encodeURIComponent(window.location.href)}><FormattedMessage id='login'/></a> | <a href='#/register'><FormattedMessage id='register'/></a></span>
+            </div>
+	        	:
+            <div className='my'>
+              <span><a href={'#/login?from='+encodeURIComponent(window.location.href)}><FormattedMessage id='login'/></a> | <a href='#/register'><FormattedMessage id='register'/></a></span>
+            </div>
 	        }
 	        </div>
-        </div>
       </header>
   	)
   }
 }
 
-function login()
+function is_login()
 {
 	let login = {};
 	$.ajax({

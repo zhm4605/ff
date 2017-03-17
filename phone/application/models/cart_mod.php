@@ -10,6 +10,13 @@ class Cart_mod extends MY_Model {
 		$this->_table_good_sort = $this->_table_good.'_sort';
 	}
 
+	public function get_cart_number($user_id)
+	{
+		$query = $this->db->where('user_id',$user_id)->get($this->_table);
+
+		return $query->num_rows();
+	}
+
 	//加入购物车 相同商品增加数量
 	public function add_good($data)
 	{
@@ -45,6 +52,17 @@ class Cart_mod extends MY_Model {
 			}
 		}
 		return $id;
+	}
+
+	//更新商品
+	public function update_good($data,$id)
+	{
+		$data = fetch_arr(array("number","sort_id"),$data);
+		//print_r($data);
+
+		//更新sorts
+
+		return $this->db->set($data)->where('id',$id)->update($this->_table);
 	}
 
 	//删除商品
@@ -90,7 +108,7 @@ class Cart_mod extends MY_Model {
 	//某条记录
 	public function get_cart_by_id($id)
 	{
-		$query = $this->db->select('id,good_id,user_id,count')->get_where("id",$id);
+		$query = $this->db->select('id,good_id,user_id,number')->where("id",$id)->get($this->_table);
 		return $query->row_array();
 	}
 	

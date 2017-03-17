@@ -86,7 +86,7 @@ export default class SortModal extends React.Component{
               {getFieldDecorator('parent_ids', {
                 initialValue:this.state.item.parent_ids
               })(
-                <SearchSort placeholder="选择父分类" style={{width:200}}/>
+                <SearchSort placeholder="选择父分类" style={{width:'100%'}}/>
               )}
             </FormItem>
             <FormItem

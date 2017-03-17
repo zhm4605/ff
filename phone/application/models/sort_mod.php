@@ -8,6 +8,14 @@ class Sort_mod extends MY_Model {
 		$this->_id = 'id';
 	}
 
+	public function get_list()
+	{
+		$query = $this->db->select('id,name,category,parent_ids');
+
+		return $query->result_array();
+	}
+
+
 	public function update_sort($data,$id)
 	{	
 		if($this->db->set($data)->where('id',$id)->update($this->_table))

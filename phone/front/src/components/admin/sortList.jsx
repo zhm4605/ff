@@ -279,6 +279,8 @@ export default class SortList extends React.Component {
 
       return <TreeNode key={item.id} title={line} />;
     });
+
+    //defaultExpandAll
     return (
       <div>
         <Search
@@ -300,7 +302,7 @@ export default class SortList extends React.Component {
           draggable
           onDragEnter={this.onDragEnter}
           onDrop={this.onDrop}
-          defaultExpandAll
+
         >
           {loop(this.state.gData)}
         </Tree>

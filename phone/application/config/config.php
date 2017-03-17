@@ -531,10 +531,19 @@ $config['serverPort'] = '8883';
 $config['softVersion'] = '2013-12-26';
 $config['tempId'] = 1;
 $config['validTime'] = 600;
+
+
 /*
- * 订单有效时间
+ * 订单
  */
-$config["orderValidTime"] = 900;        //秒
+//订单状态 0未支付未发货 1已支付未发货 2未支付已发货 3已支付已发货 4确认收货已完成
+$config["orderState"] = array(
+	"0"=>"未支付",
+	"1"=>"已支付未发货",
+	"2"=>"未支付已发货",
+	"3"=>"已支付已发货",
+	"4"=>"完成"
+);
 
 
 //汇率自动更新周期 每天

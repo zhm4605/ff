@@ -1,4 +1,4 @@
-import { Row,Col,Tag,Input,Button,Card,Tabs,message} from 'antd';
+import { Row,Col,Tag,Input,Button,Card,Tabs,message,Icon} from 'antd';
 
 import  Price from './common/price.jsx';
 
@@ -41,6 +41,15 @@ export default class Good extends React.Component{
       {
       	console.log(msg);
       	message.info(msg.info);
+      	if(msg.state==2)
+      	{
+      		window.location.href='#/login?from='+encodeURIComponent(window.location.href);
+      	}
+      	else if(msg.state==1)
+      	{
+      		window.location.href='#/cart';
+      	}
+      	
       },
       error:function(msg){;
         document.body.innerHTML = msg.responseText;
@@ -57,6 +66,7 @@ export default class Good extends React.Component{
     console.log(description);
     return (
     	<div id='good-page'>
+    		<a href="javascript:history.go(-1)" className='back'><Button type="dashed"><Icon type="left" />返回</Button></a>
 		    <Row>
 		      <Col span={20} className='good-main'>
 		      	<Row>

@@ -7,7 +7,6 @@ class Common extends MY_Controller {
 		$this->time = time();
 		$this->load->model(array('good_mod','sort_mod'));
     $this->lang->load('common', 'chinese');
-    $this->load->library('session');
 	}
 
   public function index()
