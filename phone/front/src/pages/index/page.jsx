@@ -53,7 +53,11 @@ const routes = <Router history={hashHistory}>
 
 render(routes, document.getElementById('container'));
 
-window.location.hash = '#/home';
+//window.location.hash = window.location.hash==''?'#/home';
+if(window.location.hash=='')
+{
+  window.location.hash='#/home';
+}
 
 //console.log(window.location)
 

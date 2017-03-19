@@ -550,5 +550,5 @@ $config["orderState"] = array(
 $config["rateUpdatePeriod"] = 60*60*24*1;
 
 //商品分页数
-$config["pageCount"] = 2;
+$config["pageCount"] = 20;
 

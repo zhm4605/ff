@@ -15,7 +15,7 @@ export default class GoodList extends React.Component{
     				<li key={good.id}>
 			    		<a href={"#/good/"+good.id+'?'+(window.location.hash.split('?')[1]?window.location.hash.split('?')[1]:'lang=zh-CN')}>
 				    		<div className="custom-image">
-						      <img alt="example" width="100%" src={good.pic_url} />
+						      <img alt="example" src={good.pic_url} />
 						      <div className='name'>{good.name}</div>
 						    </div>
 						    <div className="custom-card">

@@ -72,7 +72,7 @@ export default class Category extends React.Component{
       defaultOpenKeys.push(d.id)
     })
     return (
-    	<Menu onClick={this.switchCatgory} mode="vertical" selectedKeys={selectedKeys} activeKey={activeKey}>
+    	<Menu onClick={this.switchCatgory} mode="inline" selectedKeys={selectedKeys} activeKey={activeKey} inlineIndent={10}>
         <Menu.Item key="0">所有分类</Menu.Item>
         {loop(data)}
       </Menu>

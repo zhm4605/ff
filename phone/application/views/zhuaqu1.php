@@ -133,16 +133,19 @@
     });
 
     setTimeout(function(){
-    	go_next();
-    },180000);
+    	//go_next();
+    	window.location.reload();
+    },60000);
+
+    
 	}
 
 	function go_next()
 	{
 		var page = window.location.search.match(/=(.*)/)[1];
-    if(page<2500)
+    if(page<10097)
     {
-    	window.location.href='/zhuaqu/?page='+(parseInt(page)+1);
+    	window.location.href='/zhuaqu/zhuaqu1/?page='+(parseInt(page)+1);
     }
 	}
 

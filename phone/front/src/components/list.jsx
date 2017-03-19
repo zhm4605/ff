@@ -65,11 +65,11 @@ export default class List extends React.Component{
     return (
     	<div id='list-page'>
     		<SearchGood onSearch={this.handleSearch} value={query.name}/>
-			  <Row style={{marginTop:10}}>
-			  	<Col span={3}>
+			  <div>
+			  	<div className='category-menu'>
 			  		<Category selectedKeys={[selectedKeys]} onChanged={this.changeCategory}/>
-			  	</Col>
-			  	<Col span={21} style={{paddingLeft:10}}>
+			  	</div>
+			  	<div className='list'>
 				    <div className='rank-good'>
 				    	<a href='#'>按销量排序<Icon type='arrow-up' /></a>
 				    	<a href='#'>按时间排序</a>
@@ -78,8 +78,8 @@ export default class List extends React.Component{
 				    	<GoodList list={list}/>
 				    	<Pagination className='list-pagination' current={parseInt(page)} total={total} defaultPageSize={pageSize} onChange={this.changePage}/>
 				    </div>
-				  </Col>
-		    </Row>
+				  </div>
+		    </div>
 		    <BackTop />
     	</div>
   	)

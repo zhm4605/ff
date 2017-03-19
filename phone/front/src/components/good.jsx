@@ -21,6 +21,7 @@ export default class Good extends React.Component{
         document.body.innerHTML = msg.responseText;
       }
     })
+    window.scrollTo(0,0);
     this.state = {count:1};
     this.setCount = this.setCount.bind(this);
     this.addCart = this.addCart.bind(this);

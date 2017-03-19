@@ -135,14 +135,16 @@
     setTimeout(function(){
     	go_next();
     },180000);
+
+    
 	}
 
 	function go_next()
 	{
 		var page = window.location.search.match(/=(.*)/)[1];
-    if(page<2500)
+    if(page<5000)
     {
-    	window.location.href='/zhuaqu/?page='+(parseInt(page)+1);
+    	window.location.href='/zhuaqu/zhuaqu2/?page='+(parseInt(page)+1);
     }
 	}
 

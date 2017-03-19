@@ -226,8 +226,9 @@ class Good_mod extends MY_Model {
 	//后台商品列表
 	public function admin_good_list($where=array(),$page=1,$order='update_time')
 	{	
+		$limit = $this->config->item('pageCount');
 		$this->db->order_by($order,'desc');
-		$this->db->limit(($page-1)*20,20);
+		$this->db->limit($limit,($page-1)*$limit);
 		$query = $this->db->get($this->_table);
 		$result = $query->result_array();
 		foreach ($result as $key => $value) {
@@ -264,6 +265,27 @@ class Good_mod extends MY_Model {
 		$query = $this->db->like('name', $key)->select('id as key,name as text')->get($this->_table);
 		return $query->result_array();
 	}
+
+	public function get_good($where)
+	{
+		$query = $this->db->where($where)->select('id')->get($this->_table);
+		return $query->row_array();
+	}
 	
+	public function add_url($list) 
+	{
+		foreach ($list as $key => $value) {
+			$this->db->set(array("url"=>$value))->insert('goods_url');
+		}
+	}
+
+	public function get_url($page)
+	{
+		//$this->db->order_by("id");
+		//$this->db->limit(($page-1)*20,1);
+		$limit = 1;
+		$query = $this->db->order_by("id",'asc')->limit($limit,($page-1)*$limit)->get('goods_url');
+		return $query->row_array();
+	}
 	
 }

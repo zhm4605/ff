@@ -10,7 +10,7 @@ class Sort_mod extends MY_Model {
 
 	public function get_list()
 	{
-		$query = $this->db->select('id,name,category,parent_ids');
+		$query = $this->db->select('id,name,category,parent_ids')->where('level','0');
 
 		return $query->result_array();
 	}
@@ -130,6 +130,12 @@ class Sort_mod extends MY_Model {
 	{
 		$query = $this->db->like('name', $key)->select('id ,name')->get($this->_table);
 		return $query->result_array();
+	}
+
+	public function get_sort($where)
+	{
+		$query = $this->db->select('id,parent_ids,level')->where($where)->get($this->_table);
+		return $query->row_array();
 	}
 	
 	
