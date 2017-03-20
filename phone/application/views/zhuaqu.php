@@ -58,7 +58,7 @@
 		var $good = $con.find('.product-page');
 
 		good.name = $good.find('h1[itemprop=name]').text();
-		good.pic_url = $good.find('[itemprop=image]').attr('src');
+		//good.pic_url = $good.find('[itemprop=image]').attr('src');
 
 		var $details = $good.find('.detail-important tbody tr');
 
@@ -95,14 +95,14 @@
 		
 		//图片
 		var $imgs = $good.find('#gallery-'+good.import_id).find('a');
-		good.pics = [{"url":good.pic_url}];
+		good.pics = [];
 		$imgs.each(function(i,el){
-			if(!$(el).hasClass('hidden'))
-			{
-				good.pics.push(
-					{'url':$(el).find('img').attr('src')}
-				);
-			}
+			good.pics.push(
+				{
+					'thumbnail':$(el).find('img').attr('data-src')?$(el).find('img').attr('data-src'):$(el).find('img').attr('src'),
+					'url':$(el).attr('href'),
+				}
+			);
 		})
 
 		//产品分类
@@ -112,9 +112,8 @@
 
 		//产品描述
 		good.description = $good.find('div[itemprop=description]').html();
-
+		//511
 		console.log(good);
-
 		$.ajax({
       url:"http://www.shop.com/zhuaqu/good/",
       type: "post",
@@ -127,14 +126,15 @@
       },
       error:function(msg){
         console.log(msg);
-        go_next();
+        window.location.reload();
+        //go_next();
         //document.body.innerHTML = msg.responseText;
       }
     });
 
     setTimeout(function(){
-    	go_next();
-    },180000);
+    	window.location.reload();
+    },120000);
 	}
 
 	function go_next()
@@ -150,7 +150,7 @@
 	{
 		//
 		price = price.replace(' ','');
-		return price.match(/(.*)\s{1,}E/)[1].replace(',','.');
+		return parseFloat(price.match(/(.*)\s{1,}E/)[1].replace(',','.'));
 	}
 
 	function loop($items)

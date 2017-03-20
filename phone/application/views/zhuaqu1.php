@@ -143,7 +143,7 @@
 	function go_next()
 	{
 		var page = window.location.search.match(/=(.*)/)[1];
-    if(page<10097)
+    if(page<10287)
     {
     	window.location.href='/zhuaqu/zhuaqu1/?page='+(parseInt(page)+1);
     }

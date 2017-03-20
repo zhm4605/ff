@@ -10,12 +10,12 @@ class Zhuaqu extends MY_Controller {
       $this->load->helper('simple_html_dom.php');
     }
     public function index(){
-
+      //1085
       set_time_limit(30000);
       $page = $_GET['page'];
       $data = array();
       $value =  $this->good_mod->get_url($page);
-      //print_r($value);
+      print_r($value);
       //$value = array('url'=>'https://magboss.pl/anti-fingerprint-color-film-mercury-2in1-samsung-n7000-galaxy-note-purple-original,p,en,31894.html');
       $page = file_get_html($value['url']."?currency=EUR");
       $html = $page->find('div[class=page-content]',0)->innertext; 
@@ -72,35 +72,6 @@ class Zhuaqu extends MY_Controller {
     }
 
     public function aa(){
-
-      $has = 1;
-      $i = 1;
-      $html = '';
-      while($has==1)
-      {
-        echo $i;
-        $page = file_get_html("https://magboss.pl/category/show/2622/limit/200/page/".$i);
-
-        foreach($page->find('a[class=product-title]') as $element) {
-          echo $element->href.'<br>';
-        }
-        
-
-        $has = 0;
-        /*
-        if(!isset($page->find('div[class=product-list]',0)->innertext))
-        {
-          $has = 0;
-        }
-        else
-        {
-          $html .= $page->find('div[class=product-container]',0)->innertext; 
-        }
-        $page->clear();*/
-        $i++;
-      }
-      //$data["html"] = $html;
-      //$this->load->view('aa',$data);
     }
 
     public function all_url()
@@ -115,18 +86,28 @@ class Zhuaqu extends MY_Controller {
       echo json_encode(array());
     }
 
-    //子目录 
+    //添加
     public function good()
     {
 
       $data = $_POST;
 
       foreach ($data['pics'] as $key => $value) {
+        
         $type=explode(".",$value['url']); 
+        $name = time().'_'.rand(100,999).'.'.$type[count($type)-1];
+
         $img = file_get_contents($value['url']); 
-        $pic_name = '/upload/import/'.time().'_'.rand(100,999).'.'.$type[count($type)-1];
+        $pic_name = '/upload/import/20170320/'.$name;
         file_put_contents($_SERVER['DOCUMENT_ROOT'].$pic_name,$img); 
         $data['pics'][$key]['url'] = $pic_name;
+
+        //$type=explode(".",$value['thumbnail']); 
+        $img = file_get_contents($value['thumbnail']); 
+        $pic_name = '/upload/import/20170320/thumbnail/'.$name;
+        file_put_contents($_SERVER['DOCUMENT_ROOT'].$pic_name,$img); 
+        $data['pics'][$key]['thumbnail'] = $pic_name;
+
       }
      
       $data['piecewise_price'] = serialize($data['piecewise_price']);
